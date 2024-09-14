@@ -1,5 +1,8 @@
 {
   "dependencies": {
-    "firebase": "^10.13.1"
+    "expo": "^51.0.32",
+    "firebase": "^10.13.1",
+    "metro": "^0.80.12",
+    "react-native": "^0.75.3"
   }
 }
