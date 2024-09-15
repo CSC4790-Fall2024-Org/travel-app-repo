@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Text, View, Button, FlatList, TextInput, StyleSheet } from "react-native";
 
 
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
