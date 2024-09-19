@@ -1,102 +1,80 @@
-import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
-import { Text, View, Button, FlatList, TextInput, StyleSheet } from "react-native";
+import React from "react";
+import { Text, View, Button, StyleSheet } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
+// Commenting out the previous Firebase imports and functionality
 
+// // Import the functions you need from the SDKs you need
+// import { initializeApp } from "firebase/app";
+// import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
 
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// // Your web app's Firebase configuration
+// const firebaseConfig = {
+//   apiKey: "AIzaSyCz4zCemGt4XZKZCuCI_FwQwXSFxeaqvk0",
+//   authDomain: "studyguide-ea1f4.firebaseapp.com",
+//   projectId: "studyguide-ea1f4",
+//   storageBucket: "studyguide-ea1f4.appspot.com",
+//   messagingSenderId: "1090855415134",
+//   appId: "1:1090855415134:web:e68c6916b6c5b7e5d9f3cf"
+// };
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCz4zCemGt4XZKZCuCI_FwQwXSFxeaqvk0",
-  authDomain: "studyguide-ea1f4.firebaseapp.com",
-  projectId: "studyguide-ea1f4",
-  storageBucket: "studyguide-ea1f4.appspot.com",
-  messagingSenderId: "1090855415134",
-  appId: "1:1090855415134:web:e68c6916b6c5b7e5d9f3cf"
-};
+// // Initialize Firebase
+// const app = initializeApp(firebaseConfig);
+// const db = getFirestore(app);
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const Stack = createStackNavigator();
 
-export default function App() {
-  const [data, setData] = useState([]);
-  const [userName, setUserName] = useState("");
-
-  // Function to add a user's name to Firestore
-  const addUserName = async () => {
-    if (userName.trim()) {
-      try {
-        await addDoc(collection(db, "testCollection"), {
-          name: userName,
-        });
-        console.log("User name added successfully!");
-        setUserName(""); // Clear the input after submission
-        fetchTestData(); // Refresh the data after adding a new user
-      } catch (error) {
-        console.error("Error adding document: ", error);
-      }
-    } else {
-      console.error("Name cannot be empty");
-    }
-  };
-
-  // Function to fetch documents from Firestore
-  const fetchTestData = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, "testCollection"));
-      const fetchedData = [];
-      querySnapshot.forEach((doc) => {
-        fetchedData.push({ id: doc.id, ...doc.data() });
-      });
-      setData(fetchedData);
-    } catch (error) {
-      console.error("Error fetching documents: ", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchTestData(); // Fetch data on component mount
-  }, []);
-
+function HomeScreen({ navigation }) {
   return (
-    <View style={{ padding: 20 }}>
-      <TextInput
-        placeholder="Enter your name"
-        value={userName}
-        onChangeText={setUserName}
-        style={{
-          height: 40,
-          borderColor: 'gray',
-          borderWidth: 1,
-          marginBottom: 20,
-          marginTop: 30,
-          paddingHorizontal: 10,
-        }}
-      />
-      <Button title="Add User Name" onPress={addUserName} />
-      <Text style={{ fontSize: 20, marginVertical: 20 }}>User Names:</Text>
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <Text>{item.name}</Text>
-        )}
+    <View style={styles.container}>
+      <Text style={styles.title}>Welcome!</Text>
+      <Button title="Login" onPress={() => navigation.navigate("Login")} />
+      <Button
+        title="Sign Up"
+        onPress={() => navigation.navigate("SignUp")}
+        style={{ marginTop: 20 }}
       />
     </View>
   );
 }
 
+function LoginScreen() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Login Page</Text>
+    </View>
+  );
+}
+
+function SignUpScreen() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Sign Up Page</Text>
+    </View>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="SignUp" component={SignUpScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
   },
 });
