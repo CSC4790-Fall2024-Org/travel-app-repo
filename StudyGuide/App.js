@@ -9,6 +9,7 @@ import SignUpScreen from './SignUpScreen';
 import Profile from './Profile';
 import Content from './Content';
 import Posts from './Posts';
+import CreatePost from "./CreatePost";
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,7 @@ function MainPage({ navigation }) {
       <Button title="Go to Profile" onPress={() => navigation.navigate("Profile")} />
       <Button title="Go to Content" onPress={() => navigation.navigate("Content")} />
       <Button title="Go to Posts" onPress={() => navigation.navigate("Posts")} />
+      <Button title="Create Post" onPress={() => navigation.navigate("Create Post")} />
     </View>
   );
 }
@@ -37,6 +39,7 @@ export default function App() {
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Content" component={Content} />
         <Stack.Screen name="Posts" component={Posts} />
+        <Stack.Screen name="Create Post" component={CreatePost} />
       </Stack.Navigator>
     </NavigationContainer>
   );
