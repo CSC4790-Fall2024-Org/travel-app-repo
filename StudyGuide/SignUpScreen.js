@@ -1,6 +1,9 @@
 import React, { useState } from "react"; 
-import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet } from "react-native";
+import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Alert } from "react-native";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { useNavigation } from '@react-navigation/native';
+import { db } from './firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 const SignUpScreen = () => {
   const [email, setEmail] = useState('');
@@ -9,18 +12,43 @@ const SignUpScreen = () => {
   const [city, setCity] = useState('');
   const [name, setName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const navigation = useNavigation();
 
-  const handleSignUp = () => {
+  // collection = users
+  // components = city, email, name, year
+
+  const checkEmail = (email) => {
+    return email.includes('.edu');
+  };
+
+  const handleSignUp = async () => {
+    if (!checkEmail(email)) {
+      Alert.alert('Error', 'StudyGuide is designed for university students. Please enter and email address associated with an university.');
+      return;
+    }
     const auth = getAuth();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(userCredentials => {
-        const user = userCredentials.user;
-        console.log(user.email);
-        // Need to set the firebase to the code 
-        // once connected then create a new section in the authentication portion that can hold the year, city, name
-      })
-      .catch(error => alert(error.message));
-  }
+        try {
+            const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredentials.user;
+
+            await setDoc(doc(db, 'users', user.uid), {
+                email,
+                name,
+                year,
+                city,
+            });
+            navigation.navigate('Profile');  
+            Alert.alert('Sign Up Successful', 'Welcome to StudyGuide!');
+          } catch (error) {
+
+              if (error.code === 'auth/email-already-in-use') {
+                  Alert.alert('Error', 'This email is already in use. Please sign in or use another email.');
+              } else {
+                  Alert.alert('Error', error.message);
+              }
+          }
+          
+}
 
   return (
     <KeyboardAvoidingView
@@ -29,6 +57,12 @@ const SignUpScreen = () => {
     > 
       <Text style={styles.title}>Sign Up</Text>
       <View style={styles.inputContainer}>
+                <TouchableOpacity
+          onPress={handleSignUp}
+          style={styles.button}
+        >
+          <Text style={styles.buttonText}>Sign Up</Text> 
+        </TouchableOpacity>
         <TextInput
           placeholder="Name"
           value={name}
@@ -46,7 +80,7 @@ const SignUpScreen = () => {
           value={year}
           onChangeText={text => setYear(text)}
           style={styles.input}
-          keyboardType="numeric" // Optional: only allow numeric input
+          keyboardType="numeric"
         />
         <TextInput
           placeholder="Email"
@@ -69,16 +103,11 @@ const SignUpScreen = () => {
       </View>
       <Text>To create an account your email must be educational (ending with edu).</Text>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          onPress={handleSignUp}
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Sign Up</Text> 
-        </TouchableOpacity>
+    
       </View>
     </KeyboardAvoidingView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
