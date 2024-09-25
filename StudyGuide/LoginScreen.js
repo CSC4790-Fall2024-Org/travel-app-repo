@@ -1,18 +1,22 @@
 import React, { useState } from "react"; 
 import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet } from "react-native";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import Profile from './Profile';
+import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const navigation = useNavigation();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, email, password) 
       .then(userCredentials => {
         const user = userCredentials.user;
         console.log(user.email);
+        navigation.navigate('Profile'); 
       })
       .catch(error => alert(error.message));
   }
