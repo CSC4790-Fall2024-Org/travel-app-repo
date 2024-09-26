@@ -23,32 +23,34 @@ const SignUpScreen = () => {
 
   const handleSignUp = async () => {
     if (!checkEmail(email)) {
-      Alert.alert('Error', 'StudyGuide is designed for university students. Please enter and email address associated with an university.');
+      Alert.alert('Error', 'StudyGuide is designed for university students. Please enter an email address associated with a university.');
       return;
     }
     const auth = getAuth();
-        try {
-            const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredentials.user;
-
-            await setDoc(doc(db, 'users', user.uid), {
-                email,
-                name,
-                year,
-                city,
-            });
-            navigation.navigate('Profile');  
-            Alert.alert('Sign Up Successful', 'Welcome to StudyGuide!');
-          } catch (error) {
-
-              if (error.code === 'auth/email-already-in-use') {
-                  Alert.alert('Error', 'This email is already in use. Please sign in or use another email.');
-              } else {
-                  Alert.alert('Error', error.message);
-              }
-          }
-          
-}
+    try {
+      const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredentials.user;
+  
+      // Save the user details, including userId
+      await setDoc(doc(db, 'users', user.uid), {
+        email,
+        name,
+        year,
+        city,
+        userId: user.uid,  // Save the UID as a field called userId
+      });
+  
+      navigation.navigate('Profile', { uid: user.uid });
+      Alert.alert('Sign Up Successful', 'Welcome to StudyGuide!');
+    } catch (error) {
+      if (error.code === 'auth/email-already-in-use') {
+        Alert.alert('Error', 'This email is already in use. Please sign in or use another email.');
+      } else {
+        Alert.alert('Error', error.message);
+      }
+    }
+  }
+  
 
   return (
     <KeyboardAvoidingView
