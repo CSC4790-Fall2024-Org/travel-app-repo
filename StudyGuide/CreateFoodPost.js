@@ -1,10 +1,10 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 
-export default function CreatePost() {
+export default function CreateFoodPost() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Create Post</Text>
+      <Text style={styles.title}>Create Food Post</Text>
     </View>
   );
 }
