@@ -10,6 +10,7 @@ import Profile from './Profile';
 import Home from './Home';
 import Posts from './Posts';
 import CreateFoodPost from "./CreateFoodPost";
+import FindFoodPosts from "./FindFoodPosts";
 
 const Stack = createStackNavigator();
 
@@ -40,6 +41,7 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Posts" component={Posts} />
         <Stack.Screen name="Create Food Post" component={CreateFoodPost} />
+        <Stack.Screen name="Find Food Post" component={FindFoodPosts} />
       </Stack.Navigator>
     </NavigationContainer>
   );
