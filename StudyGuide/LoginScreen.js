@@ -3,6 +3,7 @@ import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleShe
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import Profile from './Profile';
 import { useNavigation } from '@react-navigation/native';
+import { uid } from "firebase/firestore";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -16,7 +17,7 @@ const LoginScreen = () => {
       .then(userCredentials => {
         const user = userCredentials.user;
         console.log(user.email);
-        navigation.navigate('Profile'); 
+        navigation.navigate('Profile', { uid: user.uid });
       })
       .catch(error => alert(error.message));
   }

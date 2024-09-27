@@ -2,21 +2,22 @@ import { getFirestore, collection, getDocs } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, Button, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // Assuming you're using React Navigation
-import { initializeApp } from "firebase/app";
+import { db } from './firebase';
+
 
 // Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCz4zCemGt4XZKZCuCI_FwQwXSFxeaqvk0",
-  authDomain: "studyguide-ea1f4.firebaseapp.com",
-  projectId: "studyguide-ea1f4",
-  storageBucket: "studyguide-ea1f4.appspot.com",
-  messagingSenderId: "1090855415134",
-  appId: "1:1090855415134:web:e68c6916b6c5b7e5d9f3cf"
-};
+// const firebaseConfig = {
+//   apiKey: "AIzaSyCz4zCemGt4XZKZCuCI_FwQwXSFxeaqvk0",
+//   authDomain: "studyguide-ea1f4.firebaseapp.com",
+//   projectId: "studyguide-ea1f4",
+//   storageBucket: "studyguide-ea1f4.appspot.com",
+//   messagingSenderId: "1090855415134",
+//   appId: "1:1090855415134:web:e68c6916b6c5b7e5d9f3cf"
+// };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// const app = initializeApp(firebaseConfig);
+// const db = getFirestore(app);
 
 export default function Home() {
   const [locations, setLocations] = useState([]);
