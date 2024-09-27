@@ -7,9 +7,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import LoginScreen from './LoginScreen';
 import SignUpScreen from './SignUpScreen';
 import Profile from './Profile';
-import Content from './Content';
+import Home from './Home';
 import Posts from './Posts';
-import CreatePost from "./CreatePost";
+import CreateFoodPost from "./CreateFoodPost";
 
 const Stack = createStackNavigator();
 
@@ -20,9 +20,9 @@ function MainPage({ navigation }) {
       <Button title="Go to Login" onPress={() => navigation.navigate("Login")} />
       <Button title="Go to Sign Up" onPress={() => navigation.navigate("SignUp")} />
       <Button title="Go to Profile" onPress={() => navigation.navigate("Profile")} />
-      <Button title="Go to Content" onPress={() => navigation.navigate("Content")} />
+      <Button title="Go to Home" onPress={() => navigation.navigate("Home")} />
       <Button title="Go to Posts" onPress={() => navigation.navigate("Posts")} />
-      <Button title="Create Post" onPress={() => navigation.navigate("Create Post")} />
+      <Button title="Create Food Post" onPress={() => navigation.navigate("Create Food Post")} />
     </View>
   );
 }
@@ -37,9 +37,9 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="Content" component={Content} />
+        <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Posts" component={Posts} />
-        <Stack.Screen name="Create Post" component={CreatePost} />
+        <Stack.Screen name="Create Food Post" component={CreateFoodPost} />
       </Stack.Navigator>
     </NavigationContainer>
   );

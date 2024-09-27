@@ -18,7 +18,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export default function Content() {
+export default function Home() {
   const [locations, setLocations] = useState([]);
   const navigation = useNavigation();
 
