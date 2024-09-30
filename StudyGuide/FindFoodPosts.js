@@ -1,29 +1,9 @@
-import React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { collection, getDocs } from "firebase/firestore";
+import React, { useState, useEffect } from "react";
+import { Text, View, StyleSheet, ScrollView, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { db } from './firebase';
 
-/*export default function FindFoodPost() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Find Food Post</Text>
-      <Text style={styles.title}>Choose a Location</Text>
-    </View>
-  );
-}*/
-
-// Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyCz4zCemGt4XZKZCuCI_FwQwXSFxeaqvk0",
-    authDomain: "studyguide-ea1f4.firebaseapp.com",
-    projectId: "studyguide-ea1f4",
-    storageBucket: "studyguide-ea1f4.appspot.com",
-    messagingSenderId: "1090855415134",
-    appId: "1:1090855415134:web:e68c6916b6c5b7e5d9f3cf"
-  };
-  
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
   
   export default function FindFoodPosts() {
     const [locations, setLocations] = useState([]);
