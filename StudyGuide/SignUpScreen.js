@@ -43,9 +43,21 @@ const SignUpScreen = () => {
       await sendEmailVerification(user); // Added line
       Alert.alert('Verification Email Sent', 'Please check your email to verify your account.'); // Added line
 
-  
-      navigation.navigate('Profile', { uid: user.uid });
-      Alert.alert('Sign Up Successful', 'Welcome to StudyGuide!');
+      const reloadUser = async () => {
+        await user.reload(); // Refresh user data
+        if (user.emailVerified) {
+          navigation.navigate('Profile', { uid: user.uid });
+          Alert.alert('Sign Up Successful', 'Your email is verified. Welcome to StudyGuide!');
+        } else {
+          Alert.alert('Email Not Verified', 'Please verify your email by clicking the link sent to your inbox before logging in.');
+        }
+      }; 
+      setTimeout(reloadUser, 5000); // Check every 5 seconds for email verification status // Added line
+
+
+      // these should not happen unless the email is actually verified 
+      // navigation.navigate('Profile', { uid: user.uid });
+      // Alert.alert('Sign Up Successful', 'Welcome to StudyGuide!');
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
         Alert.alert('Error', 'This email is already in use. Please sign in or use another email.');
