@@ -1,9 +1,8 @@
 import React, { useState } from "react"; 
-import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet } from "react-native";
+import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Alert } from "react-native";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import Profile from './Profile';
 import { useNavigation } from '@react-navigation/native';
-import { uid } from "firebase/firestore";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -13,13 +12,20 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password) 
-      .then(userCredentials => {
-        const user = userCredentials.user;
-        console.log(user.email);
-        navigation.navigate('Profile', { uid: user.uid });
-      })
-      .catch(error => alert(error.message));
+    try {
+      const userCredentials = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredentials.user;
+      console.log(user.email);
+      navigation.navigate('Profile', { uid: user.uid });
+    } catch (error) {
+      if (error.code === 'auth/user-not-found') {
+        Alert.alert('Error', 'No user found with this email. Please check your email or register.');
+      } else if (error.code === 'auth/invalid-login-credentials') {
+        Alert.alert('Error', 'This password is incorrect. Please try again or click forgot password below.');
+      } else {
+        Alert.alert('Error', error.message);
+      }
+    }
   }
 
   return (
@@ -54,6 +60,11 @@ const LoginScreen = () => {
           style={styles.button}
         >
           <Text style={styles.buttonText}>Login</Text> 
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+        >
+          <Text style={styles.buttonText}>Forgot Password?</Text> 
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -102,7 +113,7 @@ const styles = StyleSheet.create({
   showButton: {
     paddingHorizontal: 10,
     paddingVertical: 15,
-    color: 'rgb(60, 179, 113)', // Ensure this color is applied
+    color: 'rgb(60, 179, 113)',
     fontWeight: 'bold',
   },
   buttonContainer: {
@@ -117,6 +128,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
+    marginTop: 5,
   },
   buttonText: {
     color: 'white', 
