@@ -46,7 +46,6 @@ const SignUpScreen = () => {
       const reloadUser = async () => {
         await user.reload(); // Refresh user data
         if (user.emailVerified) {
-          navigation.navigate('Profile', { uid: user.uid });
           Alert.alert('Sign Up Successful', 'Your email is verified. Welcome to StudyGuide!');
         } else {
           Alert.alert('Email Not Verified', 'Please verify your email by clicking the link sent to your inbox before logging in.');
@@ -60,7 +59,7 @@ const SignUpScreen = () => {
       // Alert.alert('Sign Up Successful', 'Welcome to StudyGuide!');
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
-        Alert.alert('Error', 'This email is already in use. Please sign in or use another email.');
+        Alert.alert('Error', 'This email is already in use. Please log in or use another email.');
       } else {
         Alert.alert('Error', error.message);
       }

@@ -17,7 +17,8 @@ const LoginScreen = () => {
       .then(userCredentials => {
         const user = userCredentials.user;
         console.log(user.email);
-        navigation.navigate('Profile', { uid: user.uid });
+        // navigation.navigate('Profile', { uid: user.uid });
+        navigation.navigate('Home', { uid: user.uid });
       })
       .catch(error => alert(error.message));
   }
