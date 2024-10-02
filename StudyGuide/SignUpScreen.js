@@ -1,6 +1,6 @@
 import React, { useState } from "react"; 
 import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Alert } from "react-native";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
 import { db } from './firebase';
 import { doc, setDoc } from 'firebase/firestore';
@@ -39,6 +39,10 @@ const SignUpScreen = () => {
         city,
         userId: user.uid,  // Save the UID as a field called userId
       });
+
+      await sendEmailVerification(user); // Added line
+      Alert.alert('Verification Email Sent', 'Please check your email to verify your account.'); // Added line
+
   
       navigation.navigate('Profile', { uid: user.uid });
       Alert.alert('Sign Up Successful', 'Welcome to StudyGuide!');
