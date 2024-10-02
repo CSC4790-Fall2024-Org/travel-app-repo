@@ -3,7 +3,8 @@ import { View, Text, Button, StyleSheet, TouchableOpacity, TouchableWithoutFeedb
 import { useNavigation } from "@react-navigation/native"; // Assuming you're using React Navigation
 
 
-export default function Home() {
+export default function Home({ route }) {
+  const { uid } = route.params;
   const [isPostDropdownOpen, setPostDropdownOpen] = useState(false);
   const [isViewDropdownOpen, setViewDropdownOpen] = useState(false);
   const navigation = useNavigation();
@@ -35,8 +36,13 @@ export default function Home() {
       setViewDropdownOpen(false);
     }
   };
+  const navigateToProfile = () => {
+    navigation.navigate('Profile', { uid });  // Pass userId to the Profile screen
+  };
+
 
   return (
+
     // TouchableWithoutFeedback allows us to detect taps outside the dropdown
     <TouchableWithoutFeedback onPress={closeDropdowns}>
       <View style={styles.container}>
@@ -71,6 +77,7 @@ export default function Home() {
             </TouchableOpacity>
           </View>
         )}
+         <Button title="Go to Profile" onPress={navigateToProfile} />
       </View>
     </TouchableWithoutFeedback>
   );

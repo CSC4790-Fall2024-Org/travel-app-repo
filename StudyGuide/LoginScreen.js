@@ -12,6 +12,12 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password) 
+      .then(userCredentials => {
+        const user = userCredentials.user;
+        console.log(user.email);
+        navigation.navigate('Home', { uid: user.uid });
+      })
     try {
       const userCredentials = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredentials.user;
