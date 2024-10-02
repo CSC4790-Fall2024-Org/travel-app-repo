@@ -22,7 +22,7 @@ const LoginScreen = () => {
       const userCredentials = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredentials.user;
       console.log(user.email);
-      navigation.navigate('Profile', { uid: user.uid });
+      // navigation.navigate('Profile', { uid: user.uid });
     } catch (error) {
       if (error.code === 'auth/user-not-found') {
         Alert.alert('Error', 'No user found with this email. Please check your email or register.');

@@ -36,10 +36,10 @@ export default function Home({ route }) {
       setViewDropdownOpen(false);
     }
   };
-  const navigateToProfile = () => {
-    navigation.navigate('Profile', { uid });  // Pass userId to the Profile screen
-  };
 
+  const navigateToProfile = () => {
+    navigation.navigate('Profile', { uid });
+  };
 
   return (
 
