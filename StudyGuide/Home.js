@@ -66,13 +66,13 @@ export default function Home({ route }) {
 
         {isViewDropdownOpen && (
           <View style={styles.dropdownMenu}>
-            <TouchableOpacity style={styles.dropdownItem} onPress={() => handleViewNavigation('Posts')}>
+            <TouchableOpacity style={styles.dropdownItem} onPress={() => handleViewNavigation('FindFoodPosts')}>
               <Text> Food </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.dropdownItem} onPress={() => handleViewNavigation('Posts')}>
+            <TouchableOpacity style={styles.dropdownItem} onPress={() => handleViewNavigation('FindStayPosts')}>
               <Text> Stays </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.dropdownItem} onPress={() => handleViewNavigation('Posts')}>
+            <TouchableOpacity style={styles.dropdownItem} onPress={() => handleViewNavigation('FindActivitiesPosts')}>
               <Text> Activities </Text>
             </TouchableOpacity>
           </View>
