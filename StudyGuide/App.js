@@ -12,7 +12,9 @@ import Posts from './Posts';
 import CreateFoodPost from "./CreateFoodPost";
 import CreateStaysPost from "./CreateStaysPost";
 import CreateActivitiesPost from "./CreateActivitiesPost";
-import FindFoodPosts from "./FindFoodPosts"
+import FindFoodPosts from "./FindFoodPosts";
+import FindActivitiesPosts from "./FindActivitiesPosts";
+import FindStayPosts from "./FindStayPosts";
 
 const Stack = createStackNavigator();
 
@@ -27,6 +29,8 @@ function MainPage({ navigation }) {
       <Button title="Go to Posts" onPress={() => navigation.navigate("Posts")} />
       <Button title="Create Food Post" onPress={() => navigation.navigate("CreateFoodPost")} />
       <Button title="Go to Find Food Posts" onPress={() => navigation.navigate("FindFoodPosts")} />
+      <Button title="Go to Find Activities Posts" onPress={() => navigation.navigate("FindActivitiesPosts")} />
+      <Button title="Go to Find Stay Posts" onPress={() => navigation.navigate("FindStayPosts")} />
     </View>
   );
 }
@@ -47,6 +51,8 @@ export default function App() {
         <Stack.Screen name="CreateStaysPost" component={CreateStaysPost} />
         <Stack.Screen name="CreateActivitiesPost" component={CreateActivitiesPost} />
         <Stack.Screen name="FindFoodPosts" component={FindFoodPosts} />
+        <Stack.Screen name="FindActivitiesPosts" component={FindActivitiesPosts} />
+        <Stack.Screen name="FindStayPosts" component={FindStayPosts} />
       </Stack.Navigator>
     </NavigationContainer>
   );
