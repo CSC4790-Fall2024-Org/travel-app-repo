@@ -1,7 +1,6 @@
 import React, { useState } from "react"; 
 import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Alert } from "react-native";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import Profile from './Profile';
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
@@ -9,36 +8,42 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigation = useNavigation();
+  const auth = getAuth();
 
   const handleLogin = async () => {
-    const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password) 
-      .then(userCredentials => {
-        const user = userCredentials.user;
-        console.log(user.email);
-        navigation.navigate('Home', { uid: user.uid });
-      })
     try {
       const userCredentials = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredentials.user;
       console.log(user.email);
-      // navigation.navigate('Profile', { uid: user.uid });
+      navigation.navigate('Home', { uid: user.uid });
     } catch (error) {
-      if (error.code === 'auth/user-not-found') {
-        Alert.alert('Error', 'No user found with this email. Please check your email or register.');
-      } else if (error.code === 'auth/invalid-login-credentials') {
-        Alert.alert('Error', 'This password is incorrect. Please try again or click forgot password below.');
-      } else {
-        Alert.alert('Error', error.message);
+      switch (error.code) {
+        case 'auth/user-not-found':
+          Alert.alert('Error', 'No user found with this email. Please check your email or register.');
+          break;
+        case 'auth/invalid-login-credentials':
+          Alert.alert('Error', 'This password is incorrect. Please try again or click forgot password below.');
+          break;
+        case 'auth/wrong-password':
+          Alert.alert('Error', 'This password is incorrect. Please try again or click forgot password below.');
+          break;
+        default:
+          Alert.alert('Error', error.message);
       }
     }
-  }
+  };
+
+  const handleForgotPassword = async () => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+      Alert.alert('Success', 'Password reset email sent! Check your inbox.');
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
+  };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior="padding"
-    > 
+    <KeyboardAvoidingView style={styles.container} behavior="padding"> 
       <Text style={styles.title}>Sign In</Text>
       <View style={styles.inputContainer}>
         <TextInput
@@ -61,21 +66,16 @@ const LoginScreen = () => {
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          onPress={handleLogin}
-          style={styles.button}
-        >
+        <TouchableOpacity onPress={handleLogin} style={styles.button}>
           <Text style={styles.buttonText}>Login</Text> 
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-        >
+        <TouchableOpacity onPress={handleForgotPassword} style={styles.button}>
           <Text style={styles.buttonText}>Forgot Password?</Text> 
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -143,3 +143,4 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
+
