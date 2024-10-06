@@ -1,5 +1,5 @@
 import React, { useState } from "react"; 
-import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Alert } from "react-native";
+import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Alert, ScrollView } from "react-native";
 import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
 
@@ -22,8 +22,6 @@ const LoginScreen = () => {
           Alert.alert('Error', 'No user found with this email. Please check your email or register.');
           break;
         case 'auth/invalid-login-credentials':
-          Alert.alert('Error', 'This password is incorrect. Please try again or click forgot password below.');
-          break;
         case 'auth/wrong-password':
           Alert.alert('Error', 'This password is incorrect. Please try again or click forgot password below.');
           break;
@@ -44,35 +42,37 @@ const LoginScreen = () => {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding"> 
-      <Text style={styles.title}>Sign In</Text>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={text => setEmail(text)}
-          style={styles.input}
-        />
-        <View style={styles.passwordContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Text style={styles.title}>Sign In</Text>
+        <View style={styles.inputContainer}>
           <TextInput
-            placeholder="Password"
-            value={password}
-            onChangeText={text => setPassword(text)}
-            style={styles.passwordInput}
-            secureTextEntry={!showPassword} 
+            placeholder="Email"
+            value={email}
+            onChangeText={text => setEmail(text)}
+            style={styles.input}
           />
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-            <Text style={styles.showButton}>{showPassword ? "Hide" : "Show"}</Text>
+          <View style={styles.passwordContainer}>
+            <TextInput
+              placeholder="Password"
+              value={password}
+              onChangeText={text => setPassword(text)}
+              style={styles.passwordInput}
+              secureTextEntry={!showPassword} 
+            />
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <Text style={styles.showButton}>{showPassword ? "Hide" : "Show"}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={handleLogin} style={styles.button}>
+            <Text style={styles.buttonText}>Login</Text> 
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleForgotPassword} style={styles.button}>
+            <Text style={styles.buttonText}>Forgot Password?</Text> 
           </TouchableOpacity>
         </View>
-      </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleLogin} style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text> 
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleForgotPassword} style={styles.button}>
-          <Text style={styles.buttonText}>Forgot Password?</Text> 
-        </TouchableOpacity>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
@@ -80,6 +80,9 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  scrollContainer: {
+    flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
@@ -143,4 +146,3 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
-
