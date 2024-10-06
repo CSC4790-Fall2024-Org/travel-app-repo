@@ -29,6 +29,13 @@ import { db } from './firebase';
   
     const handleLocationPress = (locationId) => {
       navigation.navigate("Posts"); // Navigate to posts page with location ID
+     /* const citiesRef = db.collection('cities');
+
+}  
+
+snapshot.forEach(doc => {
+  console.log(doc.id, '=>', doc.data());
+});*/
     };
   
     return (
