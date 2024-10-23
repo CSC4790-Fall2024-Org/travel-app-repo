@@ -5,7 +5,7 @@ import { db } from './firebase';
 import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 
-/*most up to date!!!!!!
+/*old version
 const handleLocationPress = (locationId) => {
   //db.collection
 const foodRef = firestore().collection('foodPosts');
