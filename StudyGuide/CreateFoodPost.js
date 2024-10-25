@@ -1,18 +1,12 @@
 import React, { useState } from "react"; 
-import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Alert } from "react-native";
+import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Button, Alert } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 //import { Picker } from '@react-native-picker/picker';
+import RNPickerSelect from "react-native-picker-select";
 import { db } from './firebase';
 import { doc, setDoc } from 'firebase/firestore';
 
-// export default function CreateFoodPost() {
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>Create Food Post</Text>
 
-//     </View>
-//   );
-// }
 
 const CreateFoodPost = () => {
   const [restaurantName, setRestaurantName] = useState('');
@@ -22,11 +16,27 @@ const CreateFoodPost = () => {
   const [descrip, setDescrip] = useState('');
   const navigation = useNavigation();
 
+  // check if all fields are filled
+  const allFields = restaurantName && mealTime && restaurantType && expense && descrip;
+
+  const handleSubmit = () => {
+    if (allFields) {
+      console.log('Restaurant Name:', restaurantName);
+      console.log('Meal Time:', mealTime);
+      console.log('Restaurant Type', restaurantType);
+      console.log('Expense', expense);
+      console.log('Description', descrip);
+
+      navigation.navigate('FindFoodPosts');
+    } else {
+      Alert.alert("Fill out all fields before submitting.")
+    }
+  };
+
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
-      behavior="padding"
+      style={styles.container} behavior="padding"
     > 
       <Text style={styles.title}>Create Food Post</Text>
       <View style={styles.inputContainer}>
@@ -37,55 +47,110 @@ const CreateFoodPost = () => {
           onChangeText={text => setRestaurantName(text)}
           style={styles.input}
         />
-        <TextInput
-          placeholder="Meal Time"
+        
+        {/* Meal Time */}
+        <RNPickerSelect
+          onValueChange={(value) => setMealTime(value)}
+          items={[
+            { label: 'Breakfast', value: 'breakfast' },
+            { label: 'Brunch', value: 'brunch' },
+            { label: 'Lunch', value: 'lunch' },
+            { label: 'Dinner', value: 'dinner' }
+          ]}
+          placeholder={{ label: "Meal Time", value: null }}
+          style={pickerSelectStyles}
           value={mealTime}
-          onChangeText={text => setMealTime(text)}
-          style={styles.input}
+          useNativeAndroidPickerStyle={false} 
         />
-        <TextInput
-          placeholder="Restaurant Type"
+
+        {/* Restaurant Type */}
+        <RNPickerSelect
+          onValueChange={(value) => setRestaurantType(value)}
+          items={[
+            { label: 'Fast Food', value: 'fast food' },
+            { label: 'Casual Dining', value: 'casual dining' },
+            { label: 'Fine Dining', value: 'fine dining' },
+            { label: 'Buffet', value: 'buffet' },
+            { label: 'Cafe', value: 'cafe' }
+          ]}
+          placeholder={{ label: "Restaurant Type", value: null }}
+          style={pickerSelectStyles}
           value={restaurantType}
-          onChangeText={text => setRestaurantType(text)}
-          style={styles.input}
+          useNativeAndroidPickerStyle={false} 
         />
 
-        {/* <Text>Select an expense level:</Text>
-          <Picker
-            selectedValue={expense}
-            onValueChange={(itemValue) => setExpense(itemValue)}
-            style={styles.input}
-          >
-            <Picker.Item label="$" value="$" />
-            <Picker.Item label="$$" value="$$" />
-            <Picker.Item label="$$$" value="$$$" />
-          </Picker> */}
-
-        <TextInput
-          placeholder="Expense"
+        {/* Expense */}
+        <RNPickerSelect
+          onValueChange={(value) => setExpense(value)}
+          items={[
+            { label: '$', value: '$' },
+            { label: '$$', value: '$$' },
+            { label: '$$$', value: '$$$' }
+          ]}
+          placeholder={{ label: "Expense", value: null }}
+          style={pickerSelectStyles}
           value={expense}
-          onChangeText={text => setExpense(text)}
-          style={styles.input}
+          useNativeAndroidPickerStyle={false} 
         />
+
         <TextInput
           placeholder="Description"
           value={descrip}
           onChangeText={text => setDescrip(text)}
           style={styles.input}
+          multiline={true}
+          numberOfLines={10}
         />
         
       </View>
       <View style={styles.buttonContainer}>
 
-    <TouchableOpacity style={styles.button}>
+    <TouchableOpacity 
+      style={[styles.button, { backgroundColor: allFields ? 'green' : 'gray' }]} 
+      onPress={handleSubmit}
+      disabled={!allFields} 
+    >
       <Text style={styles.buttonText}>Create Post</Text> 
-    </TouchableOpacity>
+    </TouchableOpacity> 
     
       </View>
-    </KeyboardAvoidingView>
+    </KeyboardAvoidingView> 
   );
 };
 
+// pickerSelectStyles
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    backgroundColor: 'white',
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    borderRadius: 10,
+    marginTop: 10,
+    borderWidth: 0,
+    fontSize: 14,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    //borderWidth: 1,
+    //borderColor: 'gray',
+    //borderRadius: 4,
+    //color: 'black',
+    //paddingRight: 30, // to ensure the text is not obscured by the icon
+    //backgroundColor: 'white', // Optional
+  },
+  inputAndroid: {
+    fontSize: 14,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: 'purple',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is not obscured by the icon
+    backgroundColor: 'white', // Optional
+  },
+});
+
+// Normal style
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -111,6 +176,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
     borderWidth: 0,
+  },
+  label: {
+    marginBottom: 5,
   },
   showButton: {
     paddingHorizontal: 10,
