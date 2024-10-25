@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, ScrollView, StyleSheet, Alert, View } from "react-native";
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
+import RNPickerSelect from "react-native-picker-select";
 import { db } from './firebase';
 import { doc, setDoc } from 'firebase/firestore';
 
@@ -71,19 +72,68 @@ const SignUpScreen = () => {
             onChangeText={text => setName(text)}
             style={styles.input}
           />
-          <TextInput
-            placeholder="City"
-            value={city}
-            onChangeText={text => setCity(text)}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Year"
-            value={year}
-            onChangeText={text => setYear(text)}
-            style={styles.input}
-            keyboardType="numeric"
-          />
+          {/* City */}
+          <RNPickerSelect
+          onValueChange={(value) => setCity(value)}
+          items={[
+            { label: 'Cádiz', value: 'Cádiz' },
+            { label: 'Cambridge', value: 'Cabridge' },
+            { label: 'Dingle', value: 'Dingle' },
+            { label: 'Galway', value: 'Galway' },
+            { label: 'Lille', value: 'Lille' },
+            { label: 'Philadelphia', value: 'Philadelphia' },
+            { label: 'Rome', value: 'Rome' },
+            { label: 'St. Andrews', value: 'St. Andrews' },
+            { label: 'Singapore', value: 'Singapore' },
+            { label: 'Sydney', value: 'Sydney' },
+            { label: 'Urbino', value: 'Urbino' },
+          ]}
+          placeholder={{ label: "City", value: null }}
+          style={pickerSelectStyles}
+          value={city}
+          useNativeAndroidPickerStyle={false} 
+        />
+          {/* Year */}
+          <RNPickerSelect
+          onValueChange={(value) => setYear(value)}
+          items={[
+            { label: '2000', value: '2000' },
+            { label: '2001', value: '2001' },
+            { label: '2002', value: '2002' },
+            { label: '2003', value: '2003' },
+            { label: '2004', value: '2004' },
+            { label: '2005', value: '2005' },
+            { label: '2006', value: '2006' },
+            { label: '2007', value: '2007' },
+            { label: '2008', value: '2008' },
+            { label: '2009', value: '2009' },
+            { label: '2010', value: '2010' },
+            { label: '2011', value: '2011' },
+            { label: '2012', value: '2012' },
+            { label: '2013', value: '2013' },
+            { label: '2014', value: '2014' },
+            { label: '2015', value: '2015' },
+            { label: '2016', value: '2016' },
+            { label: '2017', value: '2017' },
+            { label: '2018', value: '2018' },
+            { label: '2019', value: '2019' },
+            { label: '2020', value: '2020' },
+            { label: '2021', value: '2021' },
+            { label: '2022', value: '2022' },
+            { label: '2023', value: '2023' },
+            { label: '2024', value: '2024' },
+            { label: '2025', value: '2025' },
+            { label: '2026', value: '2026' },
+            { label: '2027', value: '2027' },
+            { label: '2028', value: '2028' },
+            { label: '2029', value: '2029' },
+            { label: '2030', value: '2030' },
+          ]}
+          placeholder={{ label: "Year", value: null }}
+          style={pickerSelectStyles}
+          value={year}
+          useNativeAndroidPickerStyle={false} 
+        />
           <TextInput
             placeholder="Email"
             value={email}
@@ -114,6 +164,38 @@ const SignUpScreen = () => {
     </KeyboardAvoidingView>
   );
 };
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    backgroundColor: 'white',
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    borderRadius: 10,
+    marginTop: 10,
+    borderWidth: 0,
+    fontSize: 14,
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    //borderWidth: 1,
+    //borderColor: 'gray',
+    //borderRadius: 4,
+    //color: 'black',
+    //paddingRight: 30, // to ensure the text is not obscured by the icon
+    //backgroundColor: 'white', // Optional
+  },
+  inputAndroid: {
+    fontSize: 14,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: 'purple',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is not obscured by the icon
+    backgroundColor: 'white', // Optional
+  },
+});
+
 
 const styles = StyleSheet.create({
   container: {
