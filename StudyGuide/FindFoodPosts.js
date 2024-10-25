@@ -42,7 +42,7 @@ import { db } from './firebase';
    // const [sortedPosts, setSortedPosts]= useState([]);
 
     //hook
-    
+    /*
       //const fetchSortedPosts = async (locationId) => {
         async function fetchSortedPosts (locationId) {
         try {
@@ -63,7 +63,7 @@ import { db } from './firebase';
       };
       useEffect(()=> {
       fetchSortedPosts();
-    }, []);
+    }, []); */
 
     //return
    // return sortedPosts;
@@ -101,7 +101,7 @@ import { db } from './firebase';
 
     
 
-/*most up to date!!!!!!
+/*not most up to date!!!!!!
 const handleLocationPress = (locationId) => {
   //db.collection
 const foodRef = firestore().collection('foodPosts');
@@ -116,13 +116,35 @@ snapshot.forEach(doc => {
 });
 };//end of most up to date*/
 
+const handleLocationPress = (location_id) => {
+  //this one line navigates you to Posts page:
+  navigation.navigate('Posts', { location_id : location_id }); // Navigate to posts page with location ID
+ 
+};
+return (
+  <View style={styles.container}>
+    <Text style={styles.title}>Select Location</Text>
+    <ScrollView>
+      {locations.map((location) => (
+        <View key={location.id} style={styles.locationContainer}>
+          <Button
+            title={location.city} // Assuming each location document has a 'name' field
+            onPress={() => handleLocationPress(location.id)}
+          />
+          
+        </View>
+      ))}
+    </ScrollView>
+  </View>
+);
 
+/*most recvent wo attribute
     const handleLocationPress = (locationId) => {
       //this one line navigates you to Posts page:
-      navigation.navigate("Posts"); // Navigate to posts page with location ID
+      navigation.navigate("Posts", { attribute: attributeValue }); // Navigate to posts page with location ID
      
     };
-  
+    
     // orig return
     return (
       <View style={styles.container}>
@@ -138,7 +160,7 @@ snapshot.forEach(doc => {
           ))}
         </ScrollView>
       </View>
-    );
+    );end of most recent*/
    
    /* return (
       <View style={styles.container}>
