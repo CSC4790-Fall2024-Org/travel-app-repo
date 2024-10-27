@@ -38,8 +38,11 @@ const SignUpScreen = () => {
       const checkVerificationStatus = async () => {
         await user.reload(); // Reload user data
 
+
         if (user.emailVerified) {
-          // Add user to Firestore only after email is verified
+
+          console.log('email verified');
+                    
           await setDoc(doc(db, 'users', user.uid), {
             email,
             name,
@@ -48,8 +51,8 @@ const SignUpScreen = () => {
             userId: user.uid,
           });
           
-          Alert.alert('Sign Up Successful', 'Your email is verified. Welcome to StudyGuide!');
-          navigation.navigate('Home', { uid: user.uid });
+          
+          Alert.alert('Sign Up Successful', 'Your email is verified. Welcome to StudyGuide! You can login now.');
         } else {
           setTimeout(checkVerificationStatus, 5000); // Retry after 5 seconds if not verified
         }
