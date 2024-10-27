@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Alert, ScrollView } from "react-native";
 import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
+import { getFirestore, db, doc, getDoc } from 'firebase/firestore'; // Import Firestore functions
+
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -9,21 +11,49 @@ const LoginScreen = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigation = useNavigation();
   const auth = getAuth();
+  const db = getFirestore(); // Initialize Firestore
+
+  
 
   const handleLogin = async () => {
     try {
       const userCredentials = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredentials.user;
-      console.log(user.email);
-      navigation.navigate('Home', { uid: user.uid });
+
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDocSnapshot = await getDoc(userDocRef);
+
+      if (userDocSnapshot.exists()) {   // Check if the user document exists
+        console.log("User's email is verified.");
+        navigation.navigate('Home', { uid: user.uid });
+    
+      } else {
+      // reached this statement but only after user has signed up but not authenticated
+      
+        console.log("User document does not exist.");
+        Alert.alert('Error', 'No user found with those credentials. Please verify your email and password or signup.')
+        
+    }
+    
     } catch (error) {
       switch (error.code) {
-        case 'auth/user-not-found':
+        case 'auth/user-not-found': // not working, this situation should be taken care of in the else above
+        console.log("in auth/user-not-found");
           Alert.alert('Error', 'No user found with this email. Please check your email or register.');
           break;
+        //case 'auth/wrong-password':
         case 'auth/invalid-login-credentials':
-        case 'auth/wrong-password':
-          Alert.alert('Error', 'This password is incorrect. Please try again or click forgot password below.');
+          console.log("in auth/invalid login credentials");
+          Alert.alert('Error', 'No user found with this email. Please check your email or register. ')
+          break;
+        case 'auth/invalid-credential':
+          Alert.alert('Error', 'These credentials are incorrect. Please try again or click forgot password below.');
+          break;
+        case 'auth/missing-password':
+          Alert.alert('Error', 'Please enter your password.');
+          break;
+        case 'auth/invalid-email':
+          Alert.alert('Error', 'Please enter your email.');
           break;
         default:
           Alert.alert('Error', error.message);
