@@ -1,14 +1,16 @@
-import React, { useState } from "react"; 
-import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Button, Alert } from "react-native";
+import React, { useState, useEffect } from "react"; 
+import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Button, Alert, ScrollView } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 //import { Picker } from '@react-native-picker/picker';
 import RNPickerSelect from "react-native-picker-select";
 import { db } from './firebase';
+import { getDocs, collection } from 'firebase/firestore';
 import { doc, setDoc } from 'firebase/firestore';
 
-
-
+// Fields
 const CreateFoodPost = () => {
+  const [restaurantLocation, setRestaurantLocation] = useState('');
+  const [locationOptions, setLocationOptions] = useState([]); // Hold list of locations
   const [restaurantName, setRestaurantName] = useState('');
   const [mealTime, setMealTime] = useState('');
   const [restaurantType, setRestaurantType] = useState('');
@@ -17,27 +19,46 @@ const CreateFoodPost = () => {
   const navigation = useNavigation();
 
   // check if all fields are filled
-  const allFields = restaurantName && mealTime && restaurantType && expense && descrip;
+  const allFields = restaurantLocation && restaurantName && mealTime && restaurantType && expense && descrip;
 
   const handleSubmit = () => {
     if (allFields) {
+      console.log('Restarant location:', restaurantLocation);
       console.log('Restaurant Name:', restaurantName);
       console.log('Meal Time:', mealTime);
       console.log('Restaurant Type', restaurantType);
       console.log('Expense', expense);
       console.log('Description', descrip);
-
       navigation.navigate('FindFoodPosts');
     } else {
       Alert.alert("Fill out all fields before submitting.")
     }
   };
 
+  // Function to fetch location from Firestore
+  const fetchLocations = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "locations"));
+      const fetchedData = querySnapshot.docs.map((doc) => ({
+        label: doc.data().city,
+        value: doc.id,
+      }));
+      setLocationOptions(fetchedData);
+    } catch (error) {
+      console.error("Error fetching locations: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchLocations();
+  }, []);
+
 
   return (
     <KeyboardAvoidingView
       style={styles.container} behavior="padding"
     > 
+    <ScrollView>
       <Text style={styles.title}>Create Food Post</Text>
       <View style={styles.inputContainer}>
 
@@ -46,6 +67,16 @@ const CreateFoodPost = () => {
           value={restaurantName}
           onChangeText={text => setRestaurantName(text)}
           style={styles.input}
+        />
+
+         {/* Restaurant Location */}
+         <RNPickerSelect
+          onValueChange={(value) => setRestaurantLocation(value)}
+          items={locationOptions}
+          placeholder={{ label: "Restaurant Location", value: null }}
+          style={pickerSelectStyles}
+          value={restaurantLocation}
+          useNativeAndroidPickerStyle={false} 
         />
         
         {/* Meal Time */}
@@ -114,6 +145,7 @@ const CreateFoodPost = () => {
     </TouchableOpacity> 
     
       </View>
+      </ScrollView>
     </KeyboardAvoidingView> 
   );
 };
