@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { getFirestore, doc, getDoc } from "firebase/firestore"; 
-
+// maybe import firebase instead
 export default function Profile({ route }) {
   const { uid } = route.params; // Get the uid from the route parameters
   const [profileData, setProfileData] = useState(null); // State to hold user profile data

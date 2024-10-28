@@ -1,7 +1,8 @@
 import React, { useState } from "react"; 
-import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, ScrollView, StyleSheet, Alert, View } from "react-native";
+import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Alert, ScrollView} from "react-native";
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
+import RNPickerSelect from "react-native-picker-select";
 import { db } from './firebase';
 import { doc, setDoc } from 'firebase/firestore';
 
@@ -23,31 +24,44 @@ const SignUpScreen = () => {
       Alert.alert('Error', 'StudyGuide is designed for university students. Please enter an email address associated with a university.');
       return;
     }
+    
     const auth = getAuth();
+    
     try {
       const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredentials.user;
 
-      await setDoc(doc(db, 'users', user.uid), {
-        email,
-        name,
-        year,
-        city,
-        userId: user.uid,
-      });
-
+      // Send verification email
       await sendEmailVerification(user);
       Alert.alert('Verification Email Sent', 'Please check your email to verify your account.');
 
-      const reloadUser = async () => {
-        await user.reload();
+      // Reload and check verification status every 5 seconds
+      const checkVerificationStatus = async () => {
+        await user.reload(); // Reload user data
+
+
         if (user.emailVerified) {
-          Alert.alert('Sign Up Successful', 'Your email is verified. Welcome to StudyGuide!');
+
+          console.log('email verified');
+                    
+          await setDoc(doc(db, 'users', user.uid), {
+            email,
+            name,
+            year,
+            city,
+            userId: user.uid,
+          });
+          
+          
+          Alert.alert('Sign Up Successful', 'Your email is verified. Welcome to StudyGuide! You can login now.');
         } else {
-          Alert.alert('Email Not Verified', 'Please verify your email by clicking the link sent to your inbox before logging in.');
+          setTimeout(checkVerificationStatus, 5000); // Retry after 5 seconds if not verified
         }
-      }; 
-      setTimeout(reloadUser, 5000);
+      };
+
+      // Start checking for verification status
+      setTimeout(checkVerificationStatus, 5000);
+
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
         Alert.alert('Error', 'This email is already in use. Please log in or use another email.');
@@ -55,7 +69,7 @@ const SignUpScreen = () => {
         Alert.alert('Error', error.message);
       }
     }
-  }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -71,19 +85,68 @@ const SignUpScreen = () => {
             onChangeText={text => setName(text)}
             style={styles.input}
           />
-          <TextInput
-            placeholder="City"
-            value={city}
-            onChangeText={text => setCity(text)}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Year"
-            value={year}
-            onChangeText={text => setYear(text)}
-            style={styles.input}
-            keyboardType="numeric"
-          />
+          {/* City */}
+          <RNPickerSelect
+          onValueChange={(value) => setCity(value)}
+          items={[
+            { label: 'Cádiz', value: 'Cádiz' },
+            { label: 'Cambridge', value: 'Cabridge' },
+            { label: 'Dingle', value: 'Dingle' },
+            { label: 'Galway', value: 'Galway' },
+            { label: 'Lille', value: 'Lille' },
+            { label: 'Philadelphia', value: 'Philadelphia' },
+            { label: 'Rome', value: 'Rome' },
+            { label: 'St. Andrews', value: 'St. Andrews' },
+            { label: 'Singapore', value: 'Singapore' },
+            { label: 'Sydney', value: 'Sydney' },
+            { label: 'Urbino', value: 'Urbino' },
+          ]}
+          placeholder={{ label: "City", value: null }}
+          style={pickerSelectStyles}
+          value={city}
+          useNativeAndroidPickerStyle={false} 
+        />
+          {/* Year */}
+          <RNPickerSelect
+          onValueChange={(value) => setYear(value)}
+          items={[
+            { label: '2000', value: '2000' },
+            { label: '2001', value: '2001' },
+            { label: '2002', value: '2002' },
+            { label: '2003', value: '2003' },
+            { label: '2004', value: '2004' },
+            { label: '2005', value: '2005' },
+            { label: '2006', value: '2006' },
+            { label: '2007', value: '2007' },
+            { label: '2008', value: '2008' },
+            { label: '2009', value: '2009' },
+            { label: '2010', value: '2010' },
+            { label: '2011', value: '2011' },
+            { label: '2012', value: '2012' },
+            { label: '2013', value: '2013' },
+            { label: '2014', value: '2014' },
+            { label: '2015', value: '2015' },
+            { label: '2016', value: '2016' },
+            { label: '2017', value: '2017' },
+            { label: '2018', value: '2018' },
+            { label: '2019', value: '2019' },
+            { label: '2020', value: '2020' },
+            { label: '2021', value: '2021' },
+            { label: '2022', value: '2022' },
+            { label: '2023', value: '2023' },
+            { label: '2024', value: '2024' },
+            { label: '2025', value: '2025' },
+            { label: '2026', value: '2026' },
+            { label: '2027', value: '2027' },
+            { label: '2028', value: '2028' },
+            { label: '2029', value: '2029' },
+            { label: '2030', value: '2030' },
+          ]}
+          placeholder={{ label: "Year", value: null }}
+          style={pickerSelectStyles}
+          value={year}
+          useNativeAndroidPickerStyle={false} 
+        />
           <TextInput
             placeholder="Email"
             value={email}
@@ -115,12 +178,41 @@ const SignUpScreen = () => {
   );
 };
 
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    backgroundColor: 'white',
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    borderRadius: 10,
+    marginTop: 10,
+    borderWidth: 0,
+    fontSize: 14,
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    //borderWidth: 1,
+    //borderColor: 'gray',
+    //borderRadius: 4,
+    //color: 'black',
+    //paddingRight: 30, // to ensure the text is not obscured by the icon
+    //backgroundColor: 'white', // Optional
+  },
+  inputAndroid: {
+    fontSize: 14,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: 'purple',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is not obscured by the icon
+    backgroundColor: 'white', // Optional
+  },
+});
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  scrollContainer: {
-    flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
@@ -164,21 +256,22 @@ const styles = StyleSheet.create({
     color: 'rgb(60, 179, 113)',
     fontWeight: 'bold',
   },
+  buttonContainer: {
+    width: '100%',
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 40,
+  },
   button: {
     backgroundColor: 'green',
     width: '100%', 
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
-    marginTop: 20,
   },
   buttonText: {
     color: 'white', 
     fontSize: 15,
-  },
-  infoText: {
-    marginTop: 20,
-    textAlign: 'center',
   },
 });
 
