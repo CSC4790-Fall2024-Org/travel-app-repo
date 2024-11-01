@@ -41,31 +41,53 @@ return ()=> postSnap;
   //has bug
  
   
-const fetchSortedPosts = async () => {
-    try { 
+// const fetchSortedPosts = async () => {
+//     try { 
 
-     //works but it lists all posts
-     const querySnapshot = await getDocs(collection(db, "foodPosts"), where('locat_id', '==', location_id));
-    // const querySnapshot = await getDocs(collection(db, "foodPosts"), where('locat_id', 'in', [{location_id}]));
-   // const querySnapshot= db.where('locat_id', '==', 'location_id');
-   //const querySnapshot = firestore().collection('foodPosts').where('locat_id', '==', location_id).get();
+//      //works but it lists all posts
+//      console.log(location_id);
+//      const querySnapshot = await getDocs(collection(db, "foodPosts"), where('locat_id', '==', location_id));
+//     // const querySnapshot = await getDocs(collection(db, "foodPosts"), where('locat_id', 'in', [{location_id}]));
+//    // const querySnapshot= db.where('locat_id', '==', 'location_id');
+//    //const querySnapshot = firestore().collection('foodPosts').where('locat_id', '==', location_id).get();
      
-     //where to push docs with locat_id
-      const fetchedSortedPosts = [];
-      //pushing on fetched posts
-      querySnapshot.forEach((doc) => {
-        // fetchedSortedPosts.push({ id: doc.id, ...doc.data() });
+//      //where to push docs with locat_id
+//       const fetchedSortedPosts = [];
+//       //pushing on fetched posts
+//       querySnapshot.forEach((doc) => {
+//         // fetchedSortedPosts.push({ id: doc.id, ...doc.data() });
         
-        fetchedSortedPosts.push({ id: doc.id, ...doc.data() }); 
-      });
-      setSortedPosts(fetchedSortedPosts);//setting what gets displayed
+//         fetchedSortedPosts.push({ id: doc.id, ...doc.data() }); 
+//       });
+//       setSortedPosts(fetchedSortedPosts);//setting what gets displayed
       
-    } catch (error) {
-      console.error("Error fetching posts for this location: ", error);
-    } //end of works
+//     } catch (error) {
+//       console.error("Error fetching posts for this location: ", error);
+//     } //end of works
       
-  }; //end of const 
-  
+//   }; //end of const 
+const fetchSortedPosts = async () => {
+  try {
+    console.log(location_id);
+
+    // Build the query with the collection and where filter
+    const foodPostsRef = collection(db, "foodPosts");
+    const q = query(foodPostsRef, where('locat_id', '==', location_id));
+
+    // Execute the query and get the documents
+    const querySnapshot = await getDocs(q);
+
+    const fetchedSortedPosts = [];
+    querySnapshot.forEach((doc) => {
+      fetchedSortedPosts.push({ id: doc.id, ...doc.data() });
+    });
+
+    setSortedPosts(fetchedSortedPosts); // Update state with the filtered posts
+  } catch (error) {
+    console.error("Error fetching posts for this location: ", error);
+  }
+};
+
 
 useEffect(() => {
   fetchSortedPosts();
