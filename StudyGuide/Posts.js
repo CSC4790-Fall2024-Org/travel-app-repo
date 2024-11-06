@@ -68,7 +68,7 @@ return ()=> postSnap;
 //   }; //end of const 
 const fetchSortedPosts = async () => {
   try {
-    console.log(location_id);
+    //console.log(location_id);
 
     // Build the query with the collection and where filter
     const foodPostsRef = collection(db, "foodPosts");
