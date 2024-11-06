@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 // Import your subpages
+import Demo from './Demo';
 import LoginScreen from './LoginScreen';
 import SignUpScreen from './SignUpScreen';
 import Profile from './Profile';
@@ -22,6 +23,7 @@ function MainPage({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Starter page</Text>
+      <Button title="Go to App Demo" onPress={() => navigation.navigate("App Demo")} />
       <Button title="Go to Login" onPress={() => navigation.navigate("Login")} />
       <Button title="Go to Sign Up" onPress={() => navigation.navigate("SignUp")} />
       <Button title="Go to Profile" onPress={() => navigation.navigate("Profile")} />
@@ -42,6 +44,7 @@ export default function App() {
         {/* Main page listing all subpages */}
         <Stack.Screen name="MainPage" component={MainPage} />
         {/* Subpages */}
+        <Stack.Screen name="App Demo" component={Demo} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Profile" component={Profile} />
