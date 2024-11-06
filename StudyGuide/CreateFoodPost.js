@@ -11,7 +11,8 @@ import { doc, setDoc } from 'firebase/firestore';
 
 // Fields
 const CreateFoodPost = () => {
-  const [restaurantLocation, setRestaurantLocation] = useState('');
+  // add location city and user id 
+  const [restaurantLocationId, setRestaurantLocation] = useState('');
   const [locationOptions, setLocationOptions] = useState([]); // Hold list of locations
   const [restaurantName, setRestaurantName] = useState('');
   const [mealTime, setMealTime] = useState('');
@@ -23,23 +24,47 @@ const CreateFoodPost = () => {
   const navigation = useNavigation();
 
   // check if all fields are filled
+
   const allFields = restaurantLocation && restaurantName && mealTime && restaurantType && dietaryRes && expense && starRating && descrip;
 
-  const handleSubmit = () => {
+
+  const handleSubmit = async () => {
     if (allFields) {
-      console.log('Restarant location:', restaurantLocation);
-      console.log('Restaurant Name:', restaurantName);
-      console.log('Meal Time:', mealTime);
-      console.log('Restaurant Type', restaurantType);
-      console.log('Dietary Restrictions', dietaryRes);
-      console.log('Expense', expense);
-      console.log('Rating', starRating)
-      console.log('Description', descrip);
-      navigation.navigate('FindFoodPosts');
+
+      try {
+        // Generate a new document reference with a unique ID in the "foodPosts" collection
+        // add location city and user id 
+        const newPostRef = doc(collection(db, "foodPosts"));
+        
+        // Data for the new post
+        const newPostData = {
+          locat_id: restaurantLocationId,      
+          restaurant: restaurantName,        
+          mealTime: mealTime,                
+          restaurantType: restaurantType,    
+          expense: expense,                  
+          description: descrip     
+          // also add something so that the id of the specific user is also included           
+        };
+  
+        // Add the new post to Firebase
+        await setDoc(newPostRef, newPostData);
+  
+        // Navigate to the "FindFoodPosts" screen with the location_id
+        navigation.navigate('Posts', { location_id: restaurantLocationId });
+  
+        console.log("New post added successfully!");
+  
+      } catch (error) {
+        console.error("Error adding post: ", error);
+        Alert.alert("An error occurred while adding the post. Please try again.");
+      }
+
     } else {
-      Alert.alert("Fill out all fields before submitting.")
+      Alert.alert("Fill out all fields before submitting.");
     }
   };
+  
 
   // Function to fetch location from Firestore
   const fetchLocations = async () => {
@@ -81,7 +106,7 @@ const CreateFoodPost = () => {
           items={locationOptions}
           placeholder={{ label: "Restaurant Location", value: null }}
           style={pickerSelectStyles}
-          value={restaurantLocation}
+          value={restaurantLocationId}
           useNativeAndroidPickerStyle={false} 
         />
         
