@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Button, Alert, ScrollView } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 //import { Picker } from '@react-native-picker/picker';
-import RNPickerSelect from "react-native-picker-select";
+import RNPickerSelect from "react-native-picker-select"; //picker
+import SectionedMultiSelect from 'react-native-sectioned-multi-select'; //multiselect picker
+import Icon from "react-native-vector-icons/MaterialIcons"; //icons for multiselect
 import { db } from './firebase';
 import { getDocs, collection } from 'firebase/firestore';
 import { doc, setDoc } from 'firebase/firestore';
@@ -14,12 +16,14 @@ const CreateFoodPost = () => {
   const [restaurantName, setRestaurantName] = useState('');
   const [mealTime, setMealTime] = useState('');
   const [restaurantType, setRestaurantType] = useState('');
+  const [dietaryRes, setDietaryRes] = useState([]);
   const [expense, setExpense] = useState('');
+  const [starRating, setStarRating] = useState('');
   const [descrip, setDescrip] = useState('');
   const navigation = useNavigation();
 
   // check if all fields are filled
-  const allFields = restaurantLocation && restaurantName && mealTime && restaurantType && expense && descrip;
+  const allFields = restaurantLocation && restaurantName && mealTime && restaurantType && dietaryRes && expense && starRating && descrip;
 
   const handleSubmit = () => {
     if (allFields) {
@@ -27,7 +31,9 @@ const CreateFoodPost = () => {
       console.log('Restaurant Name:', restaurantName);
       console.log('Meal Time:', mealTime);
       console.log('Restaurant Type', restaurantType);
+      console.log('Dietary Restrictions', dietaryRes);
       console.log('Expense', expense);
+      console.log('Rating', starRating)
       console.log('Description', descrip);
       navigation.navigate('FindFoodPosts');
     } else {
@@ -92,7 +98,29 @@ const CreateFoodPost = () => {
           style={pickerSelectStyles}
           value={mealTime}
           useNativeAndroidPickerStyle={false} 
-        />
+        /> 
+        {/* <SectionedMultiSelect
+          items={[
+            { name: 'Breakfast', id: 'breakfast' },
+            { name: 'Brunch', id: 'brunch' },
+            { name: 'Lunch', id: 'lunch' },
+            { name: 'Dinner', id: 'dinner' }
+          ]}
+          uniqueKey="id"
+          selectText="Meal Time"
+          onSelectedItemsChange={(selectedItems) => setMealTime(selectedItems)}
+          selectedItems={mealTime}
+          IconRenderer={Icon}
+          single={false}
+          style={{
+            selectToggle: {
+              padding: 15,
+              backgroundColor: 'white',
+              borderRadius: 10,
+              marginTop: 10,
+            },
+          }}
+        /> */}
 
         {/* Restaurant Type */}
         <RNPickerSelect
@@ -110,6 +138,33 @@ const CreateFoodPost = () => {
           useNativeAndroidPickerStyle={false} 
         />
 
+        {/* Dietary Restrictions */}
+        <SectionedMultiSelect
+          items={[
+            { name: 'Vegetarian', id: 'vegetarian' },
+            { name: 'Vegan', id: 'vegan' },
+            { name: 'Dairy-free', id: 'dairy-free' },
+            { name: 'Lactose-free', id: 'lactose-free' },
+            { name: 'Gluten-free', id: 'gluten-free' },
+            { name: 'Kosher', id: 'kosher' },
+            { name: 'Paleo', id: 'paleo' }
+          ]}
+          uniqueKey="id"
+          selectText="Accomodates Dietary Restrictions:"
+          onSelectedItemsChange={(selectedItems) => setDietaryRes(selectedItems)}
+          selectedItems={dietaryRes}
+          IconRenderer={Icon}
+          single={false}
+          style={{
+            selectToggle: {
+              padding: 15,
+              backgroundColor: 'white',
+              borderRadius: 10,
+              marginTop: 10,
+            },
+          }}
+        />
+
         {/* Expense */}
         <RNPickerSelect
           onValueChange={(value) => setExpense(value)}
@@ -121,6 +176,22 @@ const CreateFoodPost = () => {
           placeholder={{ label: "Expense", value: null }}
           style={pickerSelectStyles}
           value={expense}
+          useNativeAndroidPickerStyle={false} 
+        />
+
+        {/* Stars */}
+        <RNPickerSelect
+          onValueChange={(value) => setStarRating(value)}
+          items={[
+            { label: '1', value: '1' },
+            { label: '2', value: '2' },
+            { label: '3', value: '3' },
+            { label: '4', value: '4' },
+            { label: '5', value: '5' }
+          ]}
+          placeholder={{ label: "Star Rating", value: null }}
+          style={pickerSelectStyles}
+          value={starRating}
           useNativeAndroidPickerStyle={false} 
         />
 
