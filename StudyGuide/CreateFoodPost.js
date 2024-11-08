@@ -8,6 +8,8 @@ import Icon from "react-native-vector-icons/MaterialIcons"; //icons for multisel
 import { db } from './firebase';
 import { getDocs, collection } from 'firebase/firestore';
 import { doc, setDoc } from 'firebase/firestore';
+import { getAuth } from "firebase/auth"; // Import auth to get the current user
+
 
 // Fields
 const CreateFoodPost = () => {
@@ -25,7 +27,7 @@ const CreateFoodPost = () => {
 
   // check if all fields are filled
 
-  const allFields = restaurantLocation && restaurantName && mealTime && restaurantType && dietaryRes && expense && starRating && descrip;
+  const allFields = restaurantLocationId && restaurantName && mealTime && restaurantType && dietaryRes && expense && starRating && descrip;
 
 
   const handleSubmit = async () => {
@@ -34,6 +36,11 @@ const CreateFoodPost = () => {
       try {
         // Generate a new document reference with a unique ID in the "foodPosts" collection
         // add location city and user id 
+
+        const auth = getAuth();
+        const userId = auth.currentUser ? auth.currentUser.uid : null;
+
+
         const newPostRef = doc(collection(db, "foodPosts"));
         
         // Data for the new post
@@ -43,7 +50,8 @@ const CreateFoodPost = () => {
           mealTime: mealTime,                
           restaurantType: restaurantType,    
           expense: expense,                  
-          description: descrip     
+          description: descrip,     
+          userId: userId
           // also add something so that the id of the specific user is also included           
         };
   
