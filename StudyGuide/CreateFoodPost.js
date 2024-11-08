@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from "react-native-picker-select"; //picker
 import SectionedMultiSelect from 'react-native-sectioned-multi-select'; //multiselect picker
 import Icon from "react-native-vector-icons/MaterialIcons"; //icons for multiselect
+
 import { db } from './firebase';
 import { getDocs, collection } from 'firebase/firestore';
 import { doc, setDoc } from 'firebase/firestore';
@@ -14,6 +15,7 @@ const CreateFoodPost = () => {
   // add location city and user id 
   const [restaurantLocationId, setRestaurantLocation] = useState('');
   const [locationOptions, setLocationOptions] = useState([]); // Hold list of locations
+  const [address, setAddress] = useState('');
   const [restaurantName, setRestaurantName] = useState('');
   const [mealTime, setMealTime] = useState('');
   const [restaurantType, setRestaurantType] = useState('');
@@ -21,11 +23,12 @@ const CreateFoodPost = () => {
   const [expense, setExpense] = useState('');
   const [starRating, setStarRating] = useState('');
   const [descrip, setDescrip] = useState('');
+  const [webLink, setWebLink] = useState('');
   const navigation = useNavigation();
 
   // check if all fields are filled
 
-  const allFields = restaurantLocation && restaurantName && mealTime && restaurantType && dietaryRes && expense && starRating && descrip;
+  const allFields = restaurantLocationId && restaurantName && mealTime && restaurantType && dietaryRes && expense && starRating && descrip;
 
 
   const handleSubmit = async () => {
@@ -108,6 +111,14 @@ const CreateFoodPost = () => {
           style={pickerSelectStyles}
           value={restaurantLocationId}
           useNativeAndroidPickerStyle={false} 
+        />
+
+        {/* Address */}
+        <TextInput
+          placeholder="Address"
+          value={address}
+          onChangeText={text => setAddress(text)}
+          style={styles.input}
         />
         
         {/* Meal Time */}
@@ -220,10 +231,21 @@ const CreateFoodPost = () => {
           useNativeAndroidPickerStyle={false} 
         />
 
+        {/* Description */}
         <TextInput
           placeholder="Description"
           value={descrip}
           onChangeText={text => setDescrip(text)}
+          style={styles.input}
+          multiline={true}
+          numberOfLines={10}
+        />
+
+        {/* Website */}
+        <TextInput
+          placeholder="Link to website"
+          value={webLink}
+          onChangeText={text => setWebLink(text)}
           style={styles.input}
           multiline={true}
           numberOfLines={10}
