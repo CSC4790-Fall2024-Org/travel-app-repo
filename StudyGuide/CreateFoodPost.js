@@ -5,14 +5,14 @@ import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from "react-native-picker-select"; //picker
 import SectionedMultiSelect from 'react-native-sectioned-multi-select'; //multiselect picker
 import Icon from "react-native-vector-icons/MaterialIcons"; //icons for multiselect
-
+import Stars from "./Stars"
 import { db } from './firebase';
 import { getDocs, collection } from 'firebase/firestore';
 import { doc, setDoc } from 'firebase/firestore';
 
 // Fields
 const CreateFoodPost = () => {
-  // add location city and user id 
+  // add user id 
   const [restaurantLocationId, setRestaurantLocation] = useState('');
   const [locationOptions, setLocationOptions] = useState([]); // Hold list of locations
   const [address, setAddress] = useState('');
@@ -21,14 +21,15 @@ const CreateFoodPost = () => {
   const [restaurantType, setRestaurantType] = useState('');
   const [dietaryRes, setDietaryRes] = useState([]);
   const [expense, setExpense] = useState('');
-  const [starRating, setStarRating] = useState('');
+  const [rating, setRating] = useState(0);
+  //const [starRating, setStarRating] = useState('');
   const [descrip, setDescrip] = useState('');
   const [webLink, setWebLink] = useState('');
   const navigation = useNavigation();
 
   // check if all fields are filled
 
-  const allFields = restaurantLocationId && restaurantName && mealTime && restaurantType && dietaryRes && expense && starRating && descrip;
+  const allFields = restaurantLocationId && restaurantName && mealTime && restaurantType && dietaryRes && expense && rating && descrip;
 
 
   const handleSubmit = async () => {
@@ -41,12 +42,15 @@ const CreateFoodPost = () => {
         
         // Data for the new post
         const newPostData = {
-          locat_id: restaurantLocationId,      
+          locat_id: restaurantLocationId,  
           restaurant: restaurantName,        
           mealTime: mealTime,                
-          restaurantType: restaurantType,    
-          expense: expense,                  
-          description: descrip     
+          restaurantType: restaurantType, 
+          dietary: dietaryRes,   
+          expense: expense, 
+          stars: rating,                 
+          description: descrip,
+          link: webLink  
           // also add something so that the id of the specific user is also included           
         };
   
@@ -96,8 +100,12 @@ const CreateFoodPost = () => {
       <Text style={styles.title}>Create Food Post</Text>
       <View style={styles.inputContainer}>
 
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Stars rating={rating} setRating={setRating} />
+        </View>
+
         <TextInput
-          placeholder="Restaurant Name"
+          placeholder="Restaurant Name *"
           value={restaurantName}
           onChangeText={text => setRestaurantName(text)}
           style={styles.input}
@@ -107,7 +115,7 @@ const CreateFoodPost = () => {
          <RNPickerSelect
           onValueChange={(value) => setRestaurantLocation(value)}
           items={locationOptions}
-          placeholder={{ label: "Restaurant Location", value: null }}
+          placeholder={{ label: "Restaurant Location *", value: null }}
           style={pickerSelectStyles}
           value={restaurantLocationId}
           useNativeAndroidPickerStyle={false} 
@@ -130,7 +138,7 @@ const CreateFoodPost = () => {
             { label: 'Lunch', value: 'lunch' },
             { label: 'Dinner', value: 'dinner' }
           ]}
-          placeholder={{ label: "Meal Time", value: null }}
+          placeholder={{ label: "Meal Time *", value: null }}
           style={pickerSelectStyles}
           value={mealTime}
           useNativeAndroidPickerStyle={false} 
@@ -168,7 +176,7 @@ const CreateFoodPost = () => {
             { label: 'Buffet', value: 'buffet' },
             { label: 'Cafe', value: 'cafe' }
           ]}
-          placeholder={{ label: "Restaurant Type", value: null }}
+          placeholder={{ label: "Restaurant Type *", value: null }}
           style={pickerSelectStyles}
           value={restaurantType}
           useNativeAndroidPickerStyle={false} 
@@ -209,14 +217,14 @@ const CreateFoodPost = () => {
             { label: '$$', value: '$$' },
             { label: '$$$', value: '$$$' }
           ]}
-          placeholder={{ label: "Expense", value: null }}
+          placeholder={{ label: "Expense *", value: null }}
           style={pickerSelectStyles}
           value={expense}
           useNativeAndroidPickerStyle={false} 
         />
 
         {/* Stars */}
-        <RNPickerSelect
+        {/* <RNPickerSelect
           onValueChange={(value) => setStarRating(value)}
           items={[
             { label: '1', value: '1' },
@@ -229,11 +237,11 @@ const CreateFoodPost = () => {
           style={pickerSelectStyles}
           value={starRating}
           useNativeAndroidPickerStyle={false} 
-        />
+        /> */}
 
         {/* Description */}
         <TextInput
-          placeholder="Description"
+          placeholder="Description *"
           value={descrip}
           onChangeText={text => setDescrip(text)}
           style={styles.input}
