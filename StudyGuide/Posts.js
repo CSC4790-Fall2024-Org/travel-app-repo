@@ -4,7 +4,7 @@ import { db } from './firebase';
 //import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 //import { locationId, attribute } from './FindFoodPosts';
-import { getFirestore, firestore, where, collection, getDocs, query,  Filter, doc, QueryFieldFilterConstraint, DocumentSnapshot, QuerySnapshot } from "firebase/firestore";
+import { getFirestore, firestore, where, collection, getDocs, query,  Filter, doc, QueryFieldFilterConstraint, DocumentSnapshot, QuerySnapshot, getDoc } from "firebase/firestore";
 //import firestore from '@react-native-firebase/firestore';
 //for working code: 
 import { useNavigation } from "@react-navigation/native";
@@ -19,6 +19,7 @@ export default function Posts({ route }) {
   const [sortedPosts, setSortedPosts]= useState([]);
   //const [showView, setShowView] = useState(false);
   const { location_id }=route.params;
+  const [locationCity, setLocationCity] = useState(''); // State to store city name
  // const {foodcity}=route.params;
 
  /*
@@ -66,6 +67,22 @@ return ()=> postSnap;
 //     } //end of works
       
 //   }; //end of const 
+
+
+const fetchLocationCity = async () => {
+  try {
+    const locationRef = doc(db, "locations", location_id);
+    const locationDoc = await getDoc(locationRef);
+    if (locationDoc.exists()) {
+      setLocationCity(locationDoc.data().city); // Assuming 'city' is the field name for city name
+    } else {
+      setLocationCity("Unknown Location");
+    }
+  } catch (error) {
+    console.error("Error fetching location city: ", error);
+  }
+};
+
 const fetchSortedPosts = async () => {
   try {
     //console.log(location_id);
@@ -90,8 +107,9 @@ const fetchSortedPosts = async () => {
 
 
 useEffect(() => {
+  fetchLocationCity();
   fetchSortedPosts();
-}, [db, 'foodPosts']);
+}, [db, location_id]);
 
 
 if (!sortedPosts) {
@@ -108,17 +126,13 @@ if (!sortedPosts) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Posts with ID {location_id}  </Text>
+      <Text style={styles.title}>{locationCity} Food Posts</Text>
     <ScrollView>
       {sortedPosts.map((sortedPost) => (
-       
             <View key={sortedPost.id} style={styles.container}>
             <Text style={styles.itemTitle}> Post from <Text style={styles.postItem}>{sortedPost.userId}</Text></Text>
             <Text style={styles.itemTitle}> Restaurant Name: <Text style={styles.postItem}>{sortedPost.restaurant}</Text></Text>
-            <Text style={styles.itemTitle}> Restaurant City: <Text style={styles.postItem}>{sortedPost.food_city}</Text></Text>
-            <Text style={styles.itemTitle}> Message: <Text style={styles.postItem}>{sortedPost.message}</Text></Text>
-            <Text style={styles.itemTitle}> Location Id: <Text style={styles.postItem}>{sortedPost.locat_id}</Text></Text>
-
+            <Text style={styles.itemTitle}> Message: <Text style={styles.postItem}>{sortedPost.description}</Text></Text>
         </View>
 
           
