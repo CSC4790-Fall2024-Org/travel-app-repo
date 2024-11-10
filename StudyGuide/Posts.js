@@ -1,10 +1,9 @@
 import { Text, View, StyleSheet, ScrollView, Button } from "react-native";
 import { db } from './firebase';
 import React, { useState, useEffect } from "react";
-//import { locationId, attribute } from './FindFoodPosts';
 import { getFirestore, firestore, where, collection, getDocs, query,  Filter, doc, QueryFieldFilterConstraint, DocumentSnapshot, QuerySnapshot, getDoc } from "firebase/firestore";
-//import firestore from '@react-native-firebase/firestore';
-//for working code: 
+
+
 import { useNavigation } from "@react-navigation/native";
 
 export default function Posts({ route }) { 
@@ -12,6 +11,7 @@ export default function Posts({ route }) {
   const navigation = useNavigation();
   const [sortedPosts, setSortedPosts]= useState([]);
   const { location_id }=route.params;
+
   const [locationCity, setLocationCity] = useState(''); // State to store city name
  
 
@@ -28,6 +28,9 @@ export default function Posts({ route }) {
       console.error("Error fetching location city: ", error);
     }
   };
+
+  const [locatInfo, setlocatInfo]= useState([]);
+
 
 const fetchSortedPosts = async () => {
   try {
@@ -63,6 +66,30 @@ if (!sortedPosts) {
   );
 }// end of getting the Food Posts for the location chosen in FindFoodPosts
 
+//get Location using location Id passed into this page
+const fetchLocatInfo = async () => {
+  try {
+    console.log(location_id);
+
+    // Build the query with the collection and where filter
+    const locatRef = collection(db, "locations");
+    const q = query(foodPostsRef, where('locat_id', '==', location_id));
+
+    // Execute the query and get the documents
+    const querySnapshot = await getDocs(q);
+
+    const fetchedLocatInfo = [];
+    querySnapshot.forEach((doc) => {
+      fetchedLocatInfo.push({ id: doc.id, ...doc.data() });
+    });
+    setlocatInfo(fetchedLocatInfo); // Update state with the filtered posts
+  } catch (error) {
+    console.error("Error fetching info for this location: ", error);
+  }
+};
+useEffect(() => {
+  fetchSortedPosts();
+}, [db, 'locations']);
 
 //come back to userId field that has been taken out of foodPosts fields
 //also need to add addr (address), userId, food_city, link
@@ -70,6 +97,7 @@ if (!sortedPosts) {
 
   return (
     <View style={styles.container}>
+
       <Text style={styles.title}>{locationCity} Food Posts</Text>
     
       <View style={styles.container}>
@@ -77,11 +105,25 @@ if (!sortedPosts) {
         </View>
       <ScrollView>
         
+
+      <Text style={styles.title}>Posts with ID {location_id}  </Text>
+    <ScrollView>
+    {locatInfo.map((location) => (
+        <View key={location.id} style={styles.container}>
+          <Button
+            title={location.city} // Assuming each location document has a 'name' field
+            onPress={() => handleLocationPress(location.id)}
+          />
+          <Text style={styles.itemTitle}> Locat City: <Text style={styles.postItem}>{locatInfo.city}</Text></Text>
+          <Text style={styles.itemTitle}> Locat Country: <Text style={styles.postItem}>{locatInfo.country}</Text></Text>
+        </View>
+      ))}
+
       {sortedPosts.map((sortedPost) => (
             <View key={sortedPost.id} style={styles.container}>
             <Text style={styles.itemTitle}> Post from: <Text style={styles.postItem}>{sortedPost.userId}</Text></Text>
             <Text style={styles.itemTitle}> Restaurant Name: <Text style={styles.postItem}>{sortedPost.restaurant}</Text></Text>
-            
+
             <Text style={styles.itemTitle}> Expense: <Text style={styles.postItem}>{sortedPost.expense}</Text></Text>
             <Text style={styles.itemTitle}> Meal Time: <Text style={styles.postItem}>{sortedPost.mealTime}</Text></Text>
             <Text style={styles.itemTitle}> Restaurant Type: <Text style={styles.postItem}>{sortedPost.restaurantType}</Text></Text>
