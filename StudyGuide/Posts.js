@@ -2,7 +2,7 @@ import { Text, View, StyleSheet, ScrollView, Button } from "react-native";
 import { db } from './firebase';
 import React, { useState, useEffect } from "react";
 import { getFirestore, firestore, where, collection, getDocs, query,  Filter, doc, QueryFieldFilterConstraint, DocumentSnapshot, QuerySnapshot, getDoc } from "firebase/firestore";
-
+import Stars from "./Stars"
 
 import { useNavigation } from "@react-navigation/native";
 
@@ -67,26 +67,7 @@ if (!sortedPosts) {
 }// end of getting the Food Posts for the location chosen in FindFoodPosts
 
 //get Location using location Id passed into this page
-const fetchLocatInfo = async () => {
-  try {
-    console.log(location_id);
 
-    // Build the query with the collection and where filter
-    const locatRef = collection(db, "locations");
-    const q = query(foodPostsRef, where('locat_id', '==', location_id));
-
-    // Execute the query and get the documents
-    const querySnapshot = await getDocs(q);
-
-    const fetchedLocatInfo = [];
-    querySnapshot.forEach((doc) => {
-      fetchedLocatInfo.push({ id: doc.id, ...doc.data() });
-    });
-    setlocatInfo(fetchedLocatInfo); // Update state with the filtered posts
-  } catch (error) {
-    console.error("Error fetching info for this location: ", error);
-  }
-};
 useEffect(() => {
   fetchSortedPosts();
 }, [db, 'locations']);
@@ -100,11 +81,6 @@ useEffect(() => {
 
       <Text style={styles.title}>{locationCity} Food Posts</Text>
     
-      <View style={styles.container}>
-            <Text style={styles.title}>{locationCity} Food Posts</Text>
-        </View>
-
-        
 
     <ScrollView>
     {locatInfo.map((location) => (
@@ -119,9 +95,23 @@ useEffect(() => {
       ))}
 
       {sortedPosts.map((sortedPost) => (
+
+
             <View key={sortedPost.id} style={styles.container}>
             <Text style={styles.itemTitle}> Post from: <Text style={styles.postItem}>{sortedPost.userId}</Text></Text>
             <Text style={styles.itemTitle}> Restaurant Name: <Text style={styles.postItem}>{sortedPost.restaurant}</Text></Text>
+            
+            {/* change so it shows stars */}
+            {/* <Text style={styles.itemTitle}> Rating: <Text style={styles.postItem}>{sortedPost.stars}</Text></Text>
+             */}
+          
+          <Text style={styles.itemTitle}> Rating: <Text style={styles.postItem}>{sortedPost.stars}</Text></Text>
+            
+       
+            
+            <Text style={styles.itemTitle}> Dietary Restrictions: <Text style={styles.postItem}>{sortedPost.dietary}</Text></Text>
+
+
 
             <Text style={styles.itemTitle}> Expense: <Text style={styles.postItem}>{sortedPost.expense}</Text></Text>
             <Text style={styles.itemTitle}> Meal Time: <Text style={styles.postItem}>{sortedPost.mealTime}</Text></Text>
@@ -146,6 +136,7 @@ useEffect(() => {
 // make address and link to website be conditional, only show if added
 // user id make say the user name
 //add dietary restrictions here
+// also add stars
 
 const styles = StyleSheet.create({
   container: {
