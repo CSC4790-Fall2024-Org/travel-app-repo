@@ -103,10 +103,9 @@ useEffect(() => {
       <View style={styles.container}>
             <Text style={styles.title}>{locationCity} Food Posts</Text>
         </View>
-      <ScrollView>
+
         
 
-      <Text style={styles.title}>Posts with ID {location_id}  </Text>
     <ScrollView>
     {locatInfo.map((location) => (
         <View key={location.id} style={styles.container}>
