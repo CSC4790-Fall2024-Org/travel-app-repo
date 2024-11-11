@@ -9,6 +9,8 @@ import Stars from "./Stars"
 import { db } from './firebase';
 import { getDocs, collection } from 'firebase/firestore';
 import { doc, setDoc } from 'firebase/firestore';
+import { getAuth } from "firebase/auth"; // Import auth to get the current user
+
 
 // Fields
 const CreateFoodPost = () => {
@@ -29,7 +31,9 @@ const CreateFoodPost = () => {
 
   // check if all fields are filled
 
-  const allFields = restaurantLocationId && restaurantName && mealTime && restaurantType && dietaryRes && expense && rating && descrip;
+
+  const allFields = restaurantLocationId && restaurantName && mealTime && restaurantType && dietaryRes && expense && rating && descrip && address;
+
 
 
   const handleSubmit = async () => {
@@ -38,6 +42,11 @@ const CreateFoodPost = () => {
       try {
         // Generate a new document reference with a unique ID in the "foodPosts" collection
         // add location city and user id 
+
+        const auth = getAuth();
+        const userId = auth.currentUser ? auth.currentUser.uid : null;
+
+
         const newPostRef = doc(collection(db, "foodPosts"));
         
         // Data for the new post
@@ -59,6 +68,7 @@ const CreateFoodPost = () => {
   
         // Navigate to the "FindFoodPosts" screen with the location_id
         navigation.navigate('Posts', { location_id: restaurantLocationId });
+        // don't let them navigate backwards to create food post again
   
         console.log("New post added successfully!");
   
@@ -128,6 +138,7 @@ const CreateFoodPost = () => {
           onChangeText={text => setAddress(text)}
           style={styles.input}
         />
+
         
         {/* Meal Time */}
         <RNPickerSelect
@@ -143,29 +154,7 @@ const CreateFoodPost = () => {
           value={mealTime}
           useNativeAndroidPickerStyle={false} 
         /> 
-        {/* <SectionedMultiSelect
-          items={[
-            { name: 'Breakfast', id: 'breakfast' },
-            { name: 'Brunch', id: 'brunch' },
-            { name: 'Lunch', id: 'lunch' },
-            { name: 'Dinner', id: 'dinner' }
-          ]}
-          uniqueKey="id"
-          selectText="Meal Time"
-          onSelectedItemsChange={(selectedItems) => setMealTime(selectedItems)}
-          selectedItems={mealTime}
-          IconRenderer={Icon}
-          single={false}
-          style={{
-            selectToggle: {
-              padding: 15,
-              backgroundColor: 'white',
-              borderRadius: 10,
-              marginTop: 10,
-            },
-          }}
-        /> */}
-
+       
         {/* Restaurant Type */}
         <RNPickerSelect
           onValueChange={(value) => setRestaurantType(value)}
@@ -223,22 +212,7 @@ const CreateFoodPost = () => {
           useNativeAndroidPickerStyle={false} 
         />
 
-        {/* Stars */}
-        {/* <RNPickerSelect
-          onValueChange={(value) => setStarRating(value)}
-          items={[
-            { label: '1', value: '1' },
-            { label: '2', value: '2' },
-            { label: '3', value: '3' },
-            { label: '4', value: '4' },
-            { label: '5', value: '5' }
-          ]}
-          placeholder={{ label: "Star Rating", value: null }}
-          style={pickerSelectStyles}
-          value={starRating}
-          useNativeAndroidPickerStyle={false} 
-        /> */}
-
+      
         {/* Description */}
         <TextInput
           placeholder="Description *"
