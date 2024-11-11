@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, ScrollView, TouchableOpacity, TouchableWithoutFeedback, Image } from "react-native";
-import { getFirestore, doc, getDoc } from "firebase/firestore"; 
+import { getFirestore, doc, getDoc, collection, getDocs, query, where } from "firebase/firestore"; 
 import { useNavigation } from "@react-navigation/native";
 
 export default function Profile({ route }) {
-  const { uid } = route.params; // Get the uid from the route parameters
-  const [profileData, setProfileData] = useState(null); // State to hold user profile data
-  const db = getFirestore(); // Firestore database instance
+  const { uid } = route.params;
+  const [profileData, setProfileData] = useState(null);
+  const [userPosts, setUserPosts] = useState([]);
+  const [showUserPosts, setShowUserPosts] = useState(false);
+  const db = getFirestore();
   const [isPostDropdownOpen, setPostDropdownOpen] = useState(false);
   const [isViewDropdownOpen, setViewDropdownOpen] = useState(false);
   const navigation = useNavigation();
 
-  const countryCode = "IT"; //Hard code NEED TO CHANGE
+  const countryCode = "IT";
 
   const togglePostDropdown = () => {
     setPostDropdownOpen(!isPostDropdownOpen);
@@ -32,26 +34,45 @@ export default function Profile({ route }) {
   };
 
   const closeDropdowns = () => {
-    if (isPostDropdownOpen) {
-      setPostDropdownOpen(false);
-    }
-    if (isViewDropdownOpen) {
-      setViewDropdownOpen(false);
+    if (isPostDropdownOpen) setPostDropdownOpen(false);
+    if (isViewDropdownOpen) setViewDropdownOpen(false);
+  };
+
+  const fetchUserPosts = async () => {
+    try {
+      console.log("Fetching posts for UID:", uid); // Log UID
+      const postsRef = collection(db, "posts");
+      const postsQuery = query(postsRef, where("uid", "==", uid));
+      const postsSnap = await getDocs(postsQuery);
+
+      if (postsSnap.empty) {
+        console.log("No posts found for this user.");
+      } else {
+        const postsData = postsSnap.docs.map(doc => doc.data());
+        setUserPosts(postsData);
+        setShowUserPosts(true);
+      }
+    } catch (error) {
+      console.error("Error fetching user posts: ", error);
     }
   };
 
-  const navigateToProfile = () => {
-    navigation.navigate('Profile', { uid });
+  const handleViewUserPosts = () => {
+    if (!showUserPosts) {
+      fetchUserPosts();
+    } else {
+      setShowUserPosts(false);
+    }
   };
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const docRef = doc(db, "users", uid); // Reference to the specific user document using uid
+        const docRef = doc(db, "users", uid);
         const docSnap = await getDoc(docRef);
   
         if (docSnap.exists()) {
-          setProfileData(docSnap.data()); // Set the user data to state
+          setProfileData(docSnap.data());
         } else {
           console.log("No such document!");
         }
@@ -60,7 +81,7 @@ export default function Profile({ route }) {
       }
     };
 
-    fetchProfileData(); // Fetch profile data when component mounts
+    fetchProfileData();
   }, [db, uid]);
 
   if (!profileData) {
@@ -121,9 +142,20 @@ export default function Profile({ route }) {
             </View>
           )}
 
-          <TouchableOpacity onPress={navigateToProfile} style={styles.button}>
+          <TouchableOpacity onPress={handleViewUserPosts} style={styles.button}>
             <Text style={styles.buttonText}>View your Posts</Text>
           </TouchableOpacity>
+
+          {showUserPosts && (
+            <ScrollView style={styles.postsContainer}>
+              {userPosts.map((post, index) => (
+                <View key={index} style={styles.postItem}>
+                  <Text style={styles.postText}>{post.title}</Text>
+                  <Text style={styles.postText}>{post.content}</Text>
+                </View>
+              ))}
+            </ScrollView>
+          )}
         </View>
       </TouchableWithoutFeedback>
     </View>
@@ -131,7 +163,7 @@ export default function Profile({ route }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center", padding: 20, width: '100%',  },
+  container: { flex: 1, justifyContent: "center", alignItems: "center", padding: 20, width: '100%' },
   title: { fontSize: 30, marginBottom: 20, fontWeight: "bold" },
   profileItem: { fontSize: 20, marginVertical: 5, fontWeight: "bold" },
   button: {
@@ -169,5 +201,18 @@ const styles = StyleSheet.create({
   image: {        
     width: 200,        
     height: 200,    
+  },
+  postsContainer: {
+    marginTop: 10,
+    width: '100%',
+  },
+  postItem: {
+    padding: 10,
+    backgroundColor: '#F0F0F0',
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  postText: {
+    fontSize: 16,
   },
 });
