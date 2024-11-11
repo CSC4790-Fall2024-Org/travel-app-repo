@@ -31,7 +31,9 @@ const CreateFoodPost = () => {
 
   // check if all fields are filled
 
-  const allFields = restaurantLocationId && restaurantName && mealTime && restaurantType && dietaryRes && expense && rating && descrip;
+
+  const allFields = restaurantLocationId && restaurantName && mealTime && restaurantType && dietaryRes && expense && rating && descrip && address;
+
 
 
   const handleSubmit = async () => {
@@ -135,6 +137,7 @@ const CreateFoodPost = () => {
           onChangeText={text => setAddress(text)}
           style={styles.input}
         />
+
         
         {/* Meal Time */}
         <RNPickerSelect
@@ -150,29 +153,7 @@ const CreateFoodPost = () => {
           value={mealTime}
           useNativeAndroidPickerStyle={false} 
         /> 
-        {/* <SectionedMultiSelect
-          items={[
-            { name: 'Breakfast', id: 'breakfast' },
-            { name: 'Brunch', id: 'brunch' },
-            { name: 'Lunch', id: 'lunch' },
-            { name: 'Dinner', id: 'dinner' }
-          ]}
-          uniqueKey="id"
-          selectText="Meal Time"
-          onSelectedItemsChange={(selectedItems) => setMealTime(selectedItems)}
-          selectedItems={mealTime}
-          IconRenderer={Icon}
-          single={false}
-          style={{
-            selectToggle: {
-              padding: 15,
-              backgroundColor: 'white',
-              borderRadius: 10,
-              marginTop: 10,
-            },
-          }}
-        /> */}
-
+       
         {/* Restaurant Type */}
         <RNPickerSelect
           onValueChange={(value) => setRestaurantType(value)}
@@ -230,22 +211,7 @@ const CreateFoodPost = () => {
           useNativeAndroidPickerStyle={false} 
         />
 
-        {/* Stars */}
-        {/* <RNPickerSelect
-          onValueChange={(value) => setStarRating(value)}
-          items={[
-            { label: '1', value: '1' },
-            { label: '2', value: '2' },
-            { label: '3', value: '3' },
-            { label: '4', value: '4' },
-            { label: '5', value: '5' }
-          ]}
-          placeholder={{ label: "Star Rating", value: null }}
-          style={pickerSelectStyles}
-          value={starRating}
-          useNativeAndroidPickerStyle={false} 
-        /> */}
-
+      
         {/* Description */}
         <TextInput
           placeholder="Description *"
