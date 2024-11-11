@@ -51,6 +51,7 @@ const CreateFoodPost = () => {
         
         // Data for the new post
         const newPostData = {
+          userid: userId,
           locat_id: restaurantLocationId,  
           restaurant: restaurantName,        
           mealTime: mealTime,                

@@ -8,12 +8,11 @@ export default function Profile({ route }) {
   const [profileData, setProfileData] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
   const [showUserPosts, setShowUserPosts] = useState(false);
+  const [countryCode, setCountryCode] = useState(""); // Initialize empty
   const db = getFirestore();
   const [isPostDropdownOpen, setPostDropdownOpen] = useState(false);
   const [isViewDropdownOpen, setViewDropdownOpen] = useState(false);
   const navigation = useNavigation();
-
-  const countryCode = "IT";
 
   const togglePostDropdown = () => {
     setPostDropdownOpen(!isPostDropdownOpen);
@@ -38,9 +37,13 @@ export default function Profile({ route }) {
     if (isViewDropdownOpen) setViewDropdownOpen(false);
   };
 
+  const navigateToUserPosts = () => {
+    navigation.navigate('UserPosts', { uid });
+  };
+
   const fetchUserPosts = async () => {
     try {
-      console.log("Fetching posts for UID:", uid); // Log UID
+      console.log("Fetching posts for UID:", uid); // Log UID for debugging
       const postsRef = collection(db, "posts");
       const postsQuery = query(postsRef, where("uid", "==", uid));
       const postsSnap = await getDocs(postsQuery);
@@ -49,19 +52,10 @@ export default function Profile({ route }) {
         console.log("No posts found for this user.");
       } else {
         const postsData = postsSnap.docs.map(doc => doc.data());
-        setUserPosts(postsData);
-        setShowUserPosts(true);
+        setUserPosts(postsData); // Set user posts in state
       }
     } catch (error) {
       console.error("Error fetching user posts: ", error);
-    }
-  };
-
-  const handleViewUserPosts = () => {
-    if (!showUserPosts) {
-      fetchUserPosts();
-    } else {
-      setShowUserPosts(false);
     }
   };
 
@@ -72,7 +66,8 @@ export default function Profile({ route }) {
         const docSnap = await getDoc(docRef);
   
         if (docSnap.exists()) {
-          setProfileData(docSnap.data());
+          const data = docSnap.data();
+          setProfileData(data);
         } else {
           console.log("No such document!");
         }
@@ -83,6 +78,26 @@ export default function Profile({ route }) {
 
     fetchProfileData();
   }, [db, uid]);
+
+  useEffect(() => {
+    const fetchCountryCode = async () => {
+      if (!profileData || !profileData.city) return;
+
+      try {
+        const locationRef = doc(db, "locations", profileData.city);
+        const locationDoc = await getDoc(locationRef);
+        if (locationDoc.exists()) {
+          setCountryCode(locationDoc.data().country_3-digit_code); 
+        } else {
+          setCountryCode("Unknown Location");
+        }
+      } catch (error) {
+        console.error("Error fetching location city: ", error);
+      }
+    };
+
+    fetchCountryCode();
+  }, [profileData]);
 
   if (!profileData) {
     return (
@@ -142,20 +157,10 @@ export default function Profile({ route }) {
             </View>
           )}
 
-          <TouchableOpacity onPress={handleViewUserPosts} style={styles.button}>
-            <Text style={styles.buttonText}>View your Posts</Text>
-          </TouchableOpacity>
+        <TouchableOpacity onPress={navigateToUserPosts} style={styles.button}>
+          <Text style={styles.buttonText}>View your Posts</Text>
+        </TouchableOpacity>
 
-          {showUserPosts && (
-            <ScrollView style={styles.postsContainer}>
-              {userPosts.map((post, index) => (
-                <View key={index} style={styles.postItem}>
-                  <Text style={styles.postText}>{post.title}</Text>
-                  <Text style={styles.postText}>{post.content}</Text>
-                </View>
-              ))}
-            </ScrollView>
-          )}
         </View>
       </TouchableWithoutFeedback>
     </View>
