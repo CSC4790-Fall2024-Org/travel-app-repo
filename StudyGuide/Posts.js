@@ -108,17 +108,35 @@ useEffect(() => {
           <Text style={styles.itemTitle}> Rating: <Text style={styles.postItem}>{sortedPost.stars}</Text></Text>
             
        
-            
-            <Text style={styles.itemTitle}> Dietary Restrictions: <Text style={styles.postItem}>{sortedPost.dietary}</Text></Text>
-
-
+        
 
             <Text style={styles.itemTitle}> Expense: <Text style={styles.postItem}>{sortedPost.expense}</Text></Text>
             <Text style={styles.itemTitle}> Meal Time: <Text style={styles.postItem}>{sortedPost.mealTime}</Text></Text>
             <Text style={styles.itemTitle}> Restaurant Type: <Text style={styles.postItem}>{sortedPost.restaurantType}</Text></Text>
             <Text style={styles.itemTitle}> Location Id: <Text style={styles.postItem}>{sortedPost.locat_id}</Text></Text>
-            <Text style={styles.itemTitle}> Address: <Text style={styles.postItem}>{sortedPost.addr}</Text></Text>
-            <Text style={styles.itemTitle}> Link to website: <Text style={styles.postItem}>{sortedPost.link}</Text></Text>
+            
+            {/* <Text style={styles.itemTitle}> Dietary Restrictions: <Text style={styles.postItem}>{sortedPost.dietary}</Text></Text>
+             */}
+            {sortedPost.dietary ? (
+              <Text style={styles.itemTitle}>Dietary Restrictions: <Text style={styles.postItem}>{sortedPost.dietary}</Text></Text>
+            ) : null}
+            
+
+
+            {sortedPost.addr ? (
+              <Text style={styles.itemTitle}>Address: <Text style={styles.postItem}>{sortedPost.addr}</Text></Text>
+            ) : null}
+            
+            {/* <Text style={styles.itemTitle}> Address: <Text style={styles.postItem}>{sortedPost.addr}</Text></Text> */}
+            {/* <Text style={styles.itemTitle}> Link to website: <Text style={styles.postItem}>{sortedPost.link}</Text></Text>
+             */}
+            
+            {sortedPost.link ? (
+              <Text style={styles.itemTitle}>Link to website: <Text style={styles.postItem}>{sortedPost.link}</Text></Text>
+            ) : null}
+            
+            
+            
             <Text style={styles.itemTitle}> Description/Message: <Text style={styles.postItem}>{sortedPost.description}</Text></Text>
         </View>
 

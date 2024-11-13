@@ -32,7 +32,7 @@ const CreateFoodPost = () => {
   // check if all fields are filled
 
 
-  const allFields = restaurantLocationId && restaurantName && mealTime && restaurantType && dietaryRes && expense && rating && descrip && address;
+  const allFields = restaurantLocationId && restaurantName && mealTime && restaurantType && expense && rating && descrip;
 
 
 
@@ -51,6 +51,7 @@ const CreateFoodPost = () => {
         
         // Data for the new post
         const newPostData = {
+          userId: userId,
           locat_id: restaurantLocationId,  
           restaurant: restaurantName,        
           mealTime: mealTime,                
