@@ -104,9 +104,15 @@ useEffect(() => {
             {/* change so it shows stars */}
             {/* <Text style={styles.itemTitle}> Rating: <Text style={styles.postItem}>{sortedPost.stars}</Text></Text>
              */}
-          
-          <Text style={styles.itemTitle}> Rating: <Text style={styles.postItem}>{sortedPost.stars}</Text></Text>
+             
+            {/* <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+             <Text style={styles.itemTitle}> Rating: <Stars style={styles.postItem}>{sortedPost.stars}</Stars></Text>
+            </View> */}
             
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={styles.itemTitle}>Rating:</Text>
+              <Stars rating={sortedPost.stars} readOnly={true} />
+            </View>
        
             
             <Text style={styles.itemTitle}> Dietary Restrictions: <Text style={styles.postItem}>{sortedPost.dietary}</Text></Text>

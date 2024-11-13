@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-function RatingReview({ rating, setRating }) {
+function RatingReview({ rating, setRating, readOnly = false }) {
   const [halfStars, setHalfStars] = useState({}); // Track stars
 
   const handleTap = (star) => {
+    // for Post.js
+    if (readOnly) return; 
     if (halfStars[star]) {
       // If half, make it full
       setRating(star);
