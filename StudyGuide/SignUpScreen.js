@@ -206,11 +206,11 @@ const styles = StyleSheet.create({
     maxWidth: 400,
     paddingVertical: 15,
   },
-  title: {    
+  title: {
     fontSize: 34, 
     fontWeight: "bold",    
-    marginBottom: 20, 
     textAlign: 'center',
+    marginVertical: 40, 
   },
   input: {
     backgroundColor: 'white',
@@ -242,9 +242,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: '100%',
-    justifyContent: "center",
     alignItems: "center",
-    marginTop: 40, // Space between password and sign-up button, this isnt doing anything
+    marginTop: 30,
   },
   button: {
     backgroundColor: 'green',
@@ -252,10 +251,12 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
+    marginTop: 15,
   },
   buttonText: {
     color: 'white', 
     fontSize: 15,
+    fontWeight: "bold",    
   },
 });
 

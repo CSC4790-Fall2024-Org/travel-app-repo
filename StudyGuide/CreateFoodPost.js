@@ -2,38 +2,88 @@ import React, { useState, useEffect } from "react";
 import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Button, Alert, ScrollView } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 //import { Picker } from '@react-native-picker/picker';
-import RNPickerSelect from "react-native-picker-select";
+import RNPickerSelect from "react-native-picker-select"; //picker
+import SectionedMultiSelect from 'react-native-sectioned-multi-select'; //multiselect picker
+import Icon from "react-native-vector-icons/MaterialIcons"; //icons for multiselect
+import Stars from "./Stars"
 import { db } from './firebase';
 import { getDocs, collection } from 'firebase/firestore';
 import { doc, setDoc } from 'firebase/firestore';
+import { getAuth } from "firebase/auth"; // Import auth to get the current user
+
 
 // Fields
 const CreateFoodPost = () => {
-  const [restaurantLocation, setRestaurantLocation] = useState('');
+  // add user id 
+  const [restaurantLocationId, setRestaurantLocation] = useState('');
   const [locationOptions, setLocationOptions] = useState([]); // Hold list of locations
+  const [address, setAddress] = useState('');
   const [restaurantName, setRestaurantName] = useState('');
   const [mealTime, setMealTime] = useState('');
   const [restaurantType, setRestaurantType] = useState('');
+  const [dietaryRes, setDietaryRes] = useState([]);
   const [expense, setExpense] = useState('');
+  const [rating, setRating] = useState(0);
+  //const [starRating, setStarRating] = useState('');
   const [descrip, setDescrip] = useState('');
+  const [webLink, setWebLink] = useState('');
   const navigation = useNavigation();
 
   // check if all fields are filled
-  const allFields = restaurantLocation && restaurantName && mealTime && restaurantType && expense && descrip;
 
-  const handleSubmit = () => {
+
+  const allFields = restaurantLocationId && restaurantName && mealTime && restaurantType && expense && rating && descrip;
+
+
+
+  const handleSubmit = async () => {
     if (allFields) {
-      console.log('Restarant location:', restaurantLocation);
-      console.log('Restaurant Name:', restaurantName);
-      console.log('Meal Time:', mealTime);
-      console.log('Restaurant Type', restaurantType);
-      console.log('Expense', expense);
-      console.log('Description', descrip);
-      navigation.navigate('FindFoodPosts');
+
+      try {
+        // Generate a new document reference with a unique ID in the "foodPosts" collection
+        // add location city and user id 
+
+        const auth = getAuth();
+        const userId = auth.currentUser ? auth.currentUser.uid : null;
+
+
+        const newPostRef = doc(collection(db, "foodPosts"));
+        
+        // Data for the new post
+        const newPostData = {
+
+          userId: userId,
+          locat_id: restaurantLocationId,  
+          restaurant: restaurantName,        
+          mealTime: mealTime,                
+          restaurantType: restaurantType, 
+          dietary: dietaryRes,   
+          expense: expense, 
+          stars: rating,                 
+          description: descrip,
+          link: webLink  
+          // also add something so that the id of the specific user is also included           
+        };
+  
+        // Add the new post to Firebase
+        await setDoc(newPostRef, newPostData);
+  
+        // Navigate to the "FindFoodPosts" screen with the location_id
+        navigation.navigate('Posts', { location_id: restaurantLocationId });
+        // don't let them navigate backwards to create food post again
+  
+        console.log("New post added successfully!");
+  
+      } catch (error) {
+        console.error("Error adding post: ", error);
+        Alert.alert("An error occurred while adding the post. Please try again.");
+      }
+
     } else {
-      Alert.alert("Fill out all fields before submitting.")
+      Alert.alert("Fill out all fields before submitting.");
     }
   };
+  
 
   // Function to fetch location from Firestore
   const fetchLocations = async () => {
@@ -62,8 +112,12 @@ const CreateFoodPost = () => {
       <Text style={styles.title}>Create Food Post</Text>
       <View style={styles.inputContainer}>
 
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Stars rating={rating} setRating={setRating} />
+        </View>
+
         <TextInput
-          placeholder="Restaurant Name"
+          placeholder="Restaurant Name *"
           value={restaurantName}
           onChangeText={text => setRestaurantName(text)}
           style={styles.input}
@@ -73,11 +127,20 @@ const CreateFoodPost = () => {
          <RNPickerSelect
           onValueChange={(value) => setRestaurantLocation(value)}
           items={locationOptions}
-          placeholder={{ label: "Restaurant Location", value: null }}
+          placeholder={{ label: "Restaurant Location *", value: null }}
           style={pickerSelectStyles}
-          value={restaurantLocation}
+          value={restaurantLocationId}
           useNativeAndroidPickerStyle={false} 
         />
+
+        {/* Address */}
+        <TextInput
+          placeholder="Address"
+          value={address}
+          onChangeText={text => setAddress(text)}
+          style={styles.input}
+        />
+
         
         {/* Meal Time */}
         <RNPickerSelect
@@ -88,12 +151,12 @@ const CreateFoodPost = () => {
             { label: 'Lunch', value: 'lunch' },
             { label: 'Dinner', value: 'dinner' }
           ]}
-          placeholder={{ label: "Meal Time", value: null }}
+          placeholder={{ label: "Meal Time *", value: null }}
           style={pickerSelectStyles}
           value={mealTime}
           useNativeAndroidPickerStyle={false} 
-        />
-
+        /> 
+       
         {/* Restaurant Type */}
         <RNPickerSelect
           onValueChange={(value) => setRestaurantType(value)}
@@ -104,10 +167,37 @@ const CreateFoodPost = () => {
             { label: 'Buffet', value: 'buffet' },
             { label: 'Cafe', value: 'cafe' }
           ]}
-          placeholder={{ label: "Restaurant Type", value: null }}
+          placeholder={{ label: "Restaurant Type *", value: null }}
           style={pickerSelectStyles}
           value={restaurantType}
           useNativeAndroidPickerStyle={false} 
+        />
+
+        {/* Dietary Restrictions */}
+        <SectionedMultiSelect
+          items={[
+            { name: 'Vegetarian', id: 'vegetarian' },
+            { name: 'Vegan', id: 'vegan' },
+            { name: 'Dairy-free', id: 'dairy-free' },
+            { name: 'Lactose-free', id: 'lactose-free' },
+            { name: 'Gluten-free', id: 'gluten-free' },
+            { name: 'Kosher', id: 'kosher' },
+            { name: 'Paleo', id: 'paleo' }
+          ]}
+          uniqueKey="id"
+          selectText="Accomodates Dietary Restrictions:"
+          onSelectedItemsChange={(selectedItems) => setDietaryRes(selectedItems)}
+          selectedItems={dietaryRes}
+          IconRenderer={Icon}
+          single={false}
+          style={{
+            selectToggle: {
+              padding: 15,
+              backgroundColor: 'white',
+              borderRadius: 10,
+              marginTop: 10,
+            },
+          }}
         />
 
         {/* Expense */}
@@ -118,16 +208,28 @@ const CreateFoodPost = () => {
             { label: '$$', value: '$$' },
             { label: '$$$', value: '$$$' }
           ]}
-          placeholder={{ label: "Expense", value: null }}
+          placeholder={{ label: "Expense *", value: null }}
           style={pickerSelectStyles}
           value={expense}
           useNativeAndroidPickerStyle={false} 
         />
 
+      
+        {/* Description */}
         <TextInput
-          placeholder="Description"
+          placeholder="Description *"
           value={descrip}
           onChangeText={text => setDescrip(text)}
+          style={styles.input}
+          multiline={true}
+          numberOfLines={10}
+        />
+
+        {/* Website */}
+        <TextInput
+          placeholder="Link to website"
+          value={webLink}
+          onChangeText={text => setWebLink(text)}
           style={styles.input}
           multiline={true}
           numberOfLines={10}
