@@ -126,6 +126,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",    
     marginBottom: 20, 
     textAlign: 'center',
+    padding: 20,
+    marginTop: 100,
+    //fontFamily: 'Times New Roman',
   },
   input: {
     backgroundColor: 'white',
@@ -159,7 +162,7 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 40,
+    marginTop: 20,
   },
   button: {
     backgroundColor: 'green',
@@ -167,11 +170,13 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
-    marginTop: 5,
+    marginTop: 10,
   },
   buttonText: {
     color: 'white', 
     fontSize: 15,
+    fontWeight: "bold",    
+    //fontFamily: 'Times New Roman',
   },
 });
 
