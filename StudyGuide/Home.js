@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { View, Text, Button, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, ScrollView } from "react-native";
-import { useNavigation } from "@react-navigation/native"; // Assuming you're using React Navigation
-
+import { View, Text, TouchableOpacity, TouchableWithoutFeedback, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Home({ route }) {
   const { uid } = route.params;
@@ -18,16 +17,15 @@ export default function Home({ route }) {
   };
 
   const handlePostNavigation = (screen) => {
-    setPostDropdownOpen(false);  // Close the post dropdown when navigating
-    navigation.navigate(screen);  // Navigate to the selected screen
+    setPostDropdownOpen(false);
+    navigation.navigate(screen);
   };
 
   const handleViewNavigation = (screen) => {
-    setViewDropdownOpen(false);  // Close the category dropdown when navigating
-    navigation.navigate(screen);  // Navigate to the selected screen
+    setViewDropdownOpen(false);
+    navigation.navigate(screen);
   };
 
-  // Close dropdowns when tapping outside
   const closeDropdowns = () => {
     if (isPostDropdownOpen) {
       setPostDropdownOpen(false);
@@ -42,42 +40,47 @@ export default function Home({ route }) {
   };
 
   return (
-
-    // TouchableWithoutFeedback allows us to detect taps outside the dropdown
     <TouchableWithoutFeedback onPress={closeDropdowns}>
       <View style={styles.container}>
-        <Button title="Create a Post" onPress={togglePostDropdown} />
+        <TouchableOpacity onPress={togglePostDropdown} style={styles.button}>
+          <Text style={styles.buttonText}>Create a Post</Text>
+        </TouchableOpacity>
 
         {isPostDropdownOpen && (
           <View style={styles.dropdownMenu}>
             <TouchableOpacity style={styles.dropdownItem} onPress={() => handlePostNavigation('CreateFoodPost')}>
-              <Text>Food</Text>
+              <Text style={styles.dropdownText}>Food</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.dropdownItem} onPress={() => handlePostNavigation('CreateStaysPost')}>
-              <Text>Stays</Text>
+              <Text style={styles.dropdownText}>Stays</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.dropdownItem} onPress={() => handlePostNavigation('CreateActivitiesPost')}>
-              <Text>Activities</Text>
+              <Text style={styles.dropdownText}>Activities</Text>
             </TouchableOpacity>
           </View>
         )}
 
-        <Button title="View Posts" onPress={toggleViewDropdown} />
+        <TouchableOpacity onPress={toggleViewDropdown} style={styles.button}>
+          <Text style={styles.buttonText}>View Posts</Text>
+        </TouchableOpacity>
 
         {isViewDropdownOpen && (
           <View style={styles.dropdownMenu}>
             <TouchableOpacity style={styles.dropdownItem} onPress={() => handleViewNavigation('FindFoodPosts')}>
-              <Text> Food </Text>
+              <Text style={styles.dropdownText}>Food</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.dropdownItem} onPress={() => handleViewNavigation('FindStayPosts')}>
-              <Text> Stays </Text>
+              <Text style={styles.dropdownText}>Stays</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.dropdownItem} onPress={() => handleViewNavigation('FindActivitiesPosts')}>
-              <Text> Activities </Text>
+              <Text style={styles.dropdownText}>Activities</Text>
             </TouchableOpacity>
           </View>
         )}
-         <Button title="Go to Profile" onPress={navigateToProfile} />
+
+        <TouchableOpacity onPress={navigateToProfile} style={styles.button}>
+          <Text style={styles.buttonText}>Go to Profile</Text>
+        </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -86,15 +89,40 @@ export default function Home({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
+    justifyContent: 'center', 
+    alignItems: 'center', 
     paddingHorizontal: 20,
   },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: "center",
+  button: {
+    backgroundColor: 'green',
+    width: '100%', 
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginVertical: 10, 
   },
-  locationContainer: {
-    marginBottom: 15,
+  buttonText: {
+    color: 'white',
+    fontWeight: "bold",
+    fontSize: 20,
+    textAlign: 'center',
+  },
+  dropdownMenu: {
+    backgroundColor: '#EDEDED',
+    width: '50%',  
+    alignSelf: 'center',
+    borderRadius: 5,
+    paddingVertical: 5,
+    marginTop: 5,
+  },
+  dropdownItem: {
+    paddingVertical: 8,
+    marginVertical: 15,
+  },
+  dropdownText: {
+    color: '#2a2a2a',
+    fontWeight: "bold",
+    fontSize: 18,
+    textAlign: 'center', 
   },
 });
