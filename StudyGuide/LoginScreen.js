@@ -25,7 +25,7 @@ const LoginScreen = () => {
 
       if (userDocSnapshot.exists()) {   // Check if the user document exists
         console.log("User's email is verified.");
-        navigation.navigate('Home', { uid: user.uid });
+        navigation.navigate('Profile', { uid: user.uid });
     
       } else {
       // reached this statement but only after user has signed up but not authenticated

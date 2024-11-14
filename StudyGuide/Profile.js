@@ -38,7 +38,7 @@ export default function Profile({ route }) {
   };
 
   const navigateToUserPosts = () => {
-    navigation.navigate('UserPosts', { uid });
+    navigation.navigate('UserPosts', { fetchUserPosts });
   };
 
   const fetchUserPosts = async () => {
@@ -84,15 +84,18 @@ export default function Profile({ route }) {
       if (!profileData || !profileData.city) return;
 
       try {
-        const locationRef = doc(db, "locations", profileData.city);
-        const locationDoc = await getDoc(locationRef);
-        if (locationDoc.exists()) {
-          setCountryCode(locationDoc.data().country_3-digit_code); 
+        const locationRef = collection(db, "locations");
+        const locationQuery = query(locationRef, where("city", "==", profileData.city));
+        const locationSnap = await getDocs(locationQuery);
+        
+        if (!locationSnap.empty) {
+          const locationData = locationSnap.docs[0].data();
+          setCountryCode(locationData.countryCode); // Assuming the field is country_code
         } else {
-          setCountryCode("Unknown Location");
+          console.log("No matching location found for city:", profileData.city);
         }
       } catch (error) {
-        console.error("Error fetching location city: ", error);
+        console.error("Error fetching country code for city:", error);
       }
     };
 
@@ -110,10 +113,12 @@ export default function Profile({ route }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profile Page</Text>
-      <Image 
-        source={{ uri: `https://flagsapi.com/${countryCode}/flat/64.png` }} 
-        style={styles.image} 
-      />
+      {countryCode && (
+        <Image 
+          source={{ uri: `https://flagsapi.com/${countryCode}/flat/64.png` }} 
+          style={styles.image} 
+        />
+      )}
       <Text style={styles.profileItem}>{profileData.name}</Text>
       <Text style={styles.profileItem}>{profileData.city}</Text>
       <Text style={styles.profileItem}>{profileData.year}</Text>
@@ -204,8 +209,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   image: {        
-    width: 200,        
-    height: 200,    
+    width: 300,        
+    height: 250,    
   },
   postsContainer: {
     marginTop: 10,
