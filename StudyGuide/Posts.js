@@ -45,6 +45,12 @@ export default function Posts({ route }) {
      // const fetchedSortedPosts = [];
       if (posterDoc.exists()) {
         setPosterInfo(posterDoc.data()); // Assuming 'name' is the field name for docs in 
+       /* return(
+          <View>
+            <Text>{posterDoc.data().name}</Text>
+          </View>
+        );*/
+        return posterDoc.data().name;
       } else {
         setPosterInfo("Unknown User Info");
       }
@@ -128,11 +134,12 @@ const fetchSortedPosts = async () => {
   } catch (error) {
     console.error("Error fetching posts for this location: ", error);
   }
-};
+  
+}  
+
 useEffect(() => {
   fetchLocationCity();
-  fetchSortedPosts();
-  fetchPosterInfo();
+  
 }, [db, location_id]);
 
 
@@ -151,7 +158,7 @@ useEffect(() => {
 }, [db, 'locations']);
 useEffect(() => {
   fetchPosterInfo();
-}, []);
+}, [db, "userId"]);
 
 //come back to userId field that has been taken out of foodPosts fields
 //also need to add addr (address), userId, food_city, link
@@ -164,19 +171,10 @@ useEffect(() => {
     
 
     <ScrollView>
-   {/* 
-    {locatInfo.map((location) => (
-        <View key={location.id} style={styles.container}>
-          <Button
-            title={location.city} // Assuming each location document has a 'name' field
-            onPress={() => handleLocationPress(location.id)}
-          />
-          <Text style={styles.itemTitle}> Locat City: <Text style={styles.postItem}>{locatInfo.city}</Text></Text>
-          <Text style={styles.itemTitle}> Locat Country: <Text style={styles.postItem}>{locatInfo.country}</Text></Text>
-        </View>
-      ))} */}
 
-      {sortedPosts.map((sortedPost) => (
+    
+
+     {sortedPosts.map((sortedPost) => (
 
 
             <View key={sortedPost.id} style={styles.container}>
@@ -184,24 +182,14 @@ useEffect(() => {
             <Text style={styles.itemTitle}> Post from ID: <Text style={styles.postItem}>{sortedPost.userId}</Text></Text>
             <Text style={styles.itemTitle}> Restaurant Name: <Text style={styles.postItem}>{sortedPost.restaurant}</Text></Text>
             
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Text style={styles.itemTitle}> Poster Name: {fetchPosterInfo(sortedPost.userId)} </Text></View>
+            <Text style={styles.itemTitle}><Text style={styles.itemTitle}> Poster Name: {fetchPosterInfo(sortedPost.userId)} </Text></Text>
+            <Text style={styles.itemTitle}> Post from name: <Text style={styles.postItem}>{posterInfo.name}</Text></Text>
             <Text style={styles.itemTitle}> Poster's Year Abroad : <Text style={styles.postItem}>{posterYr}</Text></Text>
-
-            {/* change so it shows stars */}
-            {/* <Text style={styles.itemTitle}> Rating: <Text style={styles.postItem}>{sortedPost.stars}</Text></Text>
-             */}
-             
-            {/* <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-             <Text style={styles.itemTitle}> Rating: <Stars style={styles.postItem}>{sortedPost.stars}</Stars></Text>
-            </View> */}
             
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
               <Text style={styles.itemTitle}>Rating:</Text>
               <Stars rating={sortedPost.stars} readOnly={true} />
             </View>
-       
-        
-
             <Text style={styles.itemTitle}> Expense: <Text style={styles.postItem}>{sortedPost.expense}</Text></Text>
             <Text style={styles.itemTitle}> Meal Time: <Text style={styles.postItem}>{sortedPost.mealTime}</Text></Text>
             <Text style={styles.itemTitle}> Restaurant Type: <Text style={styles.postItem}>{sortedPost.restaurantType}</Text></Text>
@@ -219,23 +207,22 @@ useEffect(() => {
               <Text style={styles.itemTitle}>Address: <Text style={styles.postItem}>{sortedPost.addr}</Text></Text>
             ) : null}
             
-            {/* <Text style={styles.itemTitle}> Address: <Text style={styles.postItem}>{sortedPost.addr}</Text></Text> */}
-            {/* <Text style={styles.itemTitle}> Link to website: <Text style={styles.postItem}>{sortedPost.link}</Text></Text>
-             */}
+            
             
             {sortedPost.link ? (
               <Text style={styles.itemTitle}>Link to website: <Text style={styles.postItem}>{sortedPost.link}</Text></Text>
             ) : null}
             
-            
+            {/* <Text style={styles.itemTitle}> Address: <Text style={styles.postItem}>{sortedPost.addr}</Text></Text> 
+            <Text style={styles.itemTitle}> Link to website: <Text style={styles.postItem}>{sortedPost.link}</Text></Text>
+            */}
             
             <Text style={styles.itemTitle}> Description/Message: <Text style={styles.postItem}>{sortedPost.description}</Text></Text>
         </View>
 
+    
           
-        
-          
-      ))}
+      ))}        
     </ScrollView>
     </View>
 
