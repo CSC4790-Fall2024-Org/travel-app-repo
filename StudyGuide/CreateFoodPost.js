@@ -8,7 +8,6 @@ import DropDownPicker from 'react-native-dropdown-picker'; //dropdown picker
 //import Icon from "react-native-vector-icons/MaterialIcons"; //icons for multiselect
 import Stars from "./Stars"
 import { db } from './firebase';
-
 import { getDocs, collection, getDoc, where, query } from 'firebase/firestore';
 import { doc, setDoc } from 'firebase/firestore';
 import { getAuth } from "firebase/auth"; // Import auth to get the current user
@@ -23,9 +22,7 @@ const CreateFoodPost = () => {
   const [descrip, setDescrip] = useState('');
   const [webLink, setWebLink] = useState('');
   const navigation = useNavigation();
-  
-  const [posterName, setPosterName ] = useState("");
-
+ 
 
 
   // Dropdown 1: Locations
@@ -89,46 +86,32 @@ const CreateFoodPost = () => {
     if (allFields) {
 
       try {
-        // Generate a new document reference with a unique ID in the "foodPosts" collection
-        // add location city and user id 
-
         const auth = getAuth();
         const userId = auth.currentUser ? auth.currentUser.uid : null;
 
-      /*  //get user name from userId
-        const postersRef = collection(db, "users");
-    const q = query(postersRef, where('userId', '==', userId));
-    //Execute the query and get the documents
-    const posterName = await getDoc(q).name;
-*/
 if (!userId) {
   Alert.alert("You must be logged in to post. You don't have an id.");
   return;
 }
-//getting user name from user's id
+// Now, getting user's name from user's id to automatically put it in db with this post as a field
 let posterName = "Unknown poster name";
   try {
+    //filter to user's collection
     const postersRef = collection(db, "users");
+    //get users whose userId field matches the userId from auth (above)
   const q = query(postersRef, where('userId', '==', userId));
   //Execute the query and get the documents
-//const q2 = doc(db, "users", where('userId', '==', userId));
   const querySnapshot = await getDocs(q);
 
-    // Check if we have any matching documents
+    // Check if we have any matching user documents for signed in user's ID
   if (!querySnapshot.empty) {
-    const posterDoc = querySnapshot.docs[0];  // Assuming userId is unique, take the first match
+    const posterDoc = querySnapshot.docs[0];  // Assuming userId is unique, take poster name from the first matching document
     console.log(posterDoc.data());
     posterName = posterDoc.data().name || "Unknown poster name";
-
-    // Set poster name from the first matching document
-    //setPosterName(posterDoc.data().name || "Unknown poster name");
-  } //else {
-   // setPosterName("Unknown poster name");  // No matching user found
- // }
+  } 
 } catch (error) {
   console.error("Error fetching username: ", error);
 }
-
 
 
 
@@ -189,43 +172,6 @@ let posterName = "Unknown poster name";
   useEffect(() => {
     fetchLocations();
   }, []);
-
-
-  // function to get usernames
-  const fetchPosterName = async () => {
-    try {
-     // const userId = auth().currentUser.uid;
-
-     // const posterNameRef = doc(db, "users", userId);
-      //const posterNameDoc = await getDoc(posterNameRef);
-/*
-      const posterRef = doc(db, "users");//get users collection from db
-      const q2 = query(posterRef, where('userId', '==', userId));//match user id to poster id for the doc
-      const posterDoc = await getDoc(q2);//get doc from users collection for correct userId
-*/
-      const postersRef = collection(db, "users");
-    const q = query(postersRef, where('userId', '==', userId));
-    //Execute the query and get the documents
-    const posterDoc = await getDoc(q);
-    console.log(posterDoc);
-
-
-      if (posterDoc.exists()) {
-        setPosterName(posterDoc.data().name); // Assuming 'city' is the field name for city name
-      } else {
-        setPosterName("Unknown poster name");
-
-      }
-    } catch (error) {
-      console.error("Error fetching username: ", error);
-    }
-  };
-/*  useEffect(() => {
-    fetchPosterName();
-  }, []); */
-
-
-
 
 
   return (

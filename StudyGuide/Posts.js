@@ -3,7 +3,6 @@ import { db } from './firebase';
 import React, { useState, useEffect } from "react";
 import { getFirestore, firestore, where, collection, getDocs, query,  Filter, doc, QueryFieldFilterConstraint, DocumentSnapshot, QuerySnapshot, getDoc } from "firebase/firestore";
 import Stars from "./Stars"
-
 import { useNavigation } from "@react-navigation/native";
 
 export default function Posts({ route }) { 
@@ -13,14 +12,8 @@ export default function Posts({ route }) {
   const { location_id }=route.params;
   const [locationCity, setLocationCity] = useState(''); // State to store city name
 
-  //state to store user name, pulled from db using userid:
-  const [posterInfo, setPosterInfo ] = useState('');
-
-  const [posterName, setPosterName ] = useState('');
-  const [posterYr, setPosterYr ] = useState('');
-
  
-
+//get Location using location Id passed into this page
   const fetchLocationCity = async () => {
     try {
       const locationRef = doc(db, "locations", location_id);
@@ -38,47 +31,6 @@ export default function Posts({ route }) {
   const [locatInfo, setlocatInfo]= useState([]);
 
 
-  /*
-
-  const fetchPosterInfo = async (posterId) => {
-    try {
-      const posterRef = doc(db, "users");//get users collection from db
-      const q2 = query(posterRef, where('userId', '==', posterId));//match user id to poster id for the doc
-      const posterDoc = await getDoc(q2);//get doc from users collection for correct userId
-      const fetchedPosters = [];
-      posterDoc.forEach(async (posterDoc) => {
-        //orig: 
-        fetchedPosters.push({ id: posterDoc.id, ...posterDoc.data()});
-      });
-      setPosterInfo(fetchedPosters); 
-
-     /*
-     if (posterDoc.exists()) {
-        setPosterInfo(posterDoc.data()); // Assuming 'name' is the field name for docs in 
-       /* return(
-          <View>
-            <Text>{posterDoc.data().name}</Text>
-          </View>
-        );//
-        return posterDoc.data().name;
-      } else {
-        setPosterInfo("Unknown User Info");
-      }
-
-    //
-    
-    } catch (error) {
-      console.error("Error fetching user info: ", error);
-    }
-  };
-  useEffect(() => {
-    fetchLocationCity();
-    
-  }, [db, "users", "userId"]);*/
-
-  
-
-
 const fetchSortedPosts = async () => {
   try {
     //console.log(location_id);
@@ -89,11 +41,6 @@ const fetchSortedPosts = async () => {
 
     // Execute the query and get the documents
     const querySnapshot = await getDocs(q);
-
-    //new start
-    
-    //new end 
-
 
     const fetchedSortedPosts = [];
     querySnapshot.forEach(async (postDoc) => {
@@ -106,58 +53,8 @@ const fetchSortedPosts = async () => {
      // const posterName = UsersRef.data().name;
      // firestore().collection('posts').add({posterName: posterName});
 
-
-     //new
-/*new
-     const posterId = fetchSortedPosts.get(postDoc.userId);
-     fetchPosterInfo(posterId); 
-      
-      //fetchedSortedPosts.push(fetchPosterName(doc.userId));
-      const posterId = postDoc.data().userId;
-      const posterRef = doc(db, "users");//get users collection from db
-      const q2 = query(posterRef, where('userId', '==', posterId));//match user id to poster id for the doc
-      const posterDoc = await getDoc(q2);//get doc from users collection for correct userId
-      if(posterDoc.exists){
-        setPosterName(posterDoc.data().name);
-        setPosterYr(posterDoc.data().year);
-        
-        const posterNameVar = posterDoc.data().name;
-        
-      }*/
-      //fetchedSortedPosts.push({ id: postDoc.id, ...postDoc.data() });
-       //fetchedSortedPosts.push(...posterName, posterYr);
-
-      /*  //new
-      const posterRef = collection(db, "users");
-      const q2 = query(posterRef, where('userId', '==', doc.userId));
-      const querySnapshot2 = await getDoc(q2);
-      if (posterDoc.exists()) {
-        setPosterInfo(posterDoc.data().name); // Assuming 'name' is the field name for docs in 
-      } else {
-        setPosterInfo("Unknown User Info");
-      }
-    } catch (error) {
-      console.error("Error fetching user info: ", error);
-    }
-      //end of new*/
-
     });
     setSortedPosts(fetchedSortedPosts); // Update state with the filtered posts
-  
-    /*new start
-    sortedPosts.forEach(async (postDoc)=>{
-      if(postDoc.data().userId){
-        const posterId = postDoc.data().userId;
-      const posterRef = doc(db, "users");//get users collection from db
-      const q2 = query(posterRef, where('userId', '==', posterId));//match user id to poster id for the doc
-      const posterDoc = await getDoc(q2);//get doc from users collection for correct userId
-      setPosterInfo(posterDoc.data());
-      setPosterName(posterDoc.data().name);
-        setPosterYr(posterDoc.data().year);
-
-      }
-    });
-    new end*/
 
   } catch (error) {
     console.error("Error fetching posts for this location: ", error);
@@ -178,8 +75,6 @@ if (!sortedPosts) {
     </View>
   );
 }// end of getting the Food Posts for the location chosen in FindFoodPosts
-
-//get Location using location Id passed into this page
 
 useEffect(() => {
   fetchSortedPosts();
