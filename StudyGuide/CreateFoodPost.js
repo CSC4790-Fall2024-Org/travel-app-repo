@@ -7,7 +7,7 @@ import SectionedMultiSelect from 'react-native-sectioned-multi-select'; //multis
 import Icon from "react-native-vector-icons/MaterialIcons"; //icons for multiselect
 import Stars from "./Stars"
 import { db } from './firebase';
-import { getDocs, collection } from 'firebase/firestore';
+import { getDocs, collection, getDoc } from 'firebase/firestore';
 import { doc, setDoc } from 'firebase/firestore';
 import { getAuth } from "firebase/auth"; // Import auth to get the current user
 
@@ -28,6 +28,9 @@ const CreateFoodPost = () => {
   const [descrip, setDescrip] = useState('');
   const [webLink, setWebLink] = useState('');
   const navigation = useNavigation();
+
+  const [posterName, setPosterName ] = useState('');
+
 
   // check if all fields are filled
 
@@ -61,7 +64,9 @@ const CreateFoodPost = () => {
           expense: expense, 
           stars: rating,                 
           description: descrip,
-          link: webLink  
+          link: webLink,
+
+          posterName: posterName 
           // also add something so that the id of the specific user is also included           
         };
   
@@ -84,6 +89,31 @@ const CreateFoodPost = () => {
     }
   };
   
+  //function to get usernames
+  const fetchPosterName = async () => {
+    try {
+      const auth = getAuth();
+      const userId = auth.currentUser ? auth.currentUser.uid : null;
+
+     // const posterNameRef = doc(db, "users", userId);
+      //const posterNameDoc = await getDoc(posterNameRef);
+
+      const posterRef = doc(db, "users");//get users collection from db
+      const q2 = query(posterRef, where('userId', '==', userId));//match user id to poster id for the doc
+      const posterDoc = await getDoc(q2);//get doc from users collection for correct userId
+
+      if (posterDoc.exists()) {
+        setPosterName(posterDoc.data()); // Assuming 'city' is the field name for city name
+      } else {
+        setPosterName("Unknown Location");
+      }
+    } catch (error) {
+      console.error("Error fetching username: ", error);
+    }
+  };
+  useEffect(() => {
+    fetchPosterName();
+  }, []);
 
   // Function to fetch location from Firestore
   const fetchLocations = async () => {
