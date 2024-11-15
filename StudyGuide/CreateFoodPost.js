@@ -95,6 +95,8 @@ if (!userId) {
 }
 // Now, getting user's name from user's id to automatically put it in db with this post as a field
 let posterName = "Unknown poster name";
+let posterYear = "Unknown poster yr";
+let posterVisitedCity = "Unknown poster city";
   try {
     //filter to user's collection
     const postersRef = collection(db, "users");
@@ -108,6 +110,8 @@ let posterName = "Unknown poster name";
     const posterDoc = querySnapshot.docs[0];  // Assuming userId is unique, take poster name from the first matching document
     console.log(posterDoc.data());
     posterName = posterDoc.data().name || "Unknown poster name";
+    posterYear = posterDoc.data().year || "Unknown poster year";
+    posterVisitedCity = posterDoc.data().city || "Unknown poster destination city";
   } 
 } catch (error) {
   console.error("Error fetching username: ", error);
@@ -119,7 +123,7 @@ let posterName = "Unknown poster name";
         
         // Data for the new post
         const newPostData = {
-          userid: userId,
+          userId: userId,
           locat_id: restaurantLocationId,  
           restaurant: restaurantName,        
           mealTime: mealTime,                
@@ -129,8 +133,11 @@ let posterName = "Unknown poster name";
           stars: rating,                 
           description: descrip,
           link: webLink,  
-
-          posterName: posterName 
+          
+          //info added automatically to a post doc in the db about the user making the post (user doesn't submit this)
+          posterName: posterName,
+          posterYear: posterYear,
+          posterVisitedCity: posterVisitedCity
 
           // also add something so that the id of the specific user is also included           
         };
