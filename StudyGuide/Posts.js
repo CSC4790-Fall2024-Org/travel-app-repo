@@ -42,23 +42,35 @@ export default function Posts({ route }) {
       const posterRef = doc(db, "users");//get users collection from db
       const q2 = query(posterRef, where('userId', '==', posterId));//match user id to poster id for the doc
       const posterDoc = await getDoc(q2);//get doc from users collection for correct userId
-     // const fetchedSortedPosts = [];
-      if (posterDoc.exists()) {
+      const fetchedPosters = [];
+      posterDoc.forEach(async (posterDoc) => {
+        //orig: 
+        fetchedPosters.push({ id: posterDoc.id, ...posterDoc.data().name });
+      });
+      setPosterInfo(fetchedPosters); 
+
+     /*
+     if (posterDoc.exists()) {
         setPosterInfo(posterDoc.data()); // Assuming 'name' is the field name for docs in 
        /* return(
           <View>
             <Text>{posterDoc.data().name}</Text>
           </View>
-        );*/
+        );//
         return posterDoc.data().name;
       } else {
         setPosterInfo("Unknown User Info");
       }
+    */
+    
     } catch (error) {
       console.error("Error fetching user info: ", error);
     }
   };
-
+  useEffect(() => {
+    fetchLocationCity();
+    
+  }, [db, "users", "userId"]);
   
 
 
@@ -83,7 +95,11 @@ const fetchSortedPosts = async () => {
      //orig: 
      fetchedSortedPosts.push({ id: postDoc.id, ...postDoc.data() });
       
-      /*new
+     //new
+/*new
+     const posterId = fetchSortedPosts.get(postDoc.userId);
+     fetchPosterInfo(posterId); 
+      
       //fetchedSortedPosts.push(fetchPosterName(doc.userId));
       const posterId = postDoc.data().userId;
       const posterRef = doc(db, "users");//get users collection from db
@@ -156,9 +172,7 @@ if (!sortedPosts) {
 useEffect(() => {
   fetchSortedPosts();
 }, [db, 'locations']);
-useEffect(() => {
-  fetchPosterInfo();
-}, [db, "userId"]);
+
 
 //come back to userId field that has been taken out of foodPosts fields
 //also need to add addr (address), userId, food_city, link
@@ -181,7 +195,10 @@ useEffect(() => {
             
             <Text style={styles.itemTitle}> Post from ID: <Text style={styles.postItem}>{sortedPost.userId}</Text></Text>
             <Text style={styles.itemTitle}> Restaurant Name: <Text style={styles.postItem}>{sortedPost.restaurant}</Text></Text>
-            
+            <Text style={styles.itemTitle}> Poster Name: <Text style={styles.postItem}>{sortedPost.posterName}</Text></Text>
+
+            <Text style={styles.title}>Poster Name: {fetchPosterInfo(sortedPost.userId)}</Text>
+
             <Text style={styles.itemTitle}><Text style={styles.itemTitle}> Poster Name: {fetchPosterInfo(sortedPost.userId)} </Text></Text>
             <Text style={styles.itemTitle}> Post from name: <Text style={styles.postItem}>{posterInfo.name}</Text></Text>
             <Text style={styles.itemTitle}> Poster's Year Abroad : <Text style={styles.postItem}>{posterYr}</Text></Text>
