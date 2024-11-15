@@ -37,7 +37,9 @@ export default function Posts({ route }) {
 
   const [locatInfo, setlocatInfo]= useState([]);
 
+
   /*
+
   const fetchPosterInfo = async (posterId) => {
     try {
       const posterRef = doc(db, "users");//get users collection from db
@@ -62,6 +64,7 @@ export default function Posts({ route }) {
       } else {
         setPosterInfo("Unknown User Info");
       }
+
     //
     
     } catch (error) {
@@ -72,6 +75,7 @@ export default function Posts({ route }) {
     fetchLocationCity();
     
   }, [db, "users", "userId"]);*/
+
   
 
 
@@ -95,11 +99,13 @@ const fetchSortedPosts = async () => {
     querySnapshot.forEach(async (postDoc) => {
      //orig: 
      fetchedSortedPosts.push({ id: postDoc.id, ...postDoc.data() });
+
      //something to try:
      //const userId = UsersRef.data().userId;
      //const UsersRef = query(collection(db, "users"), where('userId', '==', userId));
      // const posterName = UsersRef.data().name;
      // firestore().collection('posts').add({posterName: posterName});
+
 
      //new
 /*new

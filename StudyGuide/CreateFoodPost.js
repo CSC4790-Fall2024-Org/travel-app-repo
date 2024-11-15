@@ -8,6 +8,7 @@ import DropDownPicker from 'react-native-dropdown-picker'; //dropdown picker
 //import Icon from "react-native-vector-icons/MaterialIcons"; //icons for multiselect
 import Stars from "./Stars"
 import { db } from './firebase';
+
 import { getDocs, collection, getDoc, where, query } from 'firebase/firestore';
 import { doc, setDoc } from 'firebase/firestore';
 import { getAuth } from "firebase/auth"; // Import auth to get the current user
@@ -22,8 +23,9 @@ const CreateFoodPost = () => {
   const [descrip, setDescrip] = useState('');
   const [webLink, setWebLink] = useState('');
   const navigation = useNavigation();
-
+  
   const [posterName, setPosterName ] = useState("");
+
 
 
   // Dropdown 1: Locations
@@ -146,7 +148,7 @@ let posterName = "Unknown poster name";
           link: webLink,  
 
           posterName: posterName 
-          
+
           // also add something so that the id of the specific user is also included           
         };
   
@@ -188,6 +190,7 @@ let posterName = "Unknown poster name";
     fetchLocations();
   }, []);
 
+
   // function to get usernames
   const fetchPosterName = async () => {
     try {
@@ -206,10 +209,12 @@ let posterName = "Unknown poster name";
     const posterDoc = await getDoc(q);
     console.log(posterDoc);
 
+
       if (posterDoc.exists()) {
         setPosterName(posterDoc.data().name); // Assuming 'city' is the field name for city name
       } else {
         setPosterName("Unknown poster name");
+
       }
     } catch (error) {
       console.error("Error fetching username: ", error);
@@ -218,6 +223,7 @@ let posterName = "Unknown poster name";
 /*  useEffect(() => {
     fetchPosterName();
   }, []); */
+
 
 
 
