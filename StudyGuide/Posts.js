@@ -37,6 +37,9 @@ export default function Posts({ route }) {
 
   const [locatInfo, setlocatInfo]= useState([]);
 
+
+  /*
+
   const fetchPosterInfo = async (posterId) => {
     try {
       const posterRef = doc(db, "users");//get users collection from db
@@ -45,7 +48,7 @@ export default function Posts({ route }) {
       const fetchedPosters = [];
       posterDoc.forEach(async (posterDoc) => {
         //orig: 
-        fetchedPosters.push({ id: posterDoc.id, ...posterDoc.data().name });
+        fetchedPosters.push({ id: posterDoc.id, ...posterDoc.data()});
       });
       setPosterInfo(fetchedPosters); 
 
@@ -61,7 +64,8 @@ export default function Posts({ route }) {
       } else {
         setPosterInfo("Unknown User Info");
       }
-    */
+
+    //
     
     } catch (error) {
       console.error("Error fetching user info: ", error);
@@ -70,7 +74,8 @@ export default function Posts({ route }) {
   useEffect(() => {
     fetchLocationCity();
     
-  }, [db, "users", "userId"]);
+  }, [db, "users", "userId"]);*/
+
   
 
 
@@ -94,7 +99,14 @@ const fetchSortedPosts = async () => {
     querySnapshot.forEach(async (postDoc) => {
      //orig: 
      fetchedSortedPosts.push({ id: postDoc.id, ...postDoc.data() });
-      
+
+     //something to try:
+     //const userId = UsersRef.data().userId;
+     //const UsersRef = query(collection(db, "users"), where('userId', '==', userId));
+     // const posterName = UsersRef.data().name;
+     // firestore().collection('posts').add({posterName: posterName});
+
+
      //new
 /*new
      const posterId = fetchSortedPosts.get(postDoc.userId);
@@ -196,13 +208,6 @@ useEffect(() => {
             <Text style={styles.itemTitle}> Post from ID: <Text style={styles.postItem}>{sortedPost.userId}</Text></Text>
             <Text style={styles.itemTitle}> Restaurant Name: <Text style={styles.postItem}>{sortedPost.restaurant}</Text></Text>
             <Text style={styles.itemTitle}> Poster Name: <Text style={styles.postItem}>{sortedPost.posterName}</Text></Text>
-
-            <Text style={styles.title}>Poster Name: {fetchPosterInfo(sortedPost.userId)}</Text>
-
-            <Text style={styles.itemTitle}><Text style={styles.itemTitle}> Poster Name: {fetchPosterInfo(sortedPost.userId)} </Text></Text>
-            <Text style={styles.itemTitle}> Post from name: <Text style={styles.postItem}>{posterInfo.name}</Text></Text>
-            <Text style={styles.itemTitle}> Poster's Year Abroad : <Text style={styles.postItem}>{posterYr}</Text></Text>
-            
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
               <Text style={styles.itemTitle}>Rating:</Text>
               <Stars rating={sortedPost.stars} readOnly={true} />
