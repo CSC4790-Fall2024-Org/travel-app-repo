@@ -1,14 +1,12 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { db } from './firebase';
 import { getAuth } from "firebase/auth";
-import Stars from "./Stars"
+import Stars from "./Stars";
 
 export default function UserPosts() {
   const [userPosts, setUserPosts] = useState([]);
-  const navigation = useNavigation();
   const auth = getAuth();
 
   const fetchUserFoodPosts = async () => {
@@ -35,7 +33,7 @@ export default function UserPosts() {
         console.log("No posts found for the current user.");
       }
 
-      setUserPosts(fetchedPosts); // Set userPosts whether empty or populated
+      setUserPosts(fetchedPosts); 
     } catch (error) {
       console.error("Error fetching user food posts:", error);
     }
@@ -45,10 +43,6 @@ export default function UserPosts() {
     fetchUserFoodPosts();
   }, []);
 
-  const handlePostPress = (post) => {
-    navigation.navigate("PostDetails", { post });
-  };
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Your Posts</Text>
@@ -56,17 +50,15 @@ export default function UserPosts() {
         {userPosts.length > 0 ? (
           userPosts.map((post) => (
             <View key={post.id} style={styles.postContainer}>
-              <TouchableOpacity onPress={() => handlePostPress(post)}>
-                {post.locat_id && <Text style={styles.postlocat_id}>Location: {post.locat_id}</Text>}
-                {post.restaurant && <Text style={styles.postrestaurant}>Name: {post.restaurant}</Text>}
-                {post.mealTime && <Text style={styles.postmealTime}>Meal Time: {post.mealTime}</Text>}
-                {post.restaurantType && <Text style={styles.postrestaurantType}>Type: {post.restaurantType}</Text>}
-                {post.expense && <Text style={styles.postexpense}>Expense: {post.expense}</Text>}
-                {post.stars && <Text style={styles.poststars}>Stars: {post.stars}</Text>}
-                {post.link && <Text style={styles.postlink}>Link: {post.link}</Text>}
-                {post.dietary && <Text style={styles.postdietary}>Dietary Restrictions: {post.dietary}</Text>}
-                {post.description && <Text style={styles.postdescription}>Description: {post.description}</Text>}
-              </TouchableOpacity>
+              {post.locat_id && <Text style={styles.postlocat_id}>Location: {post.locat_id}</Text>}
+              {post.restaurant && <Text style={styles.postrestaurant}>Name: {post.restaurant}</Text>}
+              {post.mealTime && <Text style={styles.postmealTime}>Meal Time: {post.mealTime}</Text>}
+              {post.restaurantType && <Text style={styles.postrestaurantType}>Type: {post.restaurantType}</Text>}
+              {post.expense && <Text style={styles.postexpense}>Expense: {post.expense}</Text>}
+              {post.stars && <Stars style={styles.poststars} readOnly={true}>Stars: {post.stars}</Stars>}
+              {post.link && <Text style={styles.postlink}>Link: {post.link}</Text>}
+              {post.dietary && <Text style={styles.postdietary}>Dietary Restrictions: {post.dietary}</Text>}
+              {post.description && <Text style={styles.postdescription}>Description: {post.description}</Text>}
             </View>
           ))
         ) : (
@@ -87,6 +79,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 20,
     textAlign: "center",
+    fontWeight: "bold",
   },
   postContainer: {
     marginBottom: 15,
