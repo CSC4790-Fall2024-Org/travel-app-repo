@@ -107,7 +107,7 @@ const CreateFoodPost = () => {
           expense: expense, 
           stars: rating,                 
           description: descrip,
-          link: webLink  
+          link: webLink,  
 
           posterName: posterName 
           // also add something so that the id of the specific user is also included           
