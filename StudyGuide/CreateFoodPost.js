@@ -103,7 +103,7 @@ const CreateFoodPost = () => {
       const posterDoc = await getDoc(q2);//get doc from users collection for correct userId
 
       if (posterDoc.exists()) {
-        setPosterName(posterDoc.data()); // Assuming 'city' is the field name for city name
+        setPosterName(posterDoc.data().name); // Assuming 'city' is the field name for city name
       } else {
         setPosterName("Unknown Location");
       }
