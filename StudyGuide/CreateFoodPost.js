@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react"; 
-import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Button, Alert, ScrollView } from "react-native";
+import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Button, Alert, ScrollView} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 //import { Picker } from '@react-native-picker/picker';
-import RNPickerSelect from "react-native-picker-select"; //picker
-import SectionedMultiSelect from 'react-native-sectioned-multi-select'; //multiselect picker
-import Icon from "react-native-vector-icons/MaterialIcons"; //icons for multiselect
+//import RNPickerSelect from "react-native-picker-select"; //picker
+import DropDownPicker from 'react-native-dropdown-picker'; //dropdown picker
+//import SectionedMultiSelect from 'react-native-sectioned-multi-select'; //multiselect picker
+//import Icon from "react-native-vector-icons/MaterialIcons"; //icons for multiselect
 import Stars from "./Stars"
 import { db } from './firebase';
 import { getDocs, collection } from 'firebase/firestore';
@@ -12,26 +13,70 @@ import { doc, setDoc } from 'firebase/firestore';
 import { getAuth } from "firebase/auth"; // Import auth to get the current user
 
 
-// Fields
+// Input Fields
 const CreateFoodPost = () => {
   // add user id 
-  const [restaurantLocationId, setRestaurantLocation] = useState('');
-  const [locationOptions, setLocationOptions] = useState([]); // Hold list of locations
   const [address, setAddress] = useState('');
   const [restaurantName, setRestaurantName] = useState('');
-  const [mealTime, setMealTime] = useState('');
-  const [restaurantType, setRestaurantType] = useState('');
-  const [dietaryRes, setDietaryRes] = useState([]);
-  const [expense, setExpense] = useState('');
   const [rating, setRating] = useState(0);
-  //const [starRating, setStarRating] = useState('');
   const [descrip, setDescrip] = useState('');
   const [webLink, setWebLink] = useState('');
   const navigation = useNavigation();
 
-  // check if all fields are filled
+  // Dropdown 1: Locations
+  const [locationOpen, setLocationOpen] = useState(false);
+  const [restaurantLocationId, setRestaurantLocation] = useState('');
+  const [locationItems, setLocationItems] = useState([]);
+
+  // Dropdown 2: Meal Time
+  const [mealTimeOpen, setMealTimeOpen] = useState(false);
+  const [mealTime, setMealTime] = useState(null);
+  const [mealTimeItems, setMealTimeItems] = useState([
+    {label: 'Breakfast', value: 'breakfast'},
+    {label: 'Brunch', value: 'brunch'},
+    {label: 'Lunch', value: 'lunch'},
+    {label: 'Dinner', value: 'dinner'}
+  ]);
+
+  // Dropdown 3: Restaurant type
+  const [restaurantTypeOpen, setRestaurantTypeOpen] = useState(false);
+  const [restaurantType, setRestaurantType] = useState(null);
+  const [restaurantTypeItems, setRestaurantTypeItems] = useState([
+    { label: 'Casual Dining', value: 'casual dining' },
+    { label: 'Fine Dining', value: 'fine dining' },
+    { label: 'Buffet', value: 'buffet' },
+    { label: 'Cafe', value: 'cafe' }
+  ]);
+
+  // Dropdown 4: Expense
+  const [expenseOpen, setExpenseOpen] = useState(false);
+  const [expense, setExpense] = useState(null);
+  const [expenseItems, setExpenseItems] = useState([
+    { label: '$', value: '$' },
+    { label: '$$', value: '$$' },
+    { label: '$$$', value: '$$$' }
+  ]);
+
+  // Dropdown 5: Dietary Restrictions
+  const [dietaryResOpen, setDietaryResOpen] = useState(false);
+  const [dietaryRes, setDietaryRes] = useState([]);
+  const [dietaryResItems, setDietaryResItems] = useState([
+    { label: 'Vegetarian', value: 'vegetarian' },
+    { label: 'Vegan', value: 'vegan' },
+    { label: 'Dairy-free', value: 'dairy-free' },
+    { label: 'Lactose-free', value: 'lactose-free' },
+    { label: 'Gluten-free', value: 'gluten-free' },
+    { label: 'Kosher', value: 'kosher' },
+    { label: 'Paleo', value: 'paleo' }
+  ]);
+
+  // show the selected items for dietary multiselect
+  const selectedDietaryRes = dietaryRes.length > 0
+    ? dietaryRes.map(item => item).join(', ')
+    : 'Dietary Accomodations:';
 
 
+  // check if all fields are filled to submit
   const allFields = restaurantLocationId && restaurantName && mealTime && restaurantType && expense && rating && descrip;
 
 
@@ -92,7 +137,7 @@ const CreateFoodPost = () => {
         label: doc.data().city,
         value: doc.id,
       }));
-      setLocationOptions(fetchedData);
+      setLocationItems(fetchedData);
     } catch (error) {
       console.error("Error fetching locations: ", error);
     }
@@ -103,11 +148,13 @@ const CreateFoodPost = () => {
   }, []);
 
 
+
   return (
     <KeyboardAvoidingView
       style={styles.container} behavior="padding"
     > 
-    <ScrollView>
+    <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}>
+    
       <Text style={styles.title}>Create Food Post</Text>
       <View style={styles.inputContainer}>
 
@@ -122,15 +169,28 @@ const CreateFoodPost = () => {
           style={styles.input}
         />
 
-         {/* Restaurant Location */}
-         <RNPickerSelect
-          onValueChange={(value) => setRestaurantLocation(value)}
-          items={locationOptions}
-          placeholder={{ label: "Restaurant Location *", value: null }}
-          style={pickerSelectStyles}
-          value={restaurantLocationId}
-          useNativeAndroidPickerStyle={false} 
-        />
+        {/* Restaurant Location */}
+        <View style={{ zIndex: 5000, marginBottom: 10 }}>
+          <DropDownPicker
+            style={styles.dropdown}
+            containerStyle={styles.dropdownContainer}
+            placeholderStyle={styles.dropdownPlaceholder}
+            labelStyle={styles.dropdownLabelStyle}
+            itemStyle={styles.dropdownItem}
+            badgeStyle={styles.dropdownBadge}
+
+            open={locationOpen}
+            value={restaurantLocationId}
+            items={locationItems}
+            setOpen={setLocationOpen}
+            setValue={setRestaurantLocation}
+            setItems={setLocationItems}
+            placeholder="Restaurant Location: *"
+            zIndex={5000}
+            zIndexInverse={4000}
+          />
+        </View>
+
 
         {/* Address */}
         <TextInput
@@ -140,78 +200,98 @@ const CreateFoodPost = () => {
           style={styles.input}
         />
 
-        
         {/* Meal Time */}
-        <RNPickerSelect
-          onValueChange={(value) => setMealTime(value)}
-          items={[
-            { label: 'Breakfast', value: 'breakfast' },
-            { label: 'Brunch', value: 'brunch' },
-            { label: 'Lunch', value: 'lunch' },
-            { label: 'Dinner', value: 'dinner' }
-          ]}
-          placeholder={{ label: "Meal Time *", value: null }}
-          style={pickerSelectStyles}
-          value={mealTime}
-          useNativeAndroidPickerStyle={false} 
-        /> 
-       
+        <View style={{ zIndex: 4000, marginBottom: 10 }}>
+          <DropDownPicker
+            style={styles.dropdown}
+            containerStyle={styles.dropdownContainer}
+            placeholderStyle={styles.dropdownPlaceholder}
+            labelStyle={styles.dropdownLabelStyle}
+            itemStyle={styles.dropdownItem}
+            badgeStyle={styles.dropdownBadge}
+
+            open={mealTimeOpen}
+            value={mealTime}
+            items={mealTimeItems}
+            setOpen={setMealTimeOpen}
+            setValue={setMealTime}
+            setItems={setMealTimeItems}
+            placeholder="Meal time: *"
+            zIndex={4000} //Highest zIndex for top dropdown
+            zIndexInverse={3000}
+          />
+        </View>
+
         {/* Restaurant Type */}
-        <RNPickerSelect
-          onValueChange={(value) => setRestaurantType(value)}
-          items={[
-            { label: 'Fast Food', value: 'fast food' },
-            { label: 'Casual Dining', value: 'casual dining' },
-            { label: 'Fine Dining', value: 'fine dining' },
-            { label: 'Buffet', value: 'buffet' },
-            { label: 'Cafe', value: 'cafe' }
-          ]}
-          placeholder={{ label: "Restaurant Type *", value: null }}
-          style={pickerSelectStyles}
-          value={restaurantType}
-          useNativeAndroidPickerStyle={false} 
-        />
+        <View style={{ zIndex: 3000, marginBottom: 10 }}>
+          <DropDownPicker
+            style={styles.dropdown}
+            containerStyle={styles.dropdownContainer}
+            placeholderStyle={styles.dropdownPlaceholder}
+            labelStyle={styles.dropdownLabelStyle}
+            itemStyle={styles.dropdownItem}
+            badgeStyle={styles.dropdownBadge}
+
+            open={restaurantTypeOpen}
+            value={restaurantType}
+            items={restaurantTypeItems}
+            setOpen={setRestaurantTypeOpen}
+            setValue={setRestaurantType}
+            setItems={setRestaurantTypeItems}
+            placeholder="Restaurant Type: *"
+            zIndex={3000} 
+            zIndexInverse={2000}
+          />
+        </View>
+       
 
         {/* Dietary Restrictions */}
-        <SectionedMultiSelect
-          items={[
-            { name: 'Vegetarian', id: 'vegetarian' },
-            { name: 'Vegan', id: 'vegan' },
-            { name: 'Dairy-free', id: 'dairy-free' },
-            { name: 'Lactose-free', id: 'lactose-free' },
-            { name: 'Gluten-free', id: 'gluten-free' },
-            { name: 'Kosher', id: 'kosher' },
-            { name: 'Paleo', id: 'paleo' }
-          ]}
-          uniqueKey="id"
-          selectText="Accomodates Dietary Restrictions:"
-          onSelectedItemsChange={(selectedItems) => setDietaryRes(selectedItems)}
-          selectedItems={dietaryRes}
-          IconRenderer={Icon}
-          single={false}
-          style={{
-            selectToggle: {
-              padding: 15,
-              backgroundColor: 'white',
-              borderRadius: 10,
-              marginTop: 10,
-            },
-          }}
-        />
+        <View style={{ zIndex: 2000, marginBottom: 10 }}>
+          <DropDownPicker
+            style={styles.dropdown}
+            containerStyle={styles.dropdownContainer}
+            placeholderStyle={styles.dropdownPlaceholder}
+            labelStyle={styles.dropdownLabelStyle}
+            itemStyle={styles.dropdownItem}
+            badgeStyle={styles.dropdownBadge}
+
+            open={dietaryResOpen}
+            value={dietaryRes}
+            items={dietaryResItems}
+            setOpen={setDietaryResOpen}
+            setValue={setDietaryRes}
+            setItems={setDietaryResItems}
+            placeholder={selectedDietaryRes}
+            zIndex={2000}
+            zIndexInverse={1000}
+            multiple={true}
+            min={0}
+            mode="BADGE" //for multiselect readability
+          />
+        </View>
+      
 
         {/* Expense */}
-        <RNPickerSelect
-          onValueChange={(value) => setExpense(value)}
-          items={[
-            { label: '$', value: '$' },
-            { label: '$$', value: '$$' },
-            { label: '$$$', value: '$$$' }
-          ]}
-          placeholder={{ label: "Expense *", value: null }}
-          style={pickerSelectStyles}
-          value={expense}
-          useNativeAndroidPickerStyle={false} 
-        />
+        <View style={{ zIndex: 1000, marginBottom: 500 }}>
+          <DropDownPicker
+            style={styles.dropdown}
+            containerStyle={styles.dropdownContainer}
+            placeholderStyle={styles.dropdownPlaceholder}
+            labelStyle={styles.dropdownLabelStyle}
+            itemStyle={styles.dropdownItem}
+            badgeStyle={styles.dropdownBadge}
+
+            open={expenseOpen}
+            value={expense}
+            items={expenseItems}
+            setOpen={setExpenseOpen}
+            setValue={setExpense}
+            setItems={setExpenseItems}
+            placeholder="Expense: *"
+            zIndex={1000}
+            zIndexInverse={500}
+          />    
+        </View>     
 
       
         {/* Description */}
@@ -246,7 +326,8 @@ const CreateFoodPost = () => {
     </TouchableOpacity> 
     
       </View>
-      </ScrollView>
+    
+    </ScrollView>
     </KeyboardAvoidingView> 
   );
 };
@@ -261,6 +342,7 @@ const pickerSelectStyles = StyleSheet.create({
     marginTop: 10,
     borderWidth: 0,
     fontSize: 14,
+    color: 'grey',
     paddingVertical: 12,
     paddingHorizontal: 10,
     //borderWidth: 1,
@@ -306,6 +388,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 15,
     paddingVertical: 15,
+    color: 'grey',
     borderRadius: 10,
     marginTop: 10,
     borderWidth: 0,
@@ -335,6 +418,50 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white', 
     fontSize: 15,
+  },
+
+  //Dropdown style
+  dropdownContainer: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    borderWidth: 0,
+    marginTop: 10,
+    width: '100%',
+    maxWidth: 400,
+  },
+  dropdown: {
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    borderRadius: 10,
+    borderColor: 'transparent',
+    borderWidth: 0, 
+    fontSize: 14,
+    color: 'grey',
+    fontWeight: 'normal',
+  },
+  dropdownPlaceholder: {
+    color: 'grey',
+    fontWeight: 'normal',
+  },
+  dropdownLabelStyle: {
+    fontSize: 14,
+    fontWeight: 'normal',
+    color: 'grey',
+  },
+  dropdownItem: {
+    paddingHorizontal: 10,
+    paddingVertical: 15,
+    color: 'grey',
+    fontWeight: 'normal',
+  },
+  dropdownBadge: {
+    backgroundColor: 'grey',
+    color: 'white',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 5,
+    fontSize: 14,
+    fontWeight: 'normal',
   },
 });
 
