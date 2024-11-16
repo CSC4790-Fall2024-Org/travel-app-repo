@@ -171,7 +171,7 @@ const CreateFoodPost = () => {
         />
 
         {/* Restaurant Location */}
-        <View style={{ zIndex: 5000, marginBottom: 10 }}>
+        <View style={{ zIndex: 5000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -202,7 +202,7 @@ const CreateFoodPost = () => {
         />
 
         {/* Meal Time */}
-        <View style={{ zIndex: 4000, marginBottom: 10 }}>
+        <View style={{ zIndex: 4000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -224,7 +224,7 @@ const CreateFoodPost = () => {
         </View>
 
         {/* Restaurant Type */}
-        <View style={{ zIndex: 3000, marginBottom: 10 }}>
+        <View style={{ zIndex: 3000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -247,7 +247,7 @@ const CreateFoodPost = () => {
        
 
         {/* Dietary Restrictions */}
-        <View style={{ zIndex: 2000, marginBottom: 10 }}>
+        <View style={{ zIndex: 2000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -273,7 +273,7 @@ const CreateFoodPost = () => {
       
 
         {/* Expense */}
-        <View style={{ zIndex: 1000, marginBottom: 500 }}>
+        <View style={{ zIndex: 1000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
