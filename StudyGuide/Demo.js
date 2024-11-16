@@ -1,20 +1,19 @@
-import React, { useState } from "react"; 
-import { KeyboardAvoidingView, TouchableOpacity, Text, View, StyleSheet, ScrollView } from "react-native";
+import React from "react"; 
+import { KeyboardAvoidingView, TouchableOpacity, Text, View, StyleSheet, ScrollView, Image } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 
 function Demo() {
-    const navigation = useNavigation(); // Define navigation here
+    const navigation = useNavigation(); 
 
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding"> 
-        <Text style={styles.title}>Welcome to StudyGuide</Text>
-        <View style={styles.container}>
-            {/* <Image 
-                source={require('./assets/your-image.jpg')} // Adjust path to your image
-                style={styles.image} 
-                resizeMode="contain" // Adjust image sizing as needed
-            /> */}
-        </View>
+            <Text style={styles.title}>Welcome to StudyGuide</Text>
+            <View style={styles.imageContainer}>
+                <Image 
+                    source={require('./Logo.jpeg')} 
+                    style={styles.image} 
+                />
+            </View>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate("Login")} style={styles.button}>
@@ -32,38 +31,46 @@ function Demo() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundcolor: '#D1FFBD',
+    backgroundColor: 'white',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    width: '100%'
+  },
+  imageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 40, 
   },
   image: {        
-    width: 200,        
-    height: 200,    
+    width: 300, 
+    height: 300,
   },
   scrollContainer: {
     flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 20,
+    paddingVertical: 20,
   },
   title: {    
     fontSize: 34, 
     fontWeight: "bold",    
     marginBottom: 20, 
     textAlign: 'center',
-    padding: 20,
-    marginTop: 100,
     fontFamily: 'Times New Roman',
+    marginTop: 50,
   },
   buttonContainer: {
     width: '100%',
     justifyContent: "center",
     alignItems: "center",
     marginTop: 40,
+    paddingHorizontal: 20, 
   },
   button: {
     backgroundColor: 'green',
     width: '100%', 
     padding: 15,
-    borderRadius: 15,
+    borderRadius: 10,
     alignItems: 'center',
     marginTop: 15,
   },
@@ -71,8 +78,7 @@ const styles = StyleSheet.create({
     color: 'white', 
     fontSize: 18,
     fontWeight: "bold",    
-    //fontFamily: 'Times New Roman',
   },
 });
 
-export default Demo; 
+export default Demo;
