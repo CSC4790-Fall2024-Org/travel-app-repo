@@ -8,7 +8,7 @@ import DropDownPicker from 'react-native-dropdown-picker'; //dropdown picker
 //import Icon from "react-native-vector-icons/MaterialIcons"; //icons for multiselect
 import Stars from "./Stars"
 import { db } from './firebase';
-import { getDocs, collection } from 'firebase/firestore';
+import { getDocs, collection, getDoc, where, query } from 'firebase/firestore';
 import { doc, setDoc } from 'firebase/firestore';
 import { getAuth } from "firebase/auth"; // Import auth to get the current user
 
@@ -22,6 +22,7 @@ const CreateFoodPost = () => {
   const [descrip, setDescrip] = useState('');
   const [webLink, setWebLink] = useState('');
   const navigation = useNavigation();
+ 
 
   // Dropdown 1: Locations
   const [locationOpen, setLocationOpen] = useState(false);
@@ -61,14 +62,15 @@ const CreateFoodPost = () => {
   const [dietaryResOpen, setDietaryResOpen] = useState(false);
   const [dietaryRes, setDietaryRes] = useState([]);
   const [dietaryResItems, setDietaryResItems] = useState([
-    { label: 'Vegetarian', value: 'vegetarian' },
-    { label: 'Vegan', value: 'vegan' },
-    { label: 'Dairy-free', value: 'dairy-free' },
-    { label: 'Lactose-free', value: 'lactose-free' },
-    { label: 'Gluten-free', value: 'gluten-free' },
-    { label: 'Kosher', value: 'kosher' },
-    { label: 'Paleo', value: 'paleo' }
+    { label: 'Vegetarian', value: ' vegetarian ' },
+    { label: 'Vegan', value: ' vegan ' },
+    { label: 'Dairy-free', value: ' dairy-free ' },
+    { label: 'Lactose-free', value: ' lactose-free ' },
+    { label: 'Gluten-free', value: ' gluten-free ' },
+    { label: 'Kosher', value: ' kosher ' },
+    { label: 'Paleo', value: ' paleo ' }
   ]);
+
 
   // show the selected items for dietary multiselect
   const selectedDietaryRes = dietaryRes.length > 0
@@ -80,23 +82,47 @@ const CreateFoodPost = () => {
   const allFields = restaurantLocationId && restaurantName && mealTime && restaurantType && expense && rating && descrip;
 
 
-
   const handleSubmit = async () => {
     if (allFields) {
 
       try {
-        // Generate a new document reference with a unique ID in the "foodPosts" collection
-        // add location city and user id 
-
         const auth = getAuth();
         const userId = auth.currentUser ? auth.currentUser.uid : null;
+
+  if (!userId) {
+    Alert.alert("You must be logged in to post. You don't have an id.");
+    return;
+  }
+  // Now, getting user's name from user's id to automatically put it in db with this post as a field
+  let posterName = "Unknown poster name";
+  let posterYear = "Unknown poster yr";
+  let posterVisitedCity = "Unknown poster city";
+  try {
+    //filter to user's collection
+    const postersRef = collection(db, "users");
+    //get users whose userId field matches the userId from auth (above)
+    const q = query(postersRef, where('userId', '==', userId));
+    //Execute the query and get the documents
+    const querySnapshot = await getDocs(q);
+
+    // Check if we have any matching user documents for signed in user's ID
+    if (!querySnapshot.empty) {
+      const posterDoc = querySnapshot.docs[0];  // Assuming userId is unique, take poster name from the first matching document
+      //console.log(posterDoc.data());
+      posterName = posterDoc.data().name || "Unknown poster name";
+      posterYear = posterDoc.data().year || "Unknown poster year";
+      posterVisitedCity = posterDoc.data().city || "Unknown poster destination city";
+    } 
+  } catch (error) {
+    console.error("Error fetching username: ", error);
+  }
+
 
 
         const newPostRef = doc(collection(db, "foodPosts"));
         
         // Data for the new post
         const newPostData = {
-
           userId: userId,
           locat_id: restaurantLocationId,  
           restaurant: restaurantName,        
@@ -106,7 +132,13 @@ const CreateFoodPost = () => {
           expense: expense, 
           stars: rating,                 
           description: descrip,
-          link: webLink  
+          link: webLink,  
+          
+          //info added automatically to a post doc in the db about the user making the post (user doesn't submit this)
+          posterName: posterName,
+          posterYear: posterYear,
+          posterVisitedCity: posterVisitedCity
+
           // also add something so that the id of the specific user is also included           
         };
   
