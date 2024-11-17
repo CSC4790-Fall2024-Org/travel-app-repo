@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Alert, ScrollView} from "react-native";
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
-import RNPickerSelect from "react-native-picker-select";
+//import RNPickerSelect from "react-native-picker-select";
+import DropDownPicker from 'react-native-dropdown-picker'; //dropdown picker
 import { db } from './firebase';
 import { doc, setDoc, getDocs, collection } from 'firebase/firestore';
 
@@ -10,12 +11,22 @@ import { doc, setDoc, getDocs, collection } from 'firebase/firestore';
 const SignUpScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [year, setYear] = useState('');
-  const [city, setCity] = useState('');
+  //const [year, setYear] = useState('');
+  // const [city, setCity] = useState('');
   const [name, setName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigation = useNavigation();
-  const [locationOptions, setLocationOptions] = useState([]); // Hold list of locations
+  // const [locationOptions, setLocationOptions] = useState([]); // Hold list of locations
+
+  // Dropdown 1: Locations
+  const [locationOpen, setLocationOpen] = useState(false);
+  const [restaurantLocationId, setRestaurantLocation] = useState('');
+  const [locationItems, setLocationItems] = useState([]);
+
+  // Dropdown 2: Years
+  const [yearOpen, setYearOpen] = useState(false);
+  const [year, setYear] = useState(null);
+
 
   const checkEmail = (email) => {
     return email.includes('.edu');
@@ -28,7 +39,7 @@ const SignUpScreen = () => {
         label: doc.data().city,
         value: doc.data().city,
       }));
-      setLocationOptions(fetchedData);
+      setLocationItems(fetchedData);
     } catch (error) {
       console.error("Error fetching locations: ", error);
     }
@@ -96,7 +107,12 @@ const SignUpScreen = () => {
       style={styles.container}
       behavior="padding"
     > 
-      <ScrollView contentContainerStyle={[styles.scrollContainer, { flexGrow: 1 }]}>
+      <ScrollView 
+        contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16 }} 
+        style={{ flex: 1 }}
+        horizontal={false}
+        showsHorizontalScrollIndicator={false}
+      >
         
         <Text style={styles.title}>Sign Up</Text>
         <View style={styles.inputContainer}>
@@ -106,28 +122,56 @@ const SignUpScreen = () => {
             onChangeText={text => setName(text)}
             style={styles.input}
           />
+
           {/* City */}
-           {/* Restaurant Location */}
-         <RNPickerSelect
-          onValueChange={(value) => setCity(value)}
-          items={locationOptions}
-          placeholder={{ label: "City", value: null }}
-          style={pickerSelectStyles}
-          value={city}
-          useNativeAndroidPickerStyle={false} 
-        />
-          {/* Year */}
-          <RNPickerSelect
-          onValueChange={(value) => setYear(value)}
-          items={Array.from({ length: 31 }, (_, i) => {
-            const year = 2000 + i;
-            return { label: year.toString(), value: year.toString() };
-          })}
-          placeholder={{ label: "Year", value: null }}
-          style={pickerSelectStyles}
-          value={year}
-          useNativeAndroidPickerStyle={false}
-        />
+          {/* Restaurant Location */}
+        <View style={{ zIndex: 2000, marginBottom: 1 }}>
+          <DropDownPicker
+            style={styles.dropdown}
+            containerStyle={styles.dropdownContainer}
+            placeholderStyle={styles.dropdownPlaceholder}
+            labelStyle={styles.dropdownLabelStyle}
+            itemStyle={styles.dropdownItem}
+            badgeStyle={styles.dropdownBadge}
+
+            open={locationOpen}
+            value={restaurantLocationId}
+            items={locationItems}
+            setOpen={setLocationOpen}
+            setValue={setRestaurantLocation}
+            setItems={setLocationItems}
+            placeholder="Restaurant Location: *"
+            zIndex={2000}
+            zIndexInverse={1000}
+            listMode="SCROLLVIEW"
+          />
+        </View>
+
+
+        {/* Year */}
+        <View style={{ zIndex: 1000, marginBottom: 10 }}>
+          <DropDownPicker
+            open={yearOpen}
+            value={year} // Selected value
+            items={Array.from({ length: 31 }, (_, i) => {
+              const year = 2000 + i;
+              return { label: year.toString(), value: year.toString() };
+            })}
+            style={styles.dropdown}
+            containerStyle={styles.dropdownContainer}
+            placeholderStyle={styles.dropdownPlaceholder}
+
+            setOpen={setYearOpen}
+            setValue={setYear}
+            placeholder="Year"
+            zIndex={1000}
+            zIndexInverse={500}
+            labelStyle={styles.dropdownLabelStyle}
+            itemStyle={styles.dropdownItem}
+            listMode="SCROLLVIEW"
+          />
+        </View>
+
           <TextInput
             placeholder="Email"
             value={email}
@@ -174,8 +218,8 @@ const pickerSelectStyles = StyleSheet.create({
     //borderColor: 'gray',
     //borderRadius: 4,
     //color: 'black',
-    //paddingRight: 30, // to ensure the text is not obscured by the icon
-    //backgroundColor: 'white', // Optional
+    //paddingRight: 30
+    //backgroundColor: 'white',
   },
   inputAndroid: {
     fontSize: 14,
@@ -185,8 +229,8 @@ const pickerSelectStyles = StyleSheet.create({
     borderColor: 'purple',
     borderRadius: 8,
     color: 'black',
-    paddingRight: 30, // to ensure the text is not obscured by the icon
-    backgroundColor: 'white', // Optional
+    paddingRight: 30,
+    backgroundColor: 'white', 
   },
 });
 
@@ -198,7 +242,7 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flexGrow: 1,
-    justifyContent: "center", // Center content vertically
+    justifyContent: "center", 
     alignItems: "center",
   },
   inputContainer: {
@@ -214,6 +258,7 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: 'white',
+    color: 'grey',
     paddingHorizontal: 15,
     paddingVertical: 15,
     borderRadius: 10,
@@ -257,6 +302,50 @@ const styles = StyleSheet.create({
     color: 'white', 
     fontSize: 15,
     fontWeight: "bold",    
+  },
+
+   //Dropdown style
+   dropdownContainer: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    borderWidth: 0,
+    marginTop: 10,
+    width: '100%',
+    maxWidth: 400,
+  },
+  dropdown: {
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    borderRadius: 10,
+    borderColor: 'transparent',
+    borderWidth: 0, 
+    fontSize: 14,
+    color: 'grey',
+    fontWeight: 'normal',
+  },
+  dropdownPlaceholder: {
+    color: 'grey',
+    fontWeight: 'normal',
+  },
+  dropdownLabelStyle: {
+    fontSize: 14,
+    fontWeight: 'normal',
+    color: 'grey',
+  },
+  dropdownItem: {
+    paddingHorizontal: 10,
+    paddingVertical: 15,
+    color: 'grey',
+    fontWeight: 'normal',
+  },
+  dropdownBadge: {
+    backgroundColor: 'grey',
+    color: 'white',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 5,
+    fontSize: 14,
+    fontWeight: 'normal',
   },
 });
 
