@@ -24,7 +24,6 @@ const CreateFoodPost = () => {
   const navigation = useNavigation();
  
 
-
   // Dropdown 1: Locations
   const [locationOpen, setLocationOpen] = useState(false);
   const [restaurantLocationId, setRestaurantLocation] = useState('');
@@ -71,6 +70,7 @@ const CreateFoodPost = () => {
     { label: 'Kosher', value: 'kosher' },
     { label: 'Paleo', value: 'paleo' }
   ]);
+
 
   // show the selected items for dietary multiselect
   const selectedDietaryRes = dietaryRes.length > 0
@@ -179,6 +179,7 @@ let posterVisitedCity = "Unknown poster city";
   useEffect(() => {
     fetchLocations();
   }, []);
+
 
 
   return (
