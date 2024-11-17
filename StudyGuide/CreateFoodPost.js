@@ -154,8 +154,13 @@ const CreateFoodPost = () => {
     <KeyboardAvoidingView
       style={styles.container} behavior="padding"
     > 
-    <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}>
-    
+    <ScrollView 
+      contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16, width: '100%', }} 
+      style={{ flex: 1 }}
+      horizontal={false}
+      showsHorizontalScrollIndicator={false}
+    >
+
       <Text style={styles.title}>Create Food Post</Text>
       <View style={styles.inputContainer}>
 
@@ -171,7 +176,7 @@ const CreateFoodPost = () => {
         />
 
         {/* Restaurant Location */}
-        <View style={{ zIndex: 5000, marginBottom: 1 }}>
+        <View style={{ width: '100%', zIndex: 5000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -189,9 +194,9 @@ const CreateFoodPost = () => {
             placeholder="Restaurant Location: *"
             zIndex={5000}
             zIndexInverse={4000}
+            listMode="SCROLLVIEW"
           />
         </View>
-
 
         {/* Address */}
         <TextInput
@@ -202,7 +207,7 @@ const CreateFoodPost = () => {
         />
 
         {/* Meal Time */}
-        <View style={{ zIndex: 4000, marginBottom: 1 }}>
+        <View style={{ width: '100%', zIndex: 4000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -220,11 +225,12 @@ const CreateFoodPost = () => {
             placeholder="Meal time: *"
             zIndex={4000} //Highest zIndex for top dropdown
             zIndexInverse={3000}
+            listMode="SCROLLVIEW"
           />
         </View>
 
         {/* Restaurant Type */}
-        <View style={{ zIndex: 3000, marginBottom: 1 }}>
+        <View style={{ width: '100%', zIndex: 3000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -242,12 +248,12 @@ const CreateFoodPost = () => {
             placeholder="Restaurant Type: *"
             zIndex={3000} 
             zIndexInverse={2000}
+            listMode="SCROLLVIEW"
           />
         </View>
        
-
         {/* Dietary Restrictions */}
-        <View style={{ zIndex: 2000, marginBottom: 1 }}>
+        <View style={{ width: '100%', zIndex: 2000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -268,12 +274,12 @@ const CreateFoodPost = () => {
             multiple={true}
             min={0}
             mode="BADGE" //for multiselect readability
+            listMode="SCROLLVIEW"
           />
         </View>
       
-
         {/* Expense */}
-        <View style={{ zIndex: 1000, marginBottom: 1 }}>
+        <View style={{ width: '100%', zIndex: 1000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -291,10 +297,10 @@ const CreateFoodPost = () => {
             placeholder="Expense: *"
             zIndex={1000}
             zIndexInverse={500}
+            listMode="SCROLLVIEW"
           />    
         </View>     
 
-      
         {/* Description */}
         <TextInput
           placeholder="Description *"
@@ -312,7 +318,7 @@ const CreateFoodPost = () => {
           onChangeText={text => setWebLink(text)}
           style={styles.input}
           multiline={true}
-          numberOfLines={10}
+          numberOfLines={5}
         />
         
       </View>
@@ -323,7 +329,7 @@ const CreateFoodPost = () => {
       onPress={handleSubmit}
       disabled={!allFields} 
     >
-      <Text style={styles.buttonText}>Create Post</Text> 
+      <Text style={styles.buttonText}>                  Create Post                   </Text> 
     </TouchableOpacity> 
     
       </View>
@@ -333,50 +339,20 @@ const CreateFoodPost = () => {
   );
 };
 
-// pickerSelectStyles
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    backgroundColor: 'white',
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    borderRadius: 10,
-    marginTop: 10,
-    borderWidth: 0,
-    fontSize: 14,
-    color: 'grey',
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    //borderWidth: 1,
-    //borderColor: 'gray',
-    //borderRadius: 4,
-    //color: 'black',
-    //paddingRight: 30, // to ensure the text is not obscured by the icon
-    //backgroundColor: 'white', // Optional
-  },
-  inputAndroid: {
-    fontSize: 14,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 0.5,
-    borderColor: 'purple',
-    borderRadius: 8,
-    color: 'black',
-    paddingRight: 30, // to ensure the text is not obscured by the icon
-    backgroundColor: 'white', // Optional
-  },
-});
 
 // Normal style
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+    overflow: 'hidden',
   },
   inputContainer: {
     width: '100%',
-    maxWidth: 400,
+    //maxWidth: 320,
     paddingVertical: 15,
   },
   title: {    
@@ -405,9 +381,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: '100%',
-    justifyContent: "center",
     alignItems: "center",
-    marginTop: 40,
+    marginTop: 30,
   },
   button: {
     backgroundColor: 'green',
@@ -415,10 +390,12 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
+    marginTop: 0,
   },
   buttonText: {
     color: 'white', 
     fontSize: 15,
+    fontWeight: "bold", 
   },
 
   //Dropdown style
@@ -428,7 +405,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     marginTop: 10,
     width: '100%',
-    maxWidth: 400,
+    //maxWidth: 320,
   },
   dropdown: {
     paddingHorizontal: 15,
