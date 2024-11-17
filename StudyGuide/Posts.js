@@ -3,7 +3,6 @@ import { db } from './firebase';
 import React, { useState, useEffect } from "react";
 import { getFirestore, firestore, where, collection, getDocs, query,  Filter, doc, QueryFieldFilterConstraint, DocumentSnapshot, QuerySnapshot, getDoc } from "firebase/firestore";
 import Stars from "./Stars"
-
 import { useNavigation } from "@react-navigation/native";
 
 export default function Posts({ route }) { 
@@ -11,10 +10,10 @@ export default function Posts({ route }) {
   const navigation = useNavigation();
   const [sortedPosts, setSortedPosts]= useState([]);
   const { location_id }=route.params;
-
   const [locationCity, setLocationCity] = useState(''); // State to store city name
- 
 
+ 
+//get Location using location Id passed into this page
   const fetchLocationCity = async () => {
     try {
       const locationRef = doc(db, "locations", location_id);
@@ -44,17 +43,28 @@ const fetchSortedPosts = async () => {
     const querySnapshot = await getDocs(q);
 
     const fetchedSortedPosts = [];
-    querySnapshot.forEach((doc) => {
-      fetchedSortedPosts.push({ id: doc.id, ...doc.data() });
+    querySnapshot.forEach(async (postDoc) => {
+     //orig: 
+     fetchedSortedPosts.push({ id: postDoc.id, ...postDoc.data() });
+
+     //something to try:
+     //const userId = UsersRef.data().userId;
+     //const UsersRef = query(collection(db, "users"), where('userId', '==', userId));
+     // const posterName = UsersRef.data().name;
+     // firestore().collection('posts').add({posterName: posterName});
+
     });
     setSortedPosts(fetchedSortedPosts); // Update state with the filtered posts
+
   } catch (error) {
     console.error("Error fetching posts for this location: ", error);
   }
-};
+  
+}  
+
 useEffect(() => {
   fetchLocationCity();
-  fetchSortedPosts();
+  
 }, [db, location_id]);
 
 
@@ -66,11 +76,10 @@ if (!sortedPosts) {
   );
 }// end of getting the Food Posts for the location chosen in FindFoodPosts
 
-//get Location using location Id passed into this page
-
 useEffect(() => {
   fetchSortedPosts();
 }, [db, 'locations']);
+
 
 //come back to userId field that has been taken out of foodPosts fields
 //also need to add addr (address), userId, food_city, link
@@ -83,39 +92,21 @@ useEffect(() => {
     
 
     <ScrollView>
-    {locatInfo.map((location) => (
-        <View key={location.id} style={styles.container}>
-          <Button
-            title={location.city} // Assuming each location document has a 'name' field
-            onPress={() => handleLocationPress(location.id)}
-          />
-          <Text style={styles.itemTitle}> Locat City: <Text style={styles.postItem}>{locatInfo.city}</Text></Text>
-          <Text style={styles.itemTitle}> Locat Country: <Text style={styles.postItem}>{locatInfo.country}</Text></Text>
-        </View>
-      ))}
 
-      {sortedPosts.map((sortedPost) => (
+    
+
+     {sortedPosts.map((sortedPost) => (
 
 
             <View key={sortedPost.id} style={styles.container}>
-            <Text style={styles.itemTitle}> Post from: <Text style={styles.postItem}>{sortedPost.userId}</Text></Text>
+            
+            <Text style={styles.itemTitle}> Post from ID: <Text style={styles.postItem}>{sortedPost.userId}</Text></Text>
             <Text style={styles.itemTitle}> Restaurant Name: <Text style={styles.postItem}>{sortedPost.restaurant}</Text></Text>
-            
-            {/* change so it shows stars */}
-            {/* <Text style={styles.itemTitle}> Rating: <Text style={styles.postItem}>{sortedPost.stars}</Text></Text>
-             */}
-             
-            {/* <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-             <Text style={styles.itemTitle}> Rating: <Stars style={styles.postItem}>{sortedPost.stars}</Stars></Text>
-            </View> */}
-            
+            <Text style={styles.itemTitle}> Post from: <Text style={styles.postItem}>{sortedPost.posterName} who visited {sortedPost.posterVisitedCity} in {sortedPost.posterYear}</Text></Text>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
               <Text style={styles.itemTitle}>Rating:</Text>
               <Stars rating={sortedPost.stars} readOnly={true} />
             </View>
-       
-        
-
             <Text style={styles.itemTitle}> Expense: <Text style={styles.postItem}>{sortedPost.expense}</Text></Text>
             <Text style={styles.itemTitle}> Meal Time: <Text style={styles.postItem}>{sortedPost.mealTime}</Text></Text>
             <Text style={styles.itemTitle}> Restaurant Type: <Text style={styles.postItem}>{sortedPost.restaurantType}</Text></Text>
@@ -133,23 +124,22 @@ useEffect(() => {
               <Text style={styles.itemTitle}>Address: <Text style={styles.postItem}>{sortedPost.addr}</Text></Text>
             ) : null}
             
-            {/* <Text style={styles.itemTitle}> Address: <Text style={styles.postItem}>{sortedPost.addr}</Text></Text> */}
-            {/* <Text style={styles.itemTitle}> Link to website: <Text style={styles.postItem}>{sortedPost.link}</Text></Text>
-             */}
+            
             
             {sortedPost.link ? (
               <Text style={styles.itemTitle}>Link to website: <Text style={styles.postItem}>{sortedPost.link}</Text></Text>
             ) : null}
             
-            
+            {/* <Text style={styles.itemTitle}> Address: <Text style={styles.postItem}>{sortedPost.addr}</Text></Text> 
+            <Text style={styles.itemTitle}> Link to website: <Text style={styles.postItem}>{sortedPost.link}</Text></Text>
+            */}
             
             <Text style={styles.itemTitle}> Description/Message: <Text style={styles.postItem}>{sortedPost.description}</Text></Text>
         </View>
 
+    
           
-        
-          
-      ))}
+      ))}        
     </ScrollView>
     </View>
 
