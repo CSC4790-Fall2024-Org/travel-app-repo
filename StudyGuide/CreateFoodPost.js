@@ -63,13 +63,13 @@ const CreateFoodPost = () => {
   const [dietaryResOpen, setDietaryResOpen] = useState(false);
   const [dietaryRes, setDietaryRes] = useState([]);
   const [dietaryResItems, setDietaryResItems] = useState([
-    { label: 'Vegetarian', value: 'vegetarian' },
-    { label: 'Vegan', value: 'vegan' },
-    { label: 'Dairy-free', value: 'dairy-free' },
-    { label: 'Lactose-free', value: 'lactose-free' },
-    { label: 'Gluten-free', value: 'gluten-free' },
-    { label: 'Kosher', value: 'kosher' },
-    { label: 'Paleo', value: 'paleo' }
+    { label: 'Vegetarian', value: ' vegetarian ' },
+    { label: 'Vegan', value: ' vegan ' },
+    { label: 'Dairy-free', value: ' dairy-free ' },
+    { label: 'Lactose-free', value: ' lactose-free ' },
+    { label: 'Gluten-free', value: ' gluten-free ' },
+    { label: 'Kosher', value: ' kosher ' },
+    { label: 'Paleo', value: ' paleo ' }
   ]);
 
   // show the selected items for dietary multiselect
@@ -89,33 +89,33 @@ const CreateFoodPost = () => {
         const auth = getAuth();
         const userId = auth.currentUser ? auth.currentUser.uid : null;
 
-if (!userId) {
-  Alert.alert("You must be logged in to post. You don't have an id.");
-  return;
-}
-// Now, getting user's name from user's id to automatically put it in db with this post as a field
-let posterName = "Unknown poster name";
-let posterYear = "Unknown poster yr";
-let posterVisitedCity = "Unknown poster city";
+  if (!userId) {
+    Alert.alert("You must be logged in to post. You don't have an id.");
+    return;
+  }
+  // Now, getting user's name from user's id to automatically put it in db with this post as a field
+  let posterName = "Unknown poster name";
+  let posterYear = "Unknown poster yr";
+  let posterVisitedCity = "Unknown poster city";
   try {
     //filter to user's collection
     const postersRef = collection(db, "users");
     //get users whose userId field matches the userId from auth (above)
-  const q = query(postersRef, where('userId', '==', userId));
-  //Execute the query and get the documents
-  const querySnapshot = await getDocs(q);
+    const q = query(postersRef, where('userId', '==', userId));
+    //Execute the query and get the documents
+    const querySnapshot = await getDocs(q);
 
     // Check if we have any matching user documents for signed in user's ID
-  if (!querySnapshot.empty) {
-    const posterDoc = querySnapshot.docs[0];  // Assuming userId is unique, take poster name from the first matching document
-    console.log(posterDoc.data());
-    posterName = posterDoc.data().name || "Unknown poster name";
-    posterYear = posterDoc.data().year || "Unknown poster year";
-    posterVisitedCity = posterDoc.data().city || "Unknown poster destination city";
-  } 
-} catch (error) {
-  console.error("Error fetching username: ", error);
-}
+    if (!querySnapshot.empty) {
+      const posterDoc = querySnapshot.docs[0];  // Assuming userId is unique, take poster name from the first matching document
+      //console.log(posterDoc.data());
+      posterName = posterDoc.data().name || "Unknown poster name";
+      posterYear = posterDoc.data().year || "Unknown poster year";
+      posterVisitedCity = posterDoc.data().city || "Unknown poster destination city";
+    } 
+  } catch (error) {
+    console.error("Error fetching username: ", error);
+  }
 
 
 
