@@ -32,6 +32,7 @@ function MainPage({ navigation }) {
       <Button title="Go to Home" onPress={() => navigation.navigate("Home")} />
       <Button title="Go to Posts" onPress={() => navigation.navigate("Posts")} />
       <Button title="Create Food Post" onPress={() => navigation.navigate("CreateFoodPost")} />
+      <Button title="Create Stays Post" onPress={() => navigation.navigate("CreateStaysPost")} />
       <Button title="Go to Find Food Posts" onPress={() => navigation.navigate("FindFoodPosts")} />
       <Button title="Go to Find Activities Posts" onPress={() => navigation.navigate("FindActivitiesPosts")} />
       <Button title="Go to Find Stay Posts" onPress={() => navigation.navigate("FindStayPosts")} />

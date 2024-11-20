@@ -16,8 +16,8 @@ import { getAuth } from "firebase/auth"; // Import auth to get the current user
 // Input Fields
 const CreateFoodPost = () => {
   // add user id 
-  const [address, setAddress] = useState('');
   const [restaurantName, setRestaurantName] = useState('');
+  const [address, setAddress] = useState('');
   const [rating, setRating] = useState(0);
   const [descrip, setDescrip] = useState('');
   const [webLink, setWebLink] = useState('');
