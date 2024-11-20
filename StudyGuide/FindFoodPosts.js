@@ -32,7 +32,7 @@ import { db } from './firebase';
 
 const handleLocationPress = (location_id) => {
   //this one line navigates you to Posts page:
-  navigation.navigate('Posts', { location_id : location_id }); // Navigate to posts page with location ID
+  navigation.navigate('FoodPosts', { location_id : location_id }); // Navigate to posts page with location ID
  
 };
 return (

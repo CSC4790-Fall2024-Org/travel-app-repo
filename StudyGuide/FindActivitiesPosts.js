@@ -1,13 +1,14 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, ScrollView, Button } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, firestore } from "@react-navigation/native";
 import { db } from './firebase';
-
-  
+ 
   export default function FindActivitiesPosts() {
     const [locations, setLocations] = useState([]);
     const navigation = useNavigation();
+    const [sortedPosts, setSortedPosts]= useState([]);
+    const [showView, setShowView] = useState(false);
   
     // Function to fetch documents from Firestore
     const fetchLocations = async () => {
@@ -26,27 +27,32 @@ import { db } from './firebase';
     useEffect(() => {
       fetchLocations();
     }, []);
-  
-    const handleLocationPress = (locationId) => {
-      navigation.navigate("Posts"); // Navigate to posts page with location ID
-    };
-  
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Select Location</Text>
-        <ScrollView>
-          {locations.map((location) => (
-            <View key={location.id} style={styles.locationContainer}>
-              <Button
-                title={location.city} // Assuming each location document has a 'name' field
-                onPress={() => handleLocationPress(location.id)}
-              />
-            </View>
-          ))}
-        </ScrollView>
-      </View>
-    );
-  }
+    
+
+
+const handleLocationPress = (location_id) => {
+  //this one line navigates you to Posts page:
+  navigation.navigate('ActivitiesPosts', { location_id : location_id }); // Navigate to posts page with location ID
+ 
+};
+return (
+  <View style={styles.container}>
+    <Text style={styles.title}>Select Location</Text>
+    <ScrollView>
+      {locations.map((location) => (
+        <View key={location.id} style={styles.locationContainer}>
+          <Button
+            title={location.city} // Assuming each location document has a 'name' field
+            onPress={() => handleLocationPress(location.id)}
+          />
+          
+        </View>
+      ))}
+    </ScrollView>
+  </View>
+);
+}
+    
   
   const styles = StyleSheet.create({
     container: {
@@ -60,6 +66,9 @@ import { db } from './firebase';
       textAlign: "center",
     },
     locationContainer: {
+      marginBottom: 15,
+    },
+    postContainer: {
       marginBottom: 15,
     },
   });
