@@ -36,8 +36,8 @@ const fetchSortedActPosts = async () => {
     //console.log(location_id);
 
     // Build the query with the collection and where filter
-    const foodPostsRef = collection(db, "foodPosts");
-    const q = query(foodPostsRef, where('locat_id', '==', location_id));
+    const activityPostsRef = collection(db, "activityPosts");
+    const q = query(activityPostsRef, where('locat_id', '==', location_id));
 
     // Execute the query and get the documents
     const querySnapshot = await getDocs(q);
@@ -101,7 +101,7 @@ useEffect(() => {
             <View key={sortedActPost.id} style={styles.container}>
             
              <Text style={styles.itemTitle}> Post from ID: <Text style={styles.postItem}>{sortedActPost.userId}</Text></Text> 
-            <Text style={styles.itemTitle}> Name: <Text style={styles.postItem}>{sortedActPost.stayName}</Text></Text>
+            <Text style={styles.itemTitle}> Name: <Text style={styles.postItem}>{sortedActPost.actName}</Text></Text>
             <Text style={styles.itemTitle}> Post from: <Text style={styles.postItem}>{sortedActPost.posterName} who visited {sortedActPost.posterVisitedCity} in {sortedActPost.posterYear}</Text></Text>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
               <Text style={styles.itemTitle}> Rating by {sortedActPost.posterName}: </Text>

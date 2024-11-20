@@ -102,7 +102,7 @@ useEffect(() => {
             
              <Text style={styles.itemTitle}> Post from ID: <Text style={styles.postItem}>{sortedStayPost.userId}</Text></Text> 
             
-            <Text style={styles.itemTitle}>  Name: <Text style={styles.postItem}>{sortedStayPost.restaurant}</Text></Text>
+            <Text style={styles.itemTitle}>  Name: <Text style={styles.postItem}>{sortedStayPost.stayName}</Text></Text>
             <Text style={styles.itemTitle}> Post from: <Text style={styles.postItem}>{sortedStayPost.posterName} who visited {sortedStayPost.posterVisitedCity} in {sortedStayPost.posterYear}</Text></Text>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
               <Text style={styles.itemTitle}>Rating by {sortedStayPost.posterName}:</Text>
