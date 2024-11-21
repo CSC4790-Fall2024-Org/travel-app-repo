@@ -112,17 +112,21 @@ useEffect(() => {
             <Text style={styles.itemTitle}> Restaurant Type: <Text style={styles.postItem}>{sortedPost.restaurantType}</Text></Text>
             {/* <Text style={styles.itemTitle}> Location Id: <Text style={styles.postItem}>{sortedPost.locat_id}</Text></Text> */}
             
-            {/* <Text style={styles.itemTitle}> Dietary Restrictions: <Text style={styles.postItem}>{sortedPost.dietary}</Text></Text>
-             */}
+            
             {sortedPost.dietary ? (
               <Text style={styles.itemTitle}>Dietary Restrictions: <Text style={styles.postItem}>{sortedPost.dietary}</Text></Text>
             ) : null}
             
+          
 
+          {sortedPost.address ? (
+              <Text style={styles.itemTitle}>Address: <Text style={styles.postItem}>{sortedPost.address}</Text></Text>
+            ) : null}
 
-            {sortedPost.addr ? (
+          {/*    {sortedPost.addr ? (
               <Text style={styles.itemTitle}>Address: <Text style={styles.postItem}>{sortedPost.addr}</Text></Text>
             ) : null}
+             */}
             
             
             
