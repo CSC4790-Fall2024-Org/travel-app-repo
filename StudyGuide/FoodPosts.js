@@ -86,103 +86,96 @@ useEffect(() => {
 //make sure the field names match in here and create food posts so that 
 
   return (
-    <View style={styles.container}>
-
-      <Text style={styles.title}>{locationCity} Food Posts</Text>
-    
-
     <ScrollView>
-
+      <Text style={styles.title}>{locationCity}</Text>
     
+  {sortedPosts.map((sortedPost) => (
+    <View key={sortedPost.id} style={styles.postContainer}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text style={styles.itemTitle}>
+        <Text style={styles.resturantTitle}>{sortedPost.restaurant}</Text>
+      </Text>
+      <Stars rating={sortedPost.stars} readOnly={true} />
+     
+      </View>
 
-     {sortedPosts.map((sortedPost) => (
-
-
-            <View key={sortedPost.id} style={styles.container}>
-            
-            {/* <Text style={styles.itemTitle}> Post from ID: <Text style={styles.postItem}>{sortedPost.userId}</Text></Text> */}
-            <Text style={styles.itemTitle}> Restaurant Name: <Text style={styles.postItem}>{sortedPost.restaurant}</Text></Text>
-            <Text style={styles.itemTitle}> Post from: <Text style={styles.postItem}>{sortedPost.posterName} who visited {sortedPost.posterVisitedCity} in {sortedPost.posterYear}</Text></Text>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={styles.itemTitle}>Rating:</Text>
-              <Stars rating={sortedPost.stars} readOnly={true} />
-            </View>
-            <Text style={styles.itemTitle}> Expense: <Text style={styles.postItem}>{sortedPost.expense}</Text></Text>
-            <Text style={styles.itemTitle}> Meal Time: <Text style={styles.postItem}>{sortedPost.mealTime}</Text></Text>
-            <Text style={styles.itemTitle}> Restaurant Type: <Text style={styles.postItem}>{sortedPost.restaurantType}</Text></Text>
-            {/* <Text style={styles.itemTitle}> Location Id: <Text style={styles.postItem}>{sortedPost.locat_id}</Text></Text> */}
-            
-            
-            {sortedPost.dietary ? (
-              <Text style={styles.itemTitle}>Dietary Restrictions: <Text style={styles.postItem}>{sortedPost.dietary}</Text></Text>
-            ) : null}
-            
-          
-
-          {sortedPost.address ? (
-              <Text style={styles.itemTitle}>Address: <Text style={styles.postItem}>{sortedPost.address}</Text></Text>
-            ) : null}
-
-          {/*    {sortedPost.addr ? (
-              <Text style={styles.itemTitle}>Address: <Text style={styles.postItem}>{sortedPost.addr}</Text></Text>
-            ) : null}
-             */}
-            
-            
-            
-            {sortedPost.link ? (
-              <Text style={styles.itemTitle}>Link to website: <Text style={styles.postItem}>{sortedPost.link}</Text></Text>
-            ) : null}
-            
-            {/* <Text style={styles.itemTitle}> Address: <Text style={styles.postItem}>{sortedPost.addr}</Text></Text> 
-            <Text style={styles.itemTitle}> Link to website: <Text style={styles.postItem}>{sortedPost.link}</Text></Text>
-            */}
-            
-            <Text style={styles.itemTitle}> Description/Message: <Text style={styles.postItem}>{sortedPost.description}</Text></Text>
-        </View>
-
-    
-          
-      ))}        
-    </ScrollView>
+      <Text style={styles.itemTitle}>
+        Post from: <Text style={styles.postItem}>{sortedPost.posterName} who visited {sortedPost.posterVisitedCity} in {sortedPost.posterYear}</Text>
+      </Text>
+  
+      <Text style={styles.itemTitle}>
+        Expense: <Text style={styles.postItem}>{sortedPost.expense}</Text>
+      </Text>
+      <Text style={styles.itemTitle}>
+        Meal Time: <Text style={styles.postItem}>{sortedPost.mealTime}</Text>
+      </Text>
+      <Text style={styles.itemTitle}>
+        Restaurant Type: <Text style={styles.postItem}>{sortedPost.restaurantType}</Text>
+      </Text>
+      {sortedPost.dietary && (
+        <Text style={styles.itemTitle}>
+          Dietary Accomodations: <Text style={styles.postItem}>{sortedPost.dietary}</Text>
+        </Text>
+      )}
+      {sortedPost.address && (
+        <Text style={styles.itemTitle}>
+          Address: <Text style={styles.postItem}>{sortedPost.address}</Text>
+        </Text>
+      )}
+      {sortedPost.link && (
+        <Text style={styles.itemTitle}>
+          Link to website: <Text style={styles.postItem}>{sortedPost.link}</Text>
+        </Text>
+      )}
+      <Text style={styles.itemTitle}>
+        Description: <Text style={styles.postItem}>{sortedPost.description}</Text>
+      </Text>
     </View>
-
+  ))}
+</ScrollView>
 
   );
 }
 
-// make address and link to website be conditional, only show if added
-// user id make say the user name
-//add dietary restrictions here
-// also add stars
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 50,
     paddingHorizontal: 20,
+    backgroundColor: "LightGray"
   },
   title: {
-    fontSize: 24,
+    fontSize: 40,
+    marginTop: 20,
     marginBottom: 20,
     textAlign: "center",
-    fontWeight: "bold" 
+    fontWeight: "bold",
   },
+
   postContainer: {
-    marginBottom: 15,
+    marginBottom: 20,
+    padding: 15,
+    marginLeft: 15,
+    marginRight: 15,
+    backgroundColor: "#f8f8f8",
   },
-  postItem: { 
-    fontSize: 18, 
-    marginVertical: 10, 
-    textAlign: "center",
+  postItem: {
+    fontSize: 18,
+    color: "black", 
     marginBottom: 5,
-    fontWeight: "normal" ,
+    fontWeight: "normal",
   },
-  itemTitle: { 
-    fontSize: 22, 
-    marginVertical: 10, 
-    textAlign: "center",
-    fontWeight: "bold" ,
-    marginBottom: 5,
+  itemTitle: {
+    fontSize: 15,
+    color: "black", 
+    marginBottom: 8,
+    fontWeight: "bold",
+  },
+  resturantTitle: {
+    fontSize: 20,
+    color: "black", 
+    marginBottom: 8,
+    fontWeight: "bold",
   },
 });
