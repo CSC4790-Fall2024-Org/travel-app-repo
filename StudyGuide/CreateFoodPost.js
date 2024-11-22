@@ -132,6 +132,7 @@ const CreateFoodPost = () => {
           expense: expense, 
           stars: rating,                 
           description: descrip,
+          address: address,
           link: webLink,  
           
           //info added automatically to a post doc in the db about the user making the post (user doesn't submit this)
@@ -146,7 +147,7 @@ const CreateFoodPost = () => {
         await setDoc(newPostRef, newPostData);
   
         // Navigate to the "FindFoodPosts" screen with the location_id
-        navigation.navigate('Posts', { location_id: restaurantLocationId });
+        navigation.navigate('FoodPosts', { location_id: restaurantLocationId });
         // don't let them navigate backwards to create food post again
   
         console.log("New post added successfully!");

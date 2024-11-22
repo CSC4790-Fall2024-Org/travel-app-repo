@@ -241,20 +241,23 @@ export default function UserPosts() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Your Posts</Text>
       <ScrollView>
+      <Text style={styles.title}>Your Posts</Text>
         {userPosts.length > 0 ? (
           userPosts.map((post) => (
             <View key={post.id} style={styles.postContainer}>
-              <Text style={styles.postrestaurant}>Name: {post.restaurant}</Text>
-              <Text style={styles.postlocat_id}>Location: {post.city}</Text>
-              <Text style={styles.postmealTime}>Meal Time: {post.mealTime}</Text>
-              <Text style={styles.postrestaurantType}>Type: {post.restaurantType}</Text>
-              <Text style={styles.postexpense}>Expense: {post.expense}</Text>
-              <Text style={styles.poststars}>Stars: {post.stars}</Text>
-              <Text style={styles.postlink}>Link: {post.link}</Text>
-              <Text style={styles.postdietary}>Dietary Restrictions: {post.dietary}</Text>
-              <Text style={styles.postdescription}>Description: {post.description}</Text>
+
+              <Text style={styles.itemTitle}>
+              <Text style={styles.resturantTitle}>{post.restaurant}</Text>
+              </Text>
+              <Text style={styles.postItem}>Location: {post.city}</Text>
+              <Text style={styles.postItem}>Meal Time: {post.mealTime}</Text>
+              <Text style={styles.postItem}>Type: {post.restaurantType}</Text>
+              <Text style={styles.postItem}>Expense: {post.expense}</Text>
+              <Text style={styles.postItem}>Stars: {post.stars}</Text>
+              <Text style={styles.postItem}>Link: {post.link}</Text>
+              <Text style={styles.postItem}>Dietary Restrictions: {post.dietary}</Text>
+              <Text style={styles.postItem}>Description: {post.description}</Text>
             </View>
           ))
         ) : (
@@ -270,34 +273,61 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
     paddingHorizontal: 20,
+    backgroundColor: "LightGray"
   },
   title: {
-    fontSize: 24,
+    fontSize: 40,
+    marginTop: 20,
     marginBottom: 20,
     textAlign: "center",
+    fontWeight: "bold",
   },
+
+  
   postContainer: {
-    marginBottom: 15,
+    marginBottom: 20,
     padding: 15,
-    borderRadius: 8,
+    marginLeft: 15,
+    marginRight: 15,
     backgroundColor: "#f8f8f8",
   },
+  postItem: {
+    fontSize: 18,
+    color: "black", 
+    marginBottom: 5,
+    fontWeight: "normal",
+  },
+  itemTitle: {
+    fontSize: 15,
+    color: "black", 
+    marginBottom: 8,
+    fontWeight: "bold",
+  },
+  resturantTitle: {
+    fontSize: 20,
+    color: "black", 
+    marginBottom: 8,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+
+
   postlocat_id: {
     fontSize: 16,
     //fontWeight: "bold",
   },
-  postrestaurant: { fontSize: 16 },
-  postmealTime: { fontSize: 16 },
-  postrestaurantType: { fontSize: 16 },
-  postexpense: { fontSize: 16 },
-  poststars: { fontSize: 25 },
-  postlink: { fontSize: 16 },
-  postdietary: { fontSize: 16 },
-  postdescription: { fontSize: 16 },
-  noPostsText: {
-    textAlign: "center",
-    fontSize: 16,
-    color: "#888",
-    marginTop: 20,
-  },
+  // postrestaurant: { fontSize: 16 },
+  // postmealTime: { fontSize: 16 },
+  // postrestaurantType: { fontSize: 16 },
+  // postexpense: { fontSize: 16 },
+  // poststars: { fontSize: 25 },
+  // postlink: { fontSize: 16 },
+  // postdietary: { fontSize: 16 },
+  // postdescription: { fontSize: 16 },
+  // noPostsText: {
+  //   textAlign: "center",
+  //   fontSize: 16,
+  //   color: "#888",
+  //   marginTop: 20,
+  // },
 });
