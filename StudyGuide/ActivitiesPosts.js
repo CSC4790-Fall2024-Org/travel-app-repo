@@ -27,7 +27,7 @@ export default function ActivitiesPosts({ route }) {
       console.error("Error fetching location city: ", error);
     }
   };
-
+  
   const [locatInfo, setlocatInfo]= useState([]);
 
 
@@ -92,20 +92,19 @@ useEffect(() => {
             <View key={sortedActPost.id} style={styles.container}>
             
              <Text style={styles.itemTitle}> Post from ID: <Text style={styles.postItem}>{sortedActPost.userId}</Text></Text> 
-            <Text style={styles.itemTitle}> Name: <Text style={styles.postItem}>{sortedActPost.actName}</Text></Text>
+            <Text style={styles.itemTitle}> Name: <Text style={styles.postItem}>{sortedActPost.activityName}</Text></Text>
             <Text style={styles.itemTitle}> Post from: <Text style={styles.postItem}>{sortedActPost.posterName} who visited {sortedActPost.posterVisitedCity} in {sortedActPost.posterYear}</Text></Text>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
               <Text style={styles.itemTitle}> Rating by {sortedActPost.posterName}: </Text>
               <Stars rating={sortedActPost.stars} readOnly={true} />
             </View>
             <Text style={styles.itemTitle}> Expense: <Text style={styles.postItem}>{sortedActPost.expense}</Text></Text>
-          {/*  <Text style={styles.itemTitle}> Meal Time: <Text style={styles.postItem}>{sortedActPost.mealTime}</Text></Text> */}
-            <Text style={styles.itemTitle}> Restaurant Type: <Text style={styles.postItem}>{sortedActPost.restaurantType}</Text></Text>
+            <Text style={styles.itemTitle}> Activity Type: <Text style={styles.postItem}>{sortedActPost.activityType}</Text></Text>
             
              <Text style={styles.itemTitle}> Location Id: <Text style={styles.postItem}>{sortedActPost.locat_id}</Text></Text> 
-            
-            {/* <Text style={styles.itemTitle}> Dietary Restrictions: <Text style={styles.postItem}>{sortedActPost.dietary}</Text></Text>
-             */}
+             
+             <Text style={styles.itemTitle}> Activity Time: <Text style={styles.postItem}>{sortedActPost.activityTime}</Text></Text>
+             
          {/*   {sortedActPost.dietary ? (
               <Text style={styles.itemTitle}>Dietary Restrictions: <Text style={styles.postItem}>{sortedActPost.dietary}</Text></Text>
             ) : null}
