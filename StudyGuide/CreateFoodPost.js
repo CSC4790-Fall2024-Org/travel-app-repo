@@ -125,6 +125,7 @@ const CreateFoodPost = () => {
         const newPostData = {
           userId: userId,
           locat_id: restaurantLocationId,  
+          address: address,
           restaurant: restaurantName,        
           mealTime: mealTime,                
           restaurantType: restaurantType, 
@@ -196,7 +197,7 @@ const CreateFoodPost = () => {
       <Text style={styles.title}>Create Food Post</Text>
       <View style={styles.inputContainer}>
 
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 5 }}>
           <Stars rating={rating} setRating={setRating} />
         </View>
 

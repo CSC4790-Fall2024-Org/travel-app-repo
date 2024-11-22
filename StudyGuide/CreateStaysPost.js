@@ -22,7 +22,7 @@ const CreateStaysPost = () => {
 
   // Dropdown 1: Locations
   const [locationOpen, setLocationOpen] = useState(false);
-  const [restaurantLocationId, setRestaurantLocation] = useState('');
+  const [stayLocationId, setStayLocation] = useState('');
   const [locationItems, setLocationItems] = useState([]);
 
   // Dropdown 2: Type of Stay
@@ -35,16 +35,7 @@ const CreateStaysPost = () => {
     { label: 'Apartment', value: 'apartment' }
   ]);
 
-  // Dropdown 3: Expense
-  const [expenseOpen, setExpenseOpen] = useState(false);
-  const [expense, setExpense] = useState(null);
-  const [expenseItems, setExpenseItems] = useState([
-    { label: '$', value: '$' },
-    { label: '$$', value: '$$' },
-    { label: '$$$', value: '$$$' }
-  ]);
-
-  // Dropdown 4: Nearby locations
+  // Dropdown 3: Nearby locations
   const [nearbyOpen, setNearbyOpen] = useState(false);
   const [nearby, setNearby] = useState([]);
   const [nearbyItems, setNearbyItems] = useState([
@@ -55,7 +46,7 @@ const CreateStaysPost = () => {
     { label: 'Tourist Attractions', value: ' tourist attractions ' },
   ]);
 
-  // Dropdown 5: Ammenities
+  // Dropdown 4: Ammenities
   const [ammenitiesOpen, setAmmenitiesOpen] = useState(false);
   const [ammenities, setAmmenities] = useState([]);
   const [ammenitiesItems, setAmmenitiesItems] = useState([
@@ -65,6 +56,15 @@ const CreateStaysPost = () => {
     { label: 'Parking', value: ' parking' },
     { label: 'Accessibility', value: ' accessibility ' },
   ]);
+
+   // Dropdown 5: Expense
+   const [expenseOpen, setExpenseOpen] = useState(false);
+   const [expense, setExpense] = useState(null);
+   const [expenseItems, setExpenseItems] = useState([
+     { label: '$', value: '$' },
+     { label: '$$', value: '$$' },
+     { label: '$$$', value: '$$$' }
+   ]);
 
   //Dropdown 6: Stay again?
   const [wouldReturnOpen, setWouldReturnOpen] = useState(false);
@@ -81,13 +81,13 @@ const CreateStaysPost = () => {
     : 'Nearby:';
 
     // show the selected items for Ammenities multiselect
-  const selectedAmmenities = nearby.length > 0
+  const selectedAmmenities = ammenities.length > 0
   ? nearby.map(item => item).join(', ')
   : 'Ammenities:';
 
 
   // check if all fields are filled to submit
-  const allFields = restaurantLocationId && restaurantName && mealTime && restaurantType && expense && rating && descrip;
+  const allFields = stayLocationId && stayName && stayType && expense && rating && descrip && wouldReturn;
 
 
   const handleSubmit = async () => {
@@ -132,7 +132,7 @@ const CreateStaysPost = () => {
         // Data for the new post
         const newPostData = {
           userId: userId,
-          locat_id: restaurantLocationId,  
+          locat_id: stayLocationId,  
           stay: stayName,    
           address: address,
           closeTo: nearby,
@@ -157,7 +157,7 @@ const CreateStaysPost = () => {
         await setDoc(newPostRef, newPostData);
   
         // Navigate to the "FindFoodPosts" screen with the location_id
-        navigation.navigate('Posts', { location_id: restaurantLocationId });
+        navigation.navigate('Posts', { location_id: stayLocationId });
         // don't let them navigate backwards to create food post again
   
         console.log("New post added successfully!");
@@ -207,7 +207,7 @@ const CreateStaysPost = () => {
       <Text style={styles.title}>Create Stays Post</Text>
       <View style={styles.inputContainer}>
 
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 5}}>
           <Stars rating={rating} setRating={setRating} />
         </View>
 
@@ -220,7 +220,7 @@ const CreateStaysPost = () => {
         />
 
         {/* Stay Location */}
-        <View style={{ width: '100%', zIndex: 5000, marginBottom: 1 }}>
+        <View style={{ width: '100%', zIndex: 6000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -230,14 +230,14 @@ const CreateStaysPost = () => {
             badgeStyle={styles.dropdownBadge}
 
             open={locationOpen}
-            value={restaurantLocationId}
+            value={stayLocationId}
             items={locationItems}
             setOpen={setLocationOpen}
-            setValue={setRestaurantLocation}
+            setValue={setStayLocation}
             setItems={setLocationItems}
             placeholder="Location: *"
-            zIndex={5000}
-            zIndexInverse={4000}
+            zIndex={6000}
+            zIndexInverse={5000}
             listMode="SCROLLVIEW"
           />
         </View>
@@ -251,7 +251,7 @@ const CreateStaysPost = () => {
         />
 
         {/* Stay Type */}
-        <View style={{ width: '100%', zIndex: 3000, marginBottom: 1 }}>
+        <View style={{ width: '100%', zIndex: 5000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -267,14 +267,14 @@ const CreateStaysPost = () => {
             setValue={setStayType}
             setItems={setStayTypeItems}
             placeholder="Type of Stay:  *"
-            zIndex={3000} 
-            zIndexInverse={2000}
+            zIndex={5000} 
+            zIndexInverse={4000}
             listMode="SCROLLVIEW"
           />
         </View>
        
         {/* Nearby Locations */}
-        <View style={{ width: '100%', zIndex: 2000, marginBottom: 1 }}>
+        <View style={{ width: '100%', zIndex: 4000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -290,8 +290,8 @@ const CreateStaysPost = () => {
             setValue={setNearby}
             setItems={setNearbyItems}
             placeholder={selectedNearby}
-            zIndex={2000}
-            zIndexInverse={1000}
+            zIndex={4000}
+            zIndexInverse={3000}
             multiple={true}
             min={0}
             mode="BADGE" //for multiselect readability
@@ -300,7 +300,7 @@ const CreateStaysPost = () => {
         </View>
 
         {/* Ammenities */}
-        <View style={{ width: '100%', zIndex: 2000, marginBottom: 1 }}>
+        <View style={{ width: '100%', zIndex: 3000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -316,8 +316,8 @@ const CreateStaysPost = () => {
             setValue={setAmmenities}
             setItems={setAmmenitiesItems}
             placeholder={selectedAmmenities}
-            zIndex={2000}
-            zIndexInverse={1000}
+            zIndex={3000}
+            zIndexInverse={2000}
             multiple={true}
             min={0}
             mode="BADGE" //for multiselect readability
@@ -326,7 +326,7 @@ const CreateStaysPost = () => {
         </View>
       
         {/* Expense */}
-        <View style={{ width: '100%', zIndex: 1000, marginBottom: 1 }}>
+        <View style={{ width: '100%', zIndex: 2000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -342,8 +342,8 @@ const CreateStaysPost = () => {
             setValue={setExpense}
             setItems={setExpenseItems}
             placeholder="Expense: *"
-            zIndex={1000}
-            zIndexInverse={500}
+            zIndex={2000}
+            zIndexInverse={1000}
             listMode="SCROLLVIEW"
           />    
         </View>   

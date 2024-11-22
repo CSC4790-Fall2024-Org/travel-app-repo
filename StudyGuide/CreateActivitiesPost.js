@@ -13,7 +13,7 @@ import { getAuth } from "firebase/auth"; // Import auth to get the current user
 const CreateActivitiesPost = () => {
   // add user id 
   const [address, setAddress] = useState('');
-  const [restaurantName, setRestaurantName] = useState('');
+  const [activityName, setActivityName] = useState('');
   const [rating, setRating] = useState(0);
   const [descrip, setDescrip] = useState('');
   const [webLink, setWebLink] = useState('');
@@ -22,60 +22,49 @@ const CreateActivitiesPost = () => {
 
   // Dropdown 1: Locations
   const [locationOpen, setLocationOpen] = useState(false);
-  const [restaurantLocationId, setRestaurantLocation] = useState('');
+  const [activityLocationId, setActivityLocation] = useState('');
   const [locationItems, setLocationItems] = useState([]);
 
-  // Dropdown 2: Meal Time
-  const [mealTimeOpen, setMealTimeOpen] = useState(false);
-  const [mealTime, setMealTime] = useState(null);
-  const [mealTimeItems, setMealTimeItems] = useState([
-    {label: 'Breakfast', value: 'breakfast'},
-    {label: 'Brunch', value: 'brunch'},
-    {label: 'Lunch', value: 'lunch'},
-    {label: 'Dinner', value: 'dinner'}
+  // Dropdown 2: Time of Day
+  const [timeOpen, setTimeOpen] = useState(false);
+  const [time, setTime] = useState(null);
+  const [timeItems, setTimeItems] = useState([
+    {label: 'Morning', value: 'morning'},
+    {label: 'Mid-day', value: 'mid-day'},
+    {label: 'Afternoon', value: 'afternoon'},
+    {label: 'Night', value: 'night'}
   ]);
 
-  // Dropdown 3: Restaurant type
-  const [restaurantTypeOpen, setRestaurantTypeOpen] = useState(false);
-  const [restaurantType, setRestaurantType] = useState(null);
-  const [restaurantTypeItems, setRestaurantTypeItems] = useState([
-    { label: 'Casual Dining', value: 'casual dining' },
-    { label: 'Fine Dining', value: 'fine dining' },
-    { label: 'Buffet', value: 'buffet' },
-    { label: 'Cafe', value: 'cafe' }
+  // Dropdown 3: Activity type
+  const [activityTypeOpen, setActivityTypeOpen] = useState(false);
+  const [activityType, setActivityType] = useState(null);
+  const [activityTypeItems, setActivityTypeItems] = useState([
+    { label: 'Park', value: 'park' },
+    { label: 'Cultural Landmark', value: 'cultural landmark' },
+    { label: 'Beach', value: 'beach' },
+    { label: 'Hike', value: 'hike' },
+    { label: 'Tour', value: 'tour' },
+    { label: 'Museum', value: 'museum' },
+    { label: 'Show', value: 'Show' },
+    { label: 'Sport Game', value: 'sport game' },
+    { label: 'Bar', value: 'bar' },
+    { label: 'Club', value: 'club' }
   ]);
 
   // Dropdown 4: Expense
   const [expenseOpen, setExpenseOpen] = useState(false);
   const [expense, setExpense] = useState(null);
   const [expenseItems, setExpenseItems] = useState([
+    { label: 'Free', value: 'free' },
     { label: '$', value: '$' },
     { label: '$$', value: '$$' },
     { label: '$$$', value: '$$$' }
   ]);
 
-  // Dropdown 5: Dietary Restrictions
-  const [dietaryResOpen, setDietaryResOpen] = useState(false);
-  const [dietaryRes, setDietaryRes] = useState([]);
-  const [dietaryResItems, setDietaryResItems] = useState([
-    { label: 'Vegetarian', value: ' vegetarian ' },
-    { label: 'Vegan', value: ' vegan ' },
-    { label: 'Dairy-free', value: ' dairy-free ' },
-    { label: 'Lactose-free', value: ' lactose-free ' },
-    { label: 'Gluten-free', value: ' gluten-free ' },
-    { label: 'Kosher', value: ' kosher ' },
-    { label: 'Paleo', value: ' paleo ' }
-  ]);
-
-
-  // show the selected items for dietary multiselect
-  const selectedDietaryRes = dietaryRes.length > 0
-    ? dietaryRes.map(item => item).join(', ')
-    : 'Dietary Accomodations:';
 
 
   // check if all fields are filled to submit
-  const allFields = restaurantLocationId && restaurantName && mealTime && restaurantType && expense && rating && descrip;
+  const allFields = activityLocationId && activityName && time && activityType && expense && rating && descrip;
 
 
   const handleSubmit = async () => {
@@ -120,11 +109,11 @@ const CreateActivitiesPost = () => {
         // Data for the new post
         const newPostData = {
           userId: userId,
-          locat_id: restaurantLocationId,  
-          restaurant: restaurantName,        
-          mealTime: mealTime,                
-          restaurantType: restaurantType, 
-          dietary: dietaryRes,   
+          locat_id: activityLocationId,  
+          activityName: activityName,
+          address: address,        
+          activityTime: time,                
+          activityType: activityType,   
           expense: expense, 
           stars: rating,                 
           description: descrip,
@@ -142,7 +131,7 @@ const CreateActivitiesPost = () => {
         await setDoc(newPostRef, newPostData);
   
         // Navigate to the "FindFoodPosts" screen with the location_id
-        navigation.navigate('Posts', { location_id: restaurantLocationId });
+        navigation.navigate('Posts', { location_id: activityLocationId });
         // don't let them navigate backwards to create food post again
   
         console.log("New post added successfully!");
@@ -189,22 +178,22 @@ const CreateActivitiesPost = () => {
       showsHorizontalScrollIndicator={false}
     >
 
-      <Text style={styles.title}>Create Food Post</Text>
+      <Text style={styles.title}>Create Activity Post</Text>
       <View style={styles.inputContainer}>
 
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 5 }}>
           <Stars rating={rating} setRating={setRating} />
         </View>
 
         <TextInput
-          placeholder="Restaurant Name *"
-          value={restaurantName}
-          onChangeText={text => setRestaurantName(text)}
+          placeholder="Activity Name *"
+          value={activityName}
+          onChangeText={text => setActivityName(text)}
           style={styles.input}
         />
 
-        {/* Restaurant Location */}
-        <View style={{ width: '100%', zIndex: 5000, marginBottom: 1 }}>
+        {/* Activity Location */}
+        <View style={{ width: '100%', zIndex: 4000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -214,14 +203,14 @@ const CreateActivitiesPost = () => {
             badgeStyle={styles.dropdownBadge}
 
             open={locationOpen}
-            value={restaurantLocationId}
+            value={activityLocationId}
             items={locationItems}
             setOpen={setLocationOpen}
-            setValue={setRestaurantLocation}
+            setValue={setActivityLocation}
             setItems={setLocationItems}
-            placeholder="Restaurant Location: *"
-            zIndex={5000}
-            zIndexInverse={4000}
+            placeholder="Location: *"
+            zIndex={4000}
+            zIndexInverse={3000}
             listMode="SCROLLVIEW"
           />
         </View>
@@ -234,30 +223,7 @@ const CreateActivitiesPost = () => {
           style={styles.input}
         />
 
-        {/* Meal Time */}
-        <View style={{ width: '100%', zIndex: 4000, marginBottom: 1 }}>
-          <DropDownPicker
-            style={styles.dropdown}
-            containerStyle={styles.dropdownContainer}
-            placeholderStyle={styles.dropdownPlaceholder}
-            labelStyle={styles.dropdownLabelStyle}
-            itemStyle={styles.dropdownItem}
-            badgeStyle={styles.dropdownBadge}
-
-            open={mealTimeOpen}
-            value={mealTime}
-            items={mealTimeItems}
-            setOpen={setMealTimeOpen}
-            setValue={setMealTime}
-            setItems={setMealTimeItems}
-            placeholder="Meal time: *"
-            zIndex={4000} //Highest zIndex for top dropdown
-            zIndexInverse={3000}
-            listMode="SCROLLVIEW"
-          />
-        </View>
-
-        {/* Restaurant Type */}
+        {/* Time */}
         <View style={{ width: '100%', zIndex: 3000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
@@ -267,20 +233,20 @@ const CreateActivitiesPost = () => {
             itemStyle={styles.dropdownItem}
             badgeStyle={styles.dropdownBadge}
 
-            open={restaurantTypeOpen}
-            value={restaurantType}
-            items={restaurantTypeItems}
-            setOpen={setRestaurantTypeOpen}
-            setValue={setRestaurantType}
-            setItems={setRestaurantTypeItems}
-            placeholder="Restaurant Type: *"
-            zIndex={3000} 
+            open={timeOpen}
+            value={time}
+            items={timeItems}
+            setOpen={setTimeOpen}
+            setValue={setTime}
+            setItems={setTimeItems}
+            placeholder="Time of day for activity: *"
+            zIndex={3000} //Highest zIndex for top dropdown
             zIndexInverse={2000}
             listMode="SCROLLVIEW"
           />
         </View>
-       
-        {/* Dietary Restrictions */}
+
+        {/* Activity Type */}
         <View style={{ width: '100%', zIndex: 2000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
@@ -290,18 +256,15 @@ const CreateActivitiesPost = () => {
             itemStyle={styles.dropdownItem}
             badgeStyle={styles.dropdownBadge}
 
-            open={dietaryResOpen}
-            value={dietaryRes}
-            items={dietaryResItems}
-            setOpen={setDietaryResOpen}
-            setValue={setDietaryRes}
-            setItems={setDietaryResItems}
-            placeholder={selectedDietaryRes}
-            zIndex={2000}
+            open={activityTypeOpen}
+            value={activityType}
+            items={activityTypeItems}
+            setOpen={setActivityTypeOpen}
+            setValue={setActivityType}
+            setItems={setActivityTypeItems}
+            placeholder="Activity Type: *"
+            zIndex={2000} 
             zIndexInverse={1000}
-            multiple={true}
-            min={0}
-            mode="BADGE" //for multiselect readability
             listMode="SCROLLVIEW"
           />
         </View>
