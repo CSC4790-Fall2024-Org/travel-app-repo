@@ -74,16 +74,13 @@ if (!sortedStayPosts) {
       <Text style={styles.title}>Loading...</Text>
     </View>
   );
-}// end of getting the Food Posts for the location chosen in FindStayPosts
+}// end of getting the Stay Posts for the location chosen in FindStayPosts
 
 useEffect(() => {
   fetchSortedStayPosts();
 }, [db, 'locations']);
 
 
-//come back to userId field that has been taken out of stayPosts fields
-//also need to add addr (address), userId, food_city, link
-//make sure the field names match in here and create food posts so that 
 
   return (
     <View style={styles.container}>
@@ -110,28 +107,31 @@ useEffect(() => {
             </View>
             <Text style={styles.itemTitle}> Expense: <Text style={styles.postItem}>{sortedStayPost.expense}</Text></Text>
            {/* <Text style={styles.itemTitle}> Meal Time: <Text style={styles.postItem}>{sortedStayPost.mealTime}</Text></Text>*/}
-            <Text style={styles.itemTitle}> Restaurant Type: <Text style={styles.postItem}>{sortedStayPost.restaurantType}</Text></Text>
+            <Text style={styles.itemTitle}> Type of Place to Stay: <Text style={styles.postItem}>{sortedStayPost.stayType}</Text></Text>
              <Text style={styles.itemTitle}> Location Id: <Text style={styles.postItem}>{sortedStayPost.locat_id}</Text></Text> 
             
-            {/* <Text style={styles.itemTitle}> Dietary Restrictions: <Text style={styles.postItem}>{sortedStayPost.dietary}</Text></Text>
-             */}
+            <Text style={styles.itemTitle}> Ammenities: <Text style={styles.postItem}>{sortedStayPost.ammenities}</Text></Text>
+            <Text style={styles.itemTitle}> wouldReturn: <Text style={styles.postItem}>{sortedStayPost.wouldReturn}</Text></Text>
+
           {/*   {sortedStayPost.dietary ? (
               <Text style={styles.itemTitle}>Dietary Restrictions: <Text style={styles.postItem}>{sortedStayPost.dietary}</Text></Text>
             ) : null}
             */}
 
 
-            {sortedStayPost.addr ? (
-              <Text style={styles.itemTitle}>Address: <Text style={styles.postItem}>{sortedStayPost.addr}</Text></Text>
+            {sortedStayPost.address ? (
+              <Text style={styles.itemTitle}>Address: <Text style={styles.postItem}>{sortedStayPost.address}</Text></Text>
             ) : null}
             
-            
+            {sortedStayPost.closeTo ? (
+              <Text style={styles.itemTitle}>Nearby: <Text style={styles.postItem}>{sortedStayPost.closeTo}</Text></Text>
+            ) : null}
             
             {sortedStayPost.link ? (
               <Text style={styles.itemTitle}>Link to website: <Text style={styles.postItem}>{sortedStayPost.link}</Text></Text>
             ) : null}
             
-            {/* <Text style={styles.itemTitle}> Address: <Text style={styles.postItem}>{sortedStayPost.addr}</Text></Text> 
+            {/* <Text style={styles.itemTitle}> Address: <Text style={styles.postItem}>{sortedStayPost.address}</Text></Text> 
             <Text style={styles.itemTitle}> Link to website: <Text style={styles.postItem}>{sortedStayPost.link}</Text></Text>
             */}
             
