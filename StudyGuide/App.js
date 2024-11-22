@@ -10,7 +10,9 @@ import LoginScreen from './LoginScreen';
 import SignUpScreen from './SignUpScreen';
 import Profile from './Profile';
 import Home from './Home';
-import Posts from './Posts';
+import FoodPosts from './FoodPosts';
+import StayPosts from './StayPosts';
+import ActivitiesPosts from './ActivitiesPosts';
 import CreateFoodPost from "./CreateFoodPost";
 import CreateStaysPost from "./CreateStaysPost";
 import CreateActivitiesPost from "./CreateActivitiesPost";
@@ -30,7 +32,9 @@ function MainPage({ navigation }) {
       <Button title="Go to Sign Up" onPress={() => navigation.navigate("SignUp")} />
       <Button title="Go to Profile" onPress={() => navigation.navigate("Profile")} />
       <Button title="Go to Home" onPress={() => navigation.navigate("Home")} />
-      <Button title="Go to Posts" onPress={() => navigation.navigate("Posts")} />
+      <Button title="Go to FoodPosts" onPress={() => navigation.navigate("FoodPosts")} />
+      <Button title="Go to ActivitiesPosts" onPress={() => navigation.navigate("ActivitiesPosts")} />
+      <Button title="Go to StayPosts" onPress={() => navigation.navigate("StayPosts")} />
       <Button title="Create Food Post" onPress={() => navigation.navigate("CreateFoodPost")} />
       <Button title="Create Stays Post" onPress={() => navigation.navigate("CreateStaysPost")} />
       <Button title="Create Activities Post" onPress={() => navigation.navigate("CreateActivitiesPost")} />
@@ -54,7 +58,9 @@ export default function App() {
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Posts" component={Posts} />
+        <Stack.Screen name="FoodPosts" component={FoodPosts} />
+        <Stack.Screen name="ActivitiesPosts" component={ActivitiesPosts} />
+        <Stack.Screen name="StayPosts" component={StayPosts} />
         <Stack.Screen name="CreateFoodPost" component={CreateFoodPost} />
         <Stack.Screen name="CreateStaysPost" component={CreateStaysPost} />
         <Stack.Screen name="CreateActivitiesPost" component={CreateActivitiesPost} />

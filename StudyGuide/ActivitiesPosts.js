@@ -5,10 +5,10 @@ import { getFirestore, firestore, where, collection, getDocs, query,  Filter, do
 import Stars from "./Stars"
 import { useNavigation } from "@react-navigation/native";
 
-export default function Posts({ route }) { 
+export default function ActivitiesPosts({ route }) { 
   const db = getFirestore(); // Firestore database instance
   const navigation = useNavigation();
-  const [sortedPosts, setSortedPosts]= useState([]);
+  const [sortedActPosts, setSortedActPosts]= useState([]);
   const { location_id }=route.params;
   const [locationCity, setLocationCity] = useState(''); // State to store city name
 
@@ -31,21 +31,21 @@ export default function Posts({ route }) {
   const [locatInfo, setlocatInfo]= useState([]);
 
 
-const fetchSortedPosts = async () => {
+const fetchSortedActPosts = async () => {
   try {
     //console.log(location_id);
 
     // Build the query with the collection and where filter
-    const foodPostsRef = collection(db, "foodPosts");
-    const q = query(foodPostsRef, where('locat_id', '==', location_id));
+    const activityPostsRef = collection(db, "activityPosts");
+    const q = query(activityPostsRef, where('locat_id', '==', location_id));
 
     // Execute the query and get the documents
     const querySnapshot = await getDocs(q);
 
-    const fetchedSortedPosts = [];
+    const fetchedSortedActPosts = [];
     querySnapshot.forEach(async (postDoc) => {
      //orig: 
-     fetchedSortedPosts.push({ id: postDoc.id, ...postDoc.data() });
+     fetchedSortedActPosts.push({ id: postDoc.id, ...postDoc.data() });
 
      //something to try:
      //const userId = UsersRef.data().userId;
@@ -54,7 +54,7 @@ const fetchSortedPosts = async () => {
      // firestore().collection('posts').add({posterName: posterName});
 
     });
-    setSortedPosts(fetchedSortedPosts); // Update state with the filtered posts
+    setSortedActPosts(fetchedSortedActPosts); // Update state with the filtered posts
 
   } catch (error) {
     console.error("Error fetching posts for this location: ", error);
@@ -68,7 +68,7 @@ useEffect(() => {
 }, [db, location_id]);
 
 
-if (!sortedPosts) {
+if (!sortedActPosts) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Loading...</Text>
@@ -77,7 +77,7 @@ if (!sortedPosts) {
 }// end of getting the Food Posts for the location chosen in FindFoodPosts
 
 useEffect(() => {
-  fetchSortedPosts();
+  fetchSortedActPosts();
 }, [db, 'locations']);
 
 
@@ -88,53 +88,54 @@ useEffect(() => {
   return (
     <View style={styles.container}>
 
-      <Text style={styles.title}>{locationCity} Food Posts</Text>
+      <Text style={styles.title}> Activities to Do in {locationCity} </Text>
     
 
     <ScrollView>
 
     
 
-     {sortedPosts.map((sortedPost) => (
+     {sortedActPosts.map((sortedActPost) => (
 
 
-            <View key={sortedPost.id} style={styles.container}>
+            <View key={sortedActPost.id} style={styles.container}>
             
-            {/* <Text style={styles.itemTitle}> Post from ID: <Text style={styles.postItem}>{sortedPost.userId}</Text></Text> */}
-            <Text style={styles.itemTitle}> Restaurant Name: <Text style={styles.postItem}>{sortedPost.restaurant}</Text></Text>
-            <Text style={styles.itemTitle}> Post from: <Text style={styles.postItem}>{sortedPost.posterName} who visited {sortedPost.posterVisitedCity} in {sortedPost.posterYear}</Text></Text>
+             <Text style={styles.itemTitle}> Post from ID: <Text style={styles.postItem}>{sortedActPost.userId}</Text></Text> 
+            <Text style={styles.itemTitle}> Name: <Text style={styles.postItem}>{sortedActPost.actName}</Text></Text>
+            <Text style={styles.itemTitle}> Post from: <Text style={styles.postItem}>{sortedActPost.posterName} who visited {sortedActPost.posterVisitedCity} in {sortedActPost.posterYear}</Text></Text>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={styles.itemTitle}>Rating:</Text>
-              <Stars rating={sortedPost.stars} readOnly={true} />
+              <Text style={styles.itemTitle}> Rating by {sortedActPost.posterName}: </Text>
+              <Stars rating={sortedActPost.stars} readOnly={true} />
             </View>
-            <Text style={styles.itemTitle}> Expense: <Text style={styles.postItem}>{sortedPost.expense}</Text></Text>
-            <Text style={styles.itemTitle}> Meal Time: <Text style={styles.postItem}>{sortedPost.mealTime}</Text></Text>
-            <Text style={styles.itemTitle}> Restaurant Type: <Text style={styles.postItem}>{sortedPost.restaurantType}</Text></Text>
-            {/* <Text style={styles.itemTitle}> Location Id: <Text style={styles.postItem}>{sortedPost.locat_id}</Text></Text> */}
+            <Text style={styles.itemTitle}> Expense: <Text style={styles.postItem}>{sortedActPost.expense}</Text></Text>
+          {/*  <Text style={styles.itemTitle}> Meal Time: <Text style={styles.postItem}>{sortedActPost.mealTime}</Text></Text> */}
+            <Text style={styles.itemTitle}> Restaurant Type: <Text style={styles.postItem}>{sortedActPost.restaurantType}</Text></Text>
             
-            {/* <Text style={styles.itemTitle}> Dietary Restrictions: <Text style={styles.postItem}>{sortedPost.dietary}</Text></Text>
+             <Text style={styles.itemTitle}> Location Id: <Text style={styles.postItem}>{sortedActPost.locat_id}</Text></Text> 
+            
+            {/* <Text style={styles.itemTitle}> Dietary Restrictions: <Text style={styles.postItem}>{sortedActPost.dietary}</Text></Text>
              */}
-            {sortedPost.dietary ? (
-              <Text style={styles.itemTitle}>Dietary Restrictions: <Text style={styles.postItem}>{sortedPost.dietary}</Text></Text>
+         {/*   {sortedActPost.dietary ? (
+              <Text style={styles.itemTitle}>Dietary Restrictions: <Text style={styles.postItem}>{sortedActPost.dietary}</Text></Text>
             ) : null}
-            
+            */}
 
 
-            {sortedPost.addr ? (
-              <Text style={styles.itemTitle}>Address: <Text style={styles.postItem}>{sortedPost.addr}</Text></Text>
+            {sortedActPost.addr ? (
+              <Text style={styles.itemTitle}>Address: <Text style={styles.postItem}>{sortedActPost.addr}</Text></Text>
             ) : null}
             
             
             
-            {sortedPost.link ? (
-              <Text style={styles.itemTitle}>Link to website: <Text style={styles.postItem}>{sortedPost.link}</Text></Text>
+            {sortedActPost.link ? (
+              <Text style={styles.itemTitle}>Link to website: <Text style={styles.postItem}>{sortedActPost.link}</Text></Text>
             ) : null}
             
-            {/* <Text style={styles.itemTitle}> Address: <Text style={styles.postItem}>{sortedPost.addr}</Text></Text> 
-            <Text style={styles.itemTitle}> Link to website: <Text style={styles.postItem}>{sortedPost.link}</Text></Text>
+            {/* <Text style={styles.itemTitle}> Address: <Text style={styles.postItem}>{sortedActPost.addr}</Text></Text> 
+            <Text style={styles.itemTitle}> Link to website: <Text style={styles.postItem}>{sortedActPost.link}</Text></Text>
             */}
             
-            <Text style={styles.itemTitle}> Description/Message: <Text style={styles.postItem}>{sortedPost.description}</Text></Text>
+            <Text style={styles.itemTitle}> Description/Message: <Text style={styles.postItem}>{sortedActPost.description}</Text></Text>
         </View>
 
     
