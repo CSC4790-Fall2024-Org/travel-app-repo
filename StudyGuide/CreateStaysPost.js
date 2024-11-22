@@ -132,8 +132,8 @@ const CreateStaysPost = () => {
         // Data for the new post
         const newPostData = {
           userId: userId,
-          locat_id: stayLocationId,  
-          stay: stayName,    
+          locat_id: stayLocationId,    
+          stayName: stayName,    
           address: address,
           closeTo: nearby,
           stayType: stayType,                
@@ -142,15 +142,13 @@ const CreateStaysPost = () => {
           stars: rating,                 
           description: descrip,
           link: webLink, 
-          return: wouldReturn, 
-
+          wouldReturn: wouldReturn, 
           
           //info added automatically to a post doc in the db about the user making the post (user doesn't submit this)
           posterName: posterName,
           posterYear: posterYear,
           posterVisitedCity: posterVisitedCity
 
-          // also add something so that the id of the specific user is also included           
         };
   
         // Add the new post to Firebase
@@ -409,7 +407,6 @@ const CreateStaysPost = () => {
   );
 };
 
-
 // Normal style
 const styles = StyleSheet.create({
   container: {
@@ -424,6 +421,7 @@ const styles = StyleSheet.create({
     width: '100%',
     //maxWidth: 320,
     paddingVertical: 15,
+
   },
   title: {    
     fontSize: 34, 
@@ -462,6 +460,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 0,
   },
+
   buttonText: {
     color: 'white', 
     fontSize: 15,
