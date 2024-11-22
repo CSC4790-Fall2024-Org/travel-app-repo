@@ -149,8 +149,7 @@ const CreateStaysPost = () => {
           posterName: posterName,
           posterYear: posterYear,
           posterVisitedCity: posterVisitedCity
-
-          // also add something so that the id of the specific user is also included           
+          
         };
   
         // Add the new post to Firebase
