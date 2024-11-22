@@ -114,7 +114,7 @@ useEffect(() => {
       </Text>
       {sortedPost.dietary && (
         <Text style={styles.itemTitle}>
-          Dietary Restrictions: <Text style={styles.postItem}>{sortedPost.dietary}</Text>
+          Dietary Accomodations: <Text style={styles.postItem}>{sortedPost.dietary}</Text>
         </Text>
       )}
       {sortedPost.address && (
