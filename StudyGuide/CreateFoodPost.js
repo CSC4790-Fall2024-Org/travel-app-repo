@@ -16,8 +16,8 @@ import { getAuth } from "firebase/auth"; // Import auth to get the current user
 // Input Fields
 const CreateFoodPost = () => {
   // add user id 
-  const [address, setAddress] = useState('');
   const [restaurantName, setRestaurantName] = useState('');
+  const [address, setAddress] = useState('');
   const [rating, setRating] = useState(0);
   const [descrip, setDescrip] = useState('');
   const [webLink, setWebLink] = useState('');
@@ -125,6 +125,7 @@ const CreateFoodPost = () => {
         const newPostData = {
           userId: userId,
           locat_id: restaurantLocationId,  
+          address: address,
           restaurant: restaurantName,        
           mealTime: mealTime,                
           restaurantType: restaurantType, 
@@ -198,7 +199,7 @@ const CreateFoodPost = () => {
       <Text style={styles.title}>Create Food Post</Text>
       <View style={styles.inputContainer}>
 
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 5 }}>
           <Stars rating={rating} setRating={setRating} />
         </View>
 
