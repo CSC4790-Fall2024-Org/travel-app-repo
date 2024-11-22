@@ -44,14 +44,9 @@ const fetchSortedActPosts = async () => {
 
     const fetchedSortedActPosts = [];
     querySnapshot.forEach(async (postDoc) => {
-     //orig: 
+     
      fetchedSortedActPosts.push({ id: postDoc.id, ...postDoc.data() });
 
-     //something to try:
-     //const userId = UsersRef.data().userId;
-     //const UsersRef = query(collection(db, "users"), where('userId', '==', userId));
-     // const posterName = UsersRef.data().name;
-     // firestore().collection('posts').add({posterName: posterName});
 
     });
     setSortedActPosts(fetchedSortedActPosts); // Update state with the filtered posts
@@ -80,10 +75,6 @@ useEffect(() => {
   fetchSortedActPosts();
 }, [db, 'locations']);
 
-
-//come back to userId field that has been taken out of foodPosts fields
-//also need to add addr (address), userId, food_city, link
-//make sure the field names match in here and create food posts so that 
 
   return (
     <View style={styles.container}>
@@ -121,8 +112,8 @@ useEffect(() => {
             */}
 
 
-            {sortedActPost.addr ? (
-              <Text style={styles.itemTitle}>Address: <Text style={styles.postItem}>{sortedActPost.addr}</Text></Text>
+            {sortedActPost.address ? (
+              <Text style={styles.itemTitle}>Address: <Text style={styles.postItem}>{sortedActPost.address}</Text></Text>
             ) : null}
             
             
