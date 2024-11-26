@@ -234,6 +234,17 @@ const CreateFoodPost = () => {
   
           // Update the city
          // setRestaurantLocationCity(selectedLocation.label);
+
+
+         // Find the selected location to retrieve its city
+          const selectedLocation = locationItems.find(item => item.value === value);
+
+          // Update the city
+          setRestaurantLocationCity(selectedLocation?.label || 'not working');
+
+          // neither of these log statements are printing
+          console.log("test log")
+          console.log("print selected location", selectedLocation?.label || 'not working');
         }}
         setItems={setLocationItems}
         placeholder="Restaurant Location: *"

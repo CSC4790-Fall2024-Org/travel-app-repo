@@ -9,7 +9,6 @@ import Demo from './Demo';
 import LoginScreen from './LoginScreen';
 import SignUpScreen from './SignUpScreen';
 import Profile from './Profile';
-import Home from './Home';
 import FoodPosts from './FoodPosts';
 import StayPosts from './StayPosts';
 import ActivitiesPosts from './ActivitiesPosts';
@@ -22,40 +21,19 @@ import FindStayPosts from "./FindStayPosts";
 
 const Stack = createStackNavigator();
 
-function MainPage({ navigation }) {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Starter page</Text>
-      <Button title="UserPosts" onPress={() => navigation.navigate("UserPosts")} />
-      <Button title="Go to App Demo" onPress={() => navigation.navigate("App Demo")} />
-      <Button title="Go to Login" onPress={() => navigation.navigate("Login")} />
-      <Button title="Go to Sign Up" onPress={() => navigation.navigate("SignUp")} />
-      <Button title="Go to Profile" onPress={() => navigation.navigate("Profile")} />
-      <Button title="Go to Home" onPress={() => navigation.navigate("Home")} />
-      <Button title="Go to FoodPosts" onPress={() => navigation.navigate("FoodPosts")} />
-      <Button title="Go to ActivitiesPosts" onPress={() => navigation.navigate("ActivitiesPosts")} />
-      <Button title="Go to StayPosts" onPress={() => navigation.navigate("StayPosts")} />
-      <Button title="Create Food Post" onPress={() => navigation.navigate("CreateFoodPost")} />
-      <Button title="Go to Find Food Posts" onPress={() => navigation.navigate("FindFoodPosts")} />
-      <Button title="Go to Find Activities Posts" onPress={() => navigation.navigate("FindActivitiesPosts")} />
-      <Button title="Go to Find Stay Posts" onPress={() => navigation.navigate("FindStayPosts")} />
-    </View>
-  );
-}
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="MainPage">
+      <Stack.Navigator initialRouteName="Demo">
         {/* Main page listing all subpages */}
-        <Stack.Screen name="MainPage" component={MainPage} />
+        <Stack.Screen name="Home" component={Demo} />
         {/* Subpages */}
         <Stack.Screen name="UserPosts" component={UserPosts} />
         <Stack.Screen name="App Demo" component={Demo} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="FoodPosts" component={FoodPosts} />
         <Stack.Screen name="ActivitiesPosts" component={ActivitiesPosts} />
         <Stack.Screen name="StayPosts" component={StayPosts} />
