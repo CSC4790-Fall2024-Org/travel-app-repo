@@ -22,6 +22,30 @@ import FindStayPosts from "./FindStayPosts";
 const Stack = createStackNavigator();
 
 
+function MainPage({ navigation }) {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Starter page</Text>
+      <Button title="UserPosts" onPress={() => navigation.navigate("UserPosts")} />
+      <Button title="Go to App Demo" onPress={() => navigation.navigate("App Demo")} />
+      <Button title="Go to Login" onPress={() => navigation.navigate("Login")} />
+      <Button title="Go to Sign Up" onPress={() => navigation.navigate("SignUp")} />
+      <Button title="Go to Profile" onPress={() => navigation.navigate("Profile")} />
+      <Button title="Go to Home" onPress={() => navigation.navigate("Home")} />
+      <Button title="Go to FoodPosts" onPress={() => navigation.navigate("FoodPosts")} />
+      <Button title="Go to ActivitiesPosts" onPress={() => navigation.navigate("ActivitiesPosts")} />
+      <Button title="Go to StayPosts" onPress={() => navigation.navigate("StayPosts")} />
+      <Button title="Create Food Post" onPress={() => navigation.navigate("CreateFoodPost")} />
+      <Button title="Create Stays Post" onPress={() => navigation.navigate("CreateStaysPost")} />
+      <Button title="Create Activities Post" onPress={() => navigation.navigate("CreateActivitiesPost")} />
+      <Button title="Go to Find Food Posts" onPress={() => navigation.navigate("FindFoodPosts")} />
+      <Button title="Go to Find Activities Posts" onPress={() => navigation.navigate("FindActivitiesPosts")} />
+      <Button title="Go to Find Stay Posts" onPress={() => navigation.navigate("FindStayPosts")} />
+    </View>
+  );
+}
+
+
 export default function App() {
   return (
     <NavigationContainer>
