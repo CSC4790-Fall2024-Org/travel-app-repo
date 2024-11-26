@@ -33,7 +33,7 @@ export default function UserPosts() {
       }
 
       const postsRef = collection(db, "foodPosts");
-      const userPostsQuery = query(postsRef, where("userid", "==", userId));
+      const userPostsQuery = query(postsRef, where("userId", "==", userId));
       const querySnapshot = await getDocs(userPostsQuery);
 
       if (!querySnapshot.empty) {

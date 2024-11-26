@@ -348,6 +348,9 @@ const LoginScreen = () => {
           <TouchableOpacity onPress={handleForgotPassword} style={styles.button}>
             <Text style={styles.buttonText}>Forgot Password?</Text> 
           </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("SignUp")} style={styles.button}>
+          <Text style={styles.buttonText}>Register</Text> 
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

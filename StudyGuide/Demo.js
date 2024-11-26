@@ -14,7 +14,7 @@ function Demo() {
                     style={styles.image} 
                 />
             </View>
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
+            {/* <ScrollView contentContainerStyle={styles.scrollContainer}> */}
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate("Login")} style={styles.button}>
                         <Text style={styles.buttonText}>Login</Text> 
@@ -23,7 +23,7 @@ function Demo() {
                         <Text style={styles.buttonText}>Register</Text> 
                     </TouchableOpacity>
                 </View>
-            </ScrollView>
+            {/* </ScrollView> */}
         </KeyboardAvoidingView>
     );
 }
