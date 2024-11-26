@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react"; 
 import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Button, Alert, ScrollView} from "react-native";
 import { useNavigation } from '@react-navigation/native';
-//import { Picker } from '@react-native-picker/picker';
-//import RNPickerSelect from "react-native-picker-select"; //picker
-import DropDownPicker from 'react-native-dropdown-picker'; //dropdown picker
-//import SectionedMultiSelect from 'react-native-sectioned-multi-select'; //multiselect picker
-//import Icon from "react-native-vector-icons/MaterialIcons"; //icons for multiselect
+import DropDownPicker from 'react-native-dropdown-picker'; //dropdown pickert
 import Stars from "./Stars"
 import { db } from './firebase';
 import { getDocs, collection, getDoc, where, query } from 'firebase/firestore';
@@ -27,6 +23,7 @@ const CreateFoodPost = () => {
   // Dropdown 1: Locations
   const [locationOpen, setLocationOpen] = useState(false);
   const [restaurantLocationId, setRestaurantLocation] = useState('');
+  const [restaurantLocationCity, setRestaurantLocationCity] = useState('');
   const [locationItems, setLocationItems] = useState([]);
 
   // Dropdown 2: Meal Time
@@ -125,6 +122,7 @@ const CreateFoodPost = () => {
         const newPostData = {
           userId: userId,
           locat_id: restaurantLocationId,  
+          locat_city: restaurantLocationCity,
           restaurant: restaurantName,        
           mealTime: mealTime,                
           restaurantType: restaurantType, 
@@ -169,10 +167,11 @@ const CreateFoodPost = () => {
     try {
       const querySnapshot = await getDocs(collection(db, "locations"));
       const fetchedData = querySnapshot.docs.map((doc) => ({
-        label: doc.data().city,
+        label: doc.data().city, // this is the label in the dropdown, it represents city name, use it to populate firebase too
         value: doc.id,
       }));
       setLocationItems(fetchedData);
+      
     } catch (error) {
       console.error("Error fetching locations: ", error);
     }
@@ -209,28 +208,41 @@ const CreateFoodPost = () => {
           style={styles.input}
         />
 
-        {/* Restaurant Location */}
-        <View style={{ width: '100%', zIndex: 5000, marginBottom: 1 }}>
-          <DropDownPicker
-            style={styles.dropdown}
-            containerStyle={styles.dropdownContainer}
-            placeholderStyle={styles.dropdownPlaceholder}
-            labelStyle={styles.dropdownLabelStyle}
-            itemStyle={styles.dropdownItem}
-            badgeStyle={styles.dropdownBadge}
 
-            open={locationOpen}
-            value={restaurantLocationId}
-            items={locationItems}
-            setOpen={setLocationOpen}
-            setValue={setRestaurantLocation}
-            setItems={setLocationItems}
-            placeholder="Restaurant Location: *"
-            zIndex={5000}
-            zIndexInverse={4000}
-            listMode="SCROLLVIEW"
-          />
-        </View>
+        {/* Restaurant Location */}
+<View style={{ width: '100%', zIndex: 5000, marginBottom: 1 }}>
+      <DropDownPicker
+        style={styles.dropdown}
+        containerStyle={styles.dropdownContainer}
+        placeholderStyle={styles.dropdownPlaceholder}
+        labelStyle={styles.dropdownLabelStyle}
+        itemStyle={styles.dropdownItem}
+        badgeStyle={styles.dropdownBadge}
+
+        open={locationOpen}
+        value={restaurantLocationId} // Tracks selected location ID
+       // label={restaurantLocationCity}
+        items={locationItems} // Dropdown items
+        setOpen={setLocationOpen} // Handles opening/closing dropdown
+        setValue={(value) => {
+          // Update the location ID
+          setRestaurantLocation(value);
+
+          // Find the selected location to retrieve its city
+          //const selectedLocation = locationItems.find(item => item.value === value);
+      //    const selectedLocation = locationItems.find(item => item.value === value);
+  
+          // Update the city
+         // setRestaurantLocationCity(selectedLocation.label);
+        }}
+        setItems={setLocationItems}
+        placeholder="Restaurant Location: *"
+        zIndex={5000}
+        zIndexInverse={4000}
+        listMode="SCROLLVIEW"
+      />
+    </View>
+
 
         {/* Address */}
         <TextInput
