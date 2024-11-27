@@ -12,16 +12,16 @@ export default function UserPosts() {
   const auth = getAuth();
 
   // Function to fetch city name using location_id
-  const fetchCityFromLocationId = async (locationId) => {
-    try {
-      const locationRef = doc(db, "locations", locationId);
-      const locationDoc = await getDoc(locationRef);
-      return locationDoc.exists() ? locationDoc.data().city : "Unknown Location";
-    } catch (error) {
-      console.error("Error fetching location city: ", error);
-      return "Unknown Location";
-    }
-  };
+  // const fetchCityFromLocationId = async (locationId) => {
+  //   try {
+  //     const locationRef = doc(db, "locations", locationId);
+  //     const locationDoc = await getDoc(locationRef);
+  //     return locationDoc.exists() ? locationDoc.data().city : "Unknown Location";
+  //   } catch (error) {
+  //     console.error("Error fetching location city: ", error);
+  //     return "Unknown Location";
+  //   }
+  // };
 
   // Function to fetch user's posts and attach city names
   const fetchUserFoodPosts = async () => {
@@ -41,11 +41,8 @@ export default function UserPosts() {
           querySnapshot.docs.map(async (doc) => {
             const postData = doc.data();
             console.log("Post Data: ", postData); // Debugging line
-            const city = postData.locationId
-              ? await fetchCityFromLocationId(postData.locationId)
-              : "Unknown Location";
 
-            return { id: doc.id, ...postData, city };
+            return { id: doc.id, ...postData};
           })
         );
         setUserPosts(fetchedPosts);
@@ -82,8 +79,9 @@ export default function UserPosts() {
               <Stars rating={post.stars} readOnly={true} />
             
               </View>
-
-              <Text style={styles.postItem}>Location: {post.city}</Text>
+              <Text style={styles.itemTitle}>
+                Location: <Text style={styles.postItem}>{post.locat_city}</Text>
+              </Text>
               
               <Text style={styles.itemTitle}>
                 Meal Time: <Text style={styles.postItem}>{post.mealTime}</Text>
