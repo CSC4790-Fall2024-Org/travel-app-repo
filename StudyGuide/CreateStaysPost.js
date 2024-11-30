@@ -30,7 +30,7 @@ const CreateStaysPost = () => {
   const [stayType, setStayType] = useState(null);
   const [stayTypeItems, setStayTypeItems] = useState([
     { label: 'Hotel', value: 'hotel' },
-    { label: 'Hostal', value: 'hostal' },
+    { label: 'Hostel', value: 'hostel' },
     { label: 'House', value: 'house' },
     { label: 'Apartment', value: 'apartment' }
   ]);
@@ -155,10 +155,10 @@ const CreateStaysPost = () => {
         await setDoc(newPostRef, newPostData);
   
         // Navigate to the "FindFoodPosts" screen with the location_id
-        navigation.navigate('Posts', { location_id: stayLocationId });
+        navigation.replace('StayPosts', { location_id: stayLocationId });
         // don't let them navigate backwards to create food post again
   
-        console.log("New post added successfully!");
+        console.log("New stays post added successfully!");
   
       } catch (error) {
         console.error("Error adding post: ", error);

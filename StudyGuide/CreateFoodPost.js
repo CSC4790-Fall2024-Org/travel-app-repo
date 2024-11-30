@@ -146,10 +146,10 @@ const CreateFoodPost = () => {
         await setDoc(newPostRef, newPostData);
   
         // Navigate to the "FindFoodPosts" screen with the location_id
-        navigation.navigate('FoodPosts', { location_id: restaurantLocationId });
+        navigation.replace('FoodPosts', { location_id: restaurantLocationId });
         // don't let them navigate backwards to create food post again
   
-        console.log("New post added successfully!");
+        console.log("New food post added successfully!");
   
       } catch (error) {
         console.error("Error adding post: ", error);
