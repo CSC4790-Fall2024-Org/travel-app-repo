@@ -79,10 +79,11 @@ useEffect(() => {
   return (
     <View style={styles.container}>
 
-      <Text style={styles.title}> Things to do in {locationCity} </Text>
-    
+     
 
     <ScrollView>
+    <Text style={styles.title}> Things to do in {locationCity} </Text>
+    
 
     
 
