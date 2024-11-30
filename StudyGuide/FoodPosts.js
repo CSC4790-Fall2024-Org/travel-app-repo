@@ -87,7 +87,7 @@ useEffect(() => {
 
   return (
     <ScrollView>
-      <Text style={styles.title}>{locationCity}</Text>
+      <Text style={styles.title}> Places to eat in {locationCity} </Text>
     
   {sortedPosts.map((sortedPost) => (
     <View key={sortedPost.id} style={styles.postContainer}>

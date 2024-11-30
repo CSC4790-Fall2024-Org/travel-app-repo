@@ -104,7 +104,7 @@ const CreateActivitiesPost = () => {
 
 
 
-        const newPostRef = doc(collection(db, "foodPosts"));
+        const newPostRef = doc(collection(db, "activityPosts"));
         
         // Data for the new post
         const newPostData = {
@@ -131,10 +131,10 @@ const CreateActivitiesPost = () => {
         await setDoc(newPostRef, newPostData);
   
         // Navigate to the "FindFoodPosts" screen with the location_id
-        navigation.navigate('Posts', { location_id: activityLocationId });
+        navigation.replace('ActivitiesPosts', { location_id: activityLocationId });
         // don't let them navigate backwards to create food post again
   
-        console.log("New post added successfully!");
+        console.log("New activity post added successfully!");
   
       } catch (error) {
         console.error("Error adding post: ", error);

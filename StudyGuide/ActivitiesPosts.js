@@ -79,7 +79,7 @@ useEffect(() => {
   return (
     <View style={styles.container}>
 
-      <Text style={styles.title}> Activities to Do in {locationCity} </Text>
+      <Text style={styles.title}> Things to do in {locationCity} </Text>
     
 
     <ScrollView>
@@ -90,27 +90,24 @@ useEffect(() => {
 
 
             <View key={sortedActPost.id} style={styles.container}>
-            
-             <Text style={styles.itemTitle}> Post from ID: <Text style={styles.postItem}>{sortedActPost.userId}</Text></Text> 
-            <Text style={styles.itemTitle}> Name: <Text style={styles.postItem}>{sortedActPost.activityName}</Text></Text>
-            <Text style={styles.itemTitle}> Post from: <Text style={styles.postItem}>{sortedActPost.posterName} who visited {sortedActPost.posterVisitedCity} in {sortedActPost.posterYear}</Text></Text>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={styles.itemTitle}> Rating by {sortedActPost.posterName}: </Text>
-              <Stars rating={sortedActPost.stars} readOnly={true} />
+
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={styles.itemTitle}>{sortedActPost.activityName}</Text>
+            <Stars rating={sortedActPost.stars} readOnly={true} />
             </View>
+            
+           
+           
+            
+            
+            <Text style={styles.itemTitle}> Post from: <Text style={styles.postItem}>{sortedActPost.posterName} who visited {sortedActPost.posterVisitedCity} in {sortedActPost.posterYear}</Text></Text>
+          
             <Text style={styles.itemTitle}> Expense: <Text style={styles.postItem}>{sortedActPost.expense}</Text></Text>
             <Text style={styles.itemTitle}> Activity Type: <Text style={styles.postItem}>{sortedActPost.activityType}</Text></Text>
             
-             <Text style={styles.itemTitle}> Location Id: <Text style={styles.postItem}>{sortedActPost.locat_id}</Text></Text> 
-             
+              
              <Text style={styles.itemTitle}> Activity Time: <Text style={styles.postItem}>{sortedActPost.activityTime}</Text></Text>
              
-         {/*   {sortedActPost.dietary ? (
-              <Text style={styles.itemTitle}>Dietary Restrictions: <Text style={styles.postItem}>{sortedActPost.dietary}</Text></Text>
-            ) : null}
-            */}
-
-
             {sortedActPost.address ? (
               <Text style={styles.itemTitle}>Address: <Text style={styles.postItem}>{sortedActPost.address}</Text></Text>
             ) : null}
@@ -120,10 +117,6 @@ useEffect(() => {
             {sortedActPost.link ? (
               <Text style={styles.itemTitle}>Link to website: <Text style={styles.postItem}>{sortedActPost.link}</Text></Text>
             ) : null}
-            
-            {/* <Text style={styles.itemTitle}> Address: <Text style={styles.postItem}>{sortedActPost.addr}</Text></Text> 
-            <Text style={styles.itemTitle}> Link to website: <Text style={styles.postItem}>{sortedActPost.link}</Text></Text>
-            */}
             
             <Text style={styles.itemTitle}> Description/Message: <Text style={styles.postItem}>{sortedActPost.description}</Text></Text>
         </View>
@@ -148,28 +141,39 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
     paddingHorizontal: 20,
+    backgroundColor: "LightGray"
   },
   title: {
-    fontSize: 24,
+    fontSize: 40,
+    marginTop: 20,
     marginBottom: 20,
     textAlign: "center",
-    fontWeight: "bold" 
+    fontWeight: "bold",
   },
+
   postContainer: {
-    marginBottom: 15,
+    marginBottom: 20,
+    padding: 15,
+    marginLeft: 15,
+    marginRight: 15,
+    backgroundColor: "#f8f8f8",
   },
-  postItem: { 
-    fontSize: 18, 
-    marginVertical: 10, 
-    textAlign: "center",
+  postItem: {
+    fontSize: 18,
+    color: "black", 
     marginBottom: 5,
-    fontWeight: "normal" ,
+    fontWeight: "normal",
   },
-  itemTitle: { 
-    fontSize: 22, 
-    marginVertical: 10, 
-    textAlign: "center",
-    fontWeight: "bold" ,
-    marginBottom: 5,
+  itemTitle: {
+    fontSize: 15,
+    color: "black", 
+    marginBottom: 8,
+    fontWeight: "bold",
+  },
+  resturantTitle: {
+    fontSize: 20,
+    color: "black", 
+    marginBottom: 8,
+    fontWeight: "bold",
   },
 });
