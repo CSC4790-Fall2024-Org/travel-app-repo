@@ -1,108 +1,371 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, ScrollView } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { db } from './firebase';
 import { getAuth } from "firebase/auth";
 import Stars from "./Stars";
 
 export default function UserPosts() {
-  const [userPosts, setUserPosts] = useState([]);
+  const [userFoodPosts, setUserFoodPosts] = useState([]);
+  const [userActivityPosts, setUserActivityPosts] = useState([]);
+  const [userStayPosts, setUserStayPosts] = useState([]);
+  const navigation = useNavigation();
   const auth = getAuth();
 
+  
   const fetchUserFoodPosts = async () => {
     try {
-      const userId = auth.currentUser ? auth.currentUser.uid : null;
+      const userId = auth.currentUser?.uid;
       if (!userId) {
         console.log("No user ID found - user may not be signed in.");
         return;
       }
 
       const postsRef = collection(db, "foodPosts");
-      const userPostsQuery = query(postsRef, where("userid", "==", userId));
+      const userPostsQuery = query(postsRef, where("userId", "==", userId));
       const querySnapshot = await getDocs(userPostsQuery);
 
-      let fetchedPosts = [];
-      
       if (!querySnapshot.empty) {
-        fetchedPosts = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        console.log("Fetched Posts for User:", fetchedPosts);
-      } else {
-        console.log("No posts found for the current user.");
-      }
+        const fetchedPosts = await Promise.all(
+          querySnapshot.docs.map(async (doc) => {
+            const postData = doc.data();
+            console.log("Post Data: ", postData); // Debugging line
 
-      setUserPosts(fetchedPosts); 
+            return { id: doc.id, ...postData};
+          })
+        );
+        setUserFoodPosts(fetchedPosts);
+      } else {
+        console.log("No food posts found for the current user.");
+        setUserFoodPosts([]);
+      }
     } catch (error) {
       console.error("Error fetching user food posts:", error);
     }
   };
 
+  // Fetch posts on component mount
   useEffect(() => {
     fetchUserFoodPosts();
   }, []);
 
+
+
+
+
+
+
+  const fetchUserActivityPosts = async () => {
+    try {
+      const userId = auth.currentUser?.uid;
+      if (!userId) {
+        console.log("No user ID found - user may not be signed in.");
+        return;
+      }
+
+      const postsRef = collection(db, "activityPosts");
+      const userPostsQuery = query(postsRef, where("userId", "==", userId));
+      const querySnapshot = await getDocs(userPostsQuery);
+
+      if (!querySnapshot.empty) {
+        const fetchedPosts = await Promise.all(
+          querySnapshot.docs.map(async (doc) => {
+            const postData = doc.data();
+            console.log("Post Data: ", postData); // Debugging line
+
+            return { id: doc.id, ...postData};
+          })
+        );
+        setUserActivityPosts(fetchedPosts);
+      } else {
+        console.log("No activity posts found for the current user.");
+        setUserActivityPosts([]);
+      }
+    } catch (error) {
+      console.error("Error fetching user activity posts:", error);
+    }
+  };
+
+  // Fetch posts on component mount
+  useEffect(() => {
+    fetchUserActivityPosts();
+  }, []);
+
+
+  const fetchUserStayPosts = async () => {
+    try {
+      const userId = auth.currentUser?.uid;
+      if (!userId) {
+        console.log("No user ID found - user may not be signed in.");
+        return;
+      }
+
+      const postsRef = collection(db, "stayPosts");
+      const userPostsQuery = query(postsRef, where("userId", "==", userId));
+      const querySnapshot = await getDocs(userPostsQuery);
+
+      if (!querySnapshot.empty) {
+        const fetchedPosts = await Promise.all(
+          querySnapshot.docs.map(async (doc) => {
+            const postData = doc.data();
+            console.log("Post Data: ", postData); // Debugging line
+
+            return { id: doc.id, ...postData};
+          })
+        );
+        setUserStayPosts(fetchedPosts);
+      } else {
+        console.log("No stay posts found for the current user.");
+        setUserStayPosts([]);
+      }
+    } catch (error) {
+      console.error("Error fetching user stay posts:", error);
+    }
+  };
+
+  // Fetch posts on component mount
+  useEffect(() => {
+    fetchUserStayPosts();
+  }, []);
+
+
+
+
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Your Posts</Text>
       <ScrollView>
-        {userPosts.length > 0 ? (
-          userPosts.map((post) => (
-            <View key={post.id} style={styles.postContainer}>
-              {post.locat_id && <Text style={styles.postlocat_id}>Location: {post.locat_id}</Text>}
-              {post.restaurant && <Text style={styles.postrestaurant}>Name: {post.restaurant}</Text>}
-              {post.mealTime && <Text style={styles.postmealTime}>Meal Time: {post.mealTime}</Text>}
-              {post.restaurantType && <Text style={styles.postrestaurantType}>Type: {post.restaurantType}</Text>}
-              {post.expense && <Text style={styles.postexpense}>Expense: {post.expense}</Text>}
-              {post.stars && <Stars style={styles.poststars} readOnly={true}>Stars: {post.stars}</Stars>}
-              {post.link && <Text style={styles.postlink}>Link: {post.link}</Text>}
-              {post.dietary && <Text style={styles.postdietary}>Dietary Restrictions: {post.dietary}</Text>}
-              {post.description && <Text style={styles.postdescription}>Description: {post.description}</Text>}
+      <Text style={styles.mainTitle}>Your Food Posts</Text>
+        {userFoodPosts.length > 0 ? (
+          userFoodPosts.map((foodPost) => (
+            <View key={foodPost.id} style={styles.postContainer}>
+
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={styles.itemTitle}>
+                <Text style={styles.title}>{foodPost.restaurant}</Text>
+              </Text>
+              <Stars rating={foodPost.stars} readOnly={true} />
+            
+              </View>
+              <Text style={styles.itemTitle}>
+                Location: <Text style={styles.postItem}>{foodPost.locat_city}</Text>
+              </Text>
+              
+              <Text style={styles.itemTitle}>
+                Meal Time: <Text style={styles.postItem}>{foodPost.mealTime}</Text>
+              </Text>
+
+              <Text style={styles.itemTitle}>
+                Restaurant Type: <Text style={styles.postItem}>{foodPost.restaurantType}</Text>
+              </Text>
+       
+              <Text style={styles.itemTitle}>
+                Expense: <Text style={styles.postItem}>{foodPost.expense}</Text>
+              </Text>
+
+              {foodPost.dietary && (
+              <Text style={styles.itemTitle}>
+                Dietary Accomodations: <Text style={styles.postItem}>{foodPost.dietary}</Text>
+              </Text>
+            )}
+
+             {foodPost.address && (
+              <Text style={styles.itemTitle}>
+                Address: <Text style={styles.postItem}>{foodPost.address}</Text>
+              </Text>
+            )}
+            {foodPost.link && (
+              <Text style={styles.itemTitle}>
+                Link to website: <Text style={styles.postItem}>{foodPost.link}</Text>
+              </Text>
+            )}
+ 
+        <Text style={styles.itemTitle}>
+                Description: <Text style={styles.postItem}>{foodPost.description}</Text>
+        </Text>
             </View>
           ))
         ) : (
           <Text style={styles.noPostsText}>No food posts available</Text>
         )}
+
+
+
+  <Text style={styles.mainTitle}>Your Activity Posts</Text>
+        {userActivityPosts.length > 0 ? (
+          userActivityPosts.map((activityPost) => (
+            <View key={activityPost.id} style={styles.postContainer}>
+
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={styles.itemTitle}>
+                <Text style={styles.title}>{activityPost.activityName}</Text>
+              </Text>
+              <Stars rating={activityPost.stars} readOnly={true} />
+            
+              <Text style={styles.itemTitle}> Expense: <Text style={styles.postItem}>{activityPost.expense}</Text></Text>
+            <Text style={styles.itemTitle}> Activity Type: <Text style={styles.postItem}>{activityPost.activityType}</Text></Text>
+            
+              
+             <Text style={styles.itemTitle}> Activity Time: <Text style={styles.postItem}>{activityPost.activityTime}</Text></Text>
+             
+            {activityPost.address ? (
+              <Text style={styles.itemTitle}>Address: <Text style={styles.postItem}>{activityPost.address}</Text></Text>
+            ) : null}
+            
+            
+            
+            {activityPost.link ? (
+              <Text style={styles.itemTitle}>Link to website: <Text style={styles.postItem}>{activityPost.link}</Text></Text>
+            ) : null}
+            
+            <Text style={styles.itemTitle}> Description/Message: <Text style={styles.postItem}>{activityPost.description}</Text></Text>
+        </View>
+
+                </View>
+          ))
+        ) : (
+          <Text style={styles.noPostsText}>No activity posts available</Text>
+        )}
+
+
+
+
+        
+  <Text style={styles.mainTitle}>Your Stay Posts</Text>
+        {userStayPosts.length > 0 ? (
+          userStayPosts.map((stayPost) => (
+            <View key={stayPost.id} style={styles.postContainer}>
+
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={styles.itemTitle}>
+                <Text style={styles.title}>{stayPost.stayName}</Text>
+              </Text>
+              <Stars rating={stayPost.stars} readOnly={true} />
+              <Text style={styles.itemTitle}> Expense: <Text style={styles.postItem}>{stayPost.expense}</Text></Text>
+          
+
+            <Text style={styles.itemTitle}> Type of Place to Stay: <Text style={styles.postItem}>{stayPost.stayType}</Text></Text>
+           
+            <Text style={styles.itemTitle}> Ammenities: <Text style={styles.postItem}>{stayPost.ammenities}</Text></Text>
+            <Text style={styles.itemTitle}> Would return? <Text style={styles.postItem}>{stayPost.wouldReturn}</Text></Text>
+
+            {stayPost.address ? (
+              <Text style={styles.itemTitle}>Address: <Text style={styles.postItem}>{stayPost.address}</Text></Text>
+            ) : null}
+            
+            {stayPost.closeTo ? (
+              <Text style={styles.itemTitle}>Nearby: <Text style={styles.postItem}>{stayPost.closeTo}</Text></Text>
+            ) : null}
+            
+            {stayPost.link ? (
+              <Text style={styles.itemTitle}>Link to website: <Text style={styles.postItem}>{stayPost.link}</Text></Text>
+            ) : null}
+            
+  
+            
+            <Text style={styles.itemTitle}> Description/Message: <Text style={styles.postItem}>{stayPost.description}</Text></Text>
+       
+            
+              
+            
+            
+          
+        </View>
+
+                </View>
+          ))
+        ) : (
+          <Text style={styles.noPostsText}>No stay posts available</Text>
+        )}
+
+
+
+
+
+
+
+
+
+        
       </ScrollView>
     </View>
+
+    /////////// ACTIVITY SECTION 
+   
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////// STAY SECTION
+
+
+
+
+
+
+
+
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
+   // paddingTop: 50,
     paddingHorizontal: 20,
+    backgroundColor: "LightGray"
   },
-  title: {
-    fontSize: 24,
+  mainTitle: {
+    fontSize: 30,
+    marginTop: 20,
     marginBottom: 20,
     textAlign: "center",
     fontWeight: "bold",
   },
+
+  
   postContainer: {
-    marginBottom: 15,
+    marginBottom: 20,
     padding: 15,
-    borderRadius: 8,
+    marginLeft: 15,
+    marginRight: 15,
     backgroundColor: "#f8f8f8",
   },
-  postlocat_id: {
-    fontSize: 16,
+  postItem: {
+    fontSize: 18,
+    color: "black", 
+    marginBottom: 5,
+    fontWeight: "normal",
+  },
+  itemTitle: {
+    fontSize: 18,
+    color: "black", 
+    marginBottom: 8,
     fontWeight: "bold",
   },
-  postrestaurant: { fontSize: 16 },
-  postmealTime: { fontSize: 16 },
-  postrestaurantType: { fontSize: 16 },
-  postexpense: { fontSize: 16 },
-  poststars: { fontSize: 25 },
-  postlink: { fontSize: 16 },
-  postdietary: { fontSize: 16 },
-  postdescription: { fontSize: 16 },
-  noPostsText: {
+  title: {
+    fontSize: 20,
+    color: "black", 
+    marginBottom: 8,
+    fontWeight: "bold",
     textAlign: "center",
-    fontSize: 16,
-    color: "#888",
-    marginTop: 20,
   },
+
+
+  postlocat_id: {
+    fontSize: 16,
+
+  },
+ 
 });

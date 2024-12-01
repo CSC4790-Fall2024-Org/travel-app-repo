@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react"; 
 import { KeyboardAvoidingView, TouchableOpacity, Text, TextInput, View, StyleSheet, Button, Alert, ScrollView} from "react-native";
 import { useNavigation } from '@react-navigation/native';
-//import { Picker } from '@react-native-picker/picker';
-//import RNPickerSelect from "react-native-picker-select"; //picker
-import DropDownPicker from 'react-native-dropdown-picker'; //dropdown picker
-//import SectionedMultiSelect from 'react-native-sectioned-multi-select'; //multiselect picker
-//import Icon from "react-native-vector-icons/MaterialIcons"; //icons for multiselect
+import DropDownPicker from 'react-native-dropdown-picker'; //dropdown pickert
 import Stars from "./Stars"
 import { db } from './firebase';
 import { getDocs, collection, getDoc, where, query } from 'firebase/firestore';
@@ -16,8 +12,8 @@ import { getAuth } from "firebase/auth"; // Import auth to get the current user
 // Input Fields
 const CreateFoodPost = () => {
   // add user id 
-  const [address, setAddress] = useState('');
   const [restaurantName, setRestaurantName] = useState('');
+  const [address, setAddress] = useState('');
   const [rating, setRating] = useState(0);
   const [descrip, setDescrip] = useState('');
   const [webLink, setWebLink] = useState('');
@@ -27,6 +23,7 @@ const CreateFoodPost = () => {
   // Dropdown 1: Locations
   const [locationOpen, setLocationOpen] = useState(false);
   const [restaurantLocationId, setRestaurantLocation] = useState('');
+  const [restaurantLocationCity, setRestaurantLocationCity] = useState('');
   const [locationItems, setLocationItems] = useState([]);
 
   // Dropdown 2: Meal Time
@@ -125,6 +122,7 @@ const CreateFoodPost = () => {
         const newPostData = {
           userId: userId,
           locat_id: restaurantLocationId,  
+          locat_city: restaurantLocationCity,
           restaurant: restaurantName,        
           mealTime: mealTime,                
           restaurantType: restaurantType, 
@@ -132,7 +130,9 @@ const CreateFoodPost = () => {
           expense: expense, 
           stars: rating,                 
           description: descrip,
+          address: address,
           link: webLink,  
+          address: address,
           
           //info added automatically to a post doc in the db about the user making the post (user doesn't submit this)
           posterName: posterName,
@@ -146,10 +146,10 @@ const CreateFoodPost = () => {
         await setDoc(newPostRef, newPostData);
   
         // Navigate to the "FindFoodPosts" screen with the location_id
-        navigation.navigate('Posts', { location_id: restaurantLocationId });
+        navigation.replace('FoodPosts', { location_id: restaurantLocationId });
         // don't let them navigate backwards to create food post again
   
-        console.log("New post added successfully!");
+        console.log("New food post added successfully!");
   
       } catch (error) {
         console.error("Error adding post: ", error);
@@ -167,10 +167,11 @@ const CreateFoodPost = () => {
     try {
       const querySnapshot = await getDocs(collection(db, "locations"));
       const fetchedData = querySnapshot.docs.map((doc) => ({
-        label: doc.data().city,
+        label: doc.data().city, // this is the label in the dropdown, it represents city name, use it to populate firebase too
         value: doc.id,
       }));
       setLocationItems(fetchedData);
+      
     } catch (error) {
       console.error("Error fetching locations: ", error);
     }
@@ -186,12 +187,17 @@ const CreateFoodPost = () => {
     <KeyboardAvoidingView
       style={styles.container} behavior="padding"
     > 
-    <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}>
-    
+    <ScrollView 
+      contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16, width: '100%', }} 
+      style={{ flex: 1 }}
+      horizontal={false}
+      showsHorizontalScrollIndicator={false}
+    >
+
       <Text style={styles.title}>Create Food Post</Text>
       <View style={styles.inputContainer}>
 
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 5 }}>
           <Stars rating={rating} setRating={setRating} />
         </View>
 
@@ -202,27 +208,42 @@ const CreateFoodPost = () => {
           style={styles.input}
         />
 
-        {/* Restaurant Location */}
-        <View style={{ zIndex: 5000, marginBottom: 10 }}>
-          <DropDownPicker
-            style={styles.dropdown}
-            containerStyle={styles.dropdownContainer}
-            placeholderStyle={styles.dropdownPlaceholder}
-            labelStyle={styles.dropdownLabelStyle}
-            itemStyle={styles.dropdownItem}
-            badgeStyle={styles.dropdownBadge}
 
-            open={locationOpen}
-            value={restaurantLocationId}
-            items={locationItems}
-            setOpen={setLocationOpen}
-            setValue={setRestaurantLocation}
-            setItems={setLocationItems}
-            placeholder="Restaurant Location: *"
-            zIndex={5000}
-            zIndexInverse={4000}
-          />
-        </View>
+        {/* Restaurant Location */}
+<View style={{ width: '100%', zIndex: 5000, marginBottom: 1 }}>
+      <DropDownPicker
+        style={styles.dropdown}
+        containerStyle={styles.dropdownContainer}
+        placeholderStyle={styles.dropdownPlaceholder}
+        labelStyle={styles.dropdownLabelStyle}
+        itemStyle={styles.dropdownItem}
+        badgeStyle={styles.dropdownBadge}
+
+        open={locationOpen}
+        value={restaurantLocationId} // Tracks selected location ID
+       // label={restaurantLocationCity}
+        items={locationItems} // Dropdown items
+        setOpen={setLocationOpen} // Handles opening/closing dropdown
+        setValue={(value) => {
+          // Update the location ID
+          setRestaurantLocation(value);
+
+         // Find the selected location to retrieve its city
+          const selectedLocation = locationItems.find(item => item.value === restaurantLocationId);
+
+          // Update the city
+          setRestaurantLocationCity(selectedLocation?.label || 'not working');
+
+          console.log("resturant location id", restaurantLocationId);
+          console.log("selected location city", selectedLocation?.label || 'not working');
+        }}
+        setItems={setLocationItems}
+        placeholder="Restaurant Location: *"
+        zIndex={5000}
+        zIndexInverse={4000}
+        listMode="SCROLLVIEW"
+      />
+    </View>
 
 
         {/* Address */}
@@ -231,10 +252,13 @@ const CreateFoodPost = () => {
           value={address}
           onChangeText={text => setAddress(text)}
           style={styles.input}
+          multiline={true}
+          numberOfLines={5}
         />
+        
 
         {/* Meal Time */}
-        <View style={{ zIndex: 4000, marginBottom: 10 }}>
+        <View style={{ width: '100%', zIndex: 4000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -252,11 +276,12 @@ const CreateFoodPost = () => {
             placeholder="Meal time: *"
             zIndex={4000} //Highest zIndex for top dropdown
             zIndexInverse={3000}
+            listMode="SCROLLVIEW"
           />
         </View>
 
         {/* Restaurant Type */}
-        <View style={{ zIndex: 3000, marginBottom: 10 }}>
+        <View style={{ width: '100%', zIndex: 3000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -274,12 +299,12 @@ const CreateFoodPost = () => {
             placeholder="Restaurant Type: *"
             zIndex={3000} 
             zIndexInverse={2000}
+            listMode="SCROLLVIEW"
           />
         </View>
        
-
         {/* Dietary Restrictions */}
-        <View style={{ zIndex: 2000, marginBottom: 10 }}>
+        <View style={{ width: '100%', zIndex: 2000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -300,12 +325,12 @@ const CreateFoodPost = () => {
             multiple={true}
             min={0}
             mode="BADGE" //for multiselect readability
+            listMode="SCROLLVIEW"
           />
         </View>
       
-
         {/* Expense */}
-        <View style={{ zIndex: 1000, marginBottom: 500 }}>
+        <View style={{ width: '100%', zIndex: 1000, marginBottom: 1 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -323,10 +348,10 @@ const CreateFoodPost = () => {
             placeholder="Expense: *"
             zIndex={1000}
             zIndexInverse={500}
+            listMode="SCROLLVIEW"
           />    
         </View>     
 
-      
         {/* Description */}
         <TextInput
           placeholder="Description *"
@@ -344,7 +369,7 @@ const CreateFoodPost = () => {
           onChangeText={text => setWebLink(text)}
           style={styles.input}
           multiline={true}
-          numberOfLines={10}
+          numberOfLines={5}
         />
         
       </View>
@@ -355,7 +380,7 @@ const CreateFoodPost = () => {
       onPress={handleSubmit}
       disabled={!allFields} 
     >
-      <Text style={styles.buttonText}>Create Post</Text> 
+      <Text style={styles.buttonText}>                  Create Post                   </Text> 
     </TouchableOpacity> 
     
       </View>
@@ -365,50 +390,20 @@ const CreateFoodPost = () => {
   );
 };
 
-// pickerSelectStyles
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    backgroundColor: 'white',
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    borderRadius: 10,
-    marginTop: 10,
-    borderWidth: 0,
-    fontSize: 14,
-    color: 'grey',
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    //borderWidth: 1,
-    //borderColor: 'gray',
-    //borderRadius: 4,
-    //color: 'black',
-    //paddingRight: 30, // to ensure the text is not obscured by the icon
-    //backgroundColor: 'white', // Optional
-  },
-  inputAndroid: {
-    fontSize: 14,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 0.5,
-    borderColor: 'purple',
-    borderRadius: 8,
-    color: 'black',
-    paddingRight: 30, // to ensure the text is not obscured by the icon
-    backgroundColor: 'white', // Optional
-  },
-});
 
 // Normal style
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+    overflow: 'hidden',
   },
   inputContainer: {
     width: '100%',
-    maxWidth: 400,
+    //maxWidth: 320,
     paddingVertical: 15,
   },
   title: {    
@@ -437,9 +432,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: '100%',
-    justifyContent: "center",
     alignItems: "center",
-    marginTop: 40,
+    marginTop: 30,
   },
   button: {
     backgroundColor: 'green',
@@ -447,10 +441,12 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
+    marginTop: 0,
   },
   buttonText: {
     color: 'white', 
     fontSize: 15,
+    fontWeight: "bold", 
   },
 
   //Dropdown style
@@ -460,7 +456,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     marginTop: 10,
     width: '100%',
-    maxWidth: 400,
+    //maxWidth: 320,
   },
   dropdown: {
     paddingHorizontal: 15,
