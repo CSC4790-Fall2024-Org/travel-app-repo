@@ -78,7 +78,7 @@ const LoginScreen = () => {
                     source={require('./Logo.jpeg')} 
                     style={styles.image} 
                 />
-        <Text style={styles.title}>Sign In</Text>
+        <Text style={styles.title}>Login</Text>
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Email"
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     marginBottom: 15, 
     textAlign: 'center',
     padding: 20,
-    fontFamily: 'Times New Roman',
+    fontFamily: 'San Francisco',
     //marginTop: 50,
     //fontFamily: 'Times New Roman',
   },

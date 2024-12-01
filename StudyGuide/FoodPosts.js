@@ -204,7 +204,8 @@ const styles = StyleSheet.create({
   itemTitle: {
     fontSize: 15,
     color: "black", 
-    marginBottom: 8,
+    marginBottom: 5,
+    marginTop: 10,
     fontWeight: "bold",
   },
   resturantTitle: {

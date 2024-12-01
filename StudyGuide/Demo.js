@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   title: {    
     fontSize: 34, 
-    fontWeight: "light",    
+    fontWeight: "semi bold",    
     marginBottom: 20, 
     textAlign: 'center',
     fontFamily: 'San Francisco',
