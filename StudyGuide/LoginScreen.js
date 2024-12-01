@@ -320,7 +320,7 @@ const LoginScreen = () => {
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding"> 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.title}>Sign In</Text>
+        <Text style={styles.title}>Login</Text>
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Email"
@@ -349,7 +349,7 @@ const LoginScreen = () => {
             <Text style={styles.buttonText}>Forgot Password?</Text> 
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("SignUp")} style={styles.button}>
-          <Text style={styles.buttonText}>Register</Text> 
+          <Text style={styles.buttonText}>Sign Up</Text> 
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -387,6 +387,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 30,
     borderWidth: 0,
+    color: '#6D6D6D',
   },
   passwordContainer: {
     flexDirection: 'row',
@@ -401,6 +402,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 10,
     borderWidth: 0,
+    color: '#6D6D6D',
   },
   showButton: {
     paddingHorizontal: 10,

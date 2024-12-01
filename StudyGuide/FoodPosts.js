@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { getFirestore, firestore, where, collection, getDocs, query,  Filter, doc, QueryFieldFilterConstraint, DocumentSnapshot, QuerySnapshot, getDoc } from "firebase/firestore";
 import Stars from "./Stars"
 import { useNavigation } from "@react-navigation/native";
+import DropDownPicker from 'react-native-dropdown-picker'; //dropdown picker
+
 
 export default function FoodPosts({ route }) { 
   const db = getFirestore(); // Firestore database instance
@@ -11,6 +13,15 @@ export default function FoodPosts({ route }) {
   const [sortedPosts, setSortedPosts]= useState([]);
   const { location_id }=route.params;
   const [locationCity, setLocationCity] = useState(''); // State to store city name
+
+  // Dropdown Expense for filter
+  const [expenseOpen, setExpenseOpen] = useState(false);
+  const [expense, setExpense] = useState(null);
+  const [expenseItems, setExpenseItems] = useState([
+    { label: '$', value: '$' },
+    { label: '$$', value: '$$' },
+    { label: '$$$', value: '$$$' }
+  ]);
 
  
 //get Location using location Id passed into this page
@@ -88,7 +99,31 @@ useEffect(() => {
   return (
     <ScrollView>
       <Text style={styles.title}> Places to eat in {locationCity} </Text>
+
     
+    {/* Expense */}
+      <View style={{ width: '100%', zIndex: 2000, marginBottom: 10 }}>
+          <DropDownPicker
+            style={styles.dropdown}
+            containerStyle={styles.dropdownContainer}
+            placeholderStyle={styles.dropdownPlaceholder}
+            labelStyle={styles.dropdownLabelStyle}
+            itemStyle={styles.dropdownItem}
+            badgeStyle={styles.dropdownBadge}
+
+            open={expenseOpen}
+            value={expense}
+            items={expenseItems}
+            setOpen={setExpenseOpen}
+            setValue={setExpense}
+            setItems={setExpenseItems}
+            placeholder="Filter by expense:"
+            zIndex={2000}
+            zIndexInverse={1000}
+            listMode="SCROLLVIEW"
+          />    
+      </View>   
+
   {sortedPosts.map((sortedPost) => (
     <View key={sortedPost.id} style={styles.postContainer}>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -177,5 +212,50 @@ const styles = StyleSheet.create({
     color: "black", 
     marginBottom: 8,
     fontWeight: "bold",
+  },
+
+  //Dropdown style
+  dropdownContainer: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    borderWidth: 0,
+    marginTop: 10,
+    width: '50%',
+    marginLeft: 180,
+    //maxWidth: 320,
+  },
+  dropdown: {
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    borderRadius: 10,
+    borderColor: 'transparent',
+    borderWidth: 0, 
+    fontSize: 14,
+    color: 'grey',
+    fontWeight: 'normal',
+  },
+  dropdownPlaceholder: {
+    color: '#B0B0B0',
+    fontWeight: 'normal',
+  },
+  dropdownLabelStyle: {
+    fontSize: 14,
+    fontWeight: 'normal',
+    color: 'grey',
+  },
+  dropdownItem: {
+    paddingHorizontal: 10,
+    paddingVertical: 15,
+    color: 'grey',
+    fontWeight: 'normal',
+  },
+  dropdownBadge: {
+    backgroundColor: 'grey',
+    color: 'white',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 5,
+    fontSize: 14,
+    fontWeight: 'normal',
   },
 });
