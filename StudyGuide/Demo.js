@@ -39,11 +39,11 @@ const styles = StyleSheet.create({
   imageContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 40, 
+    marginVertical: 10, 
   },
   image: {        
-    width: 300, 
-    height: 300,
+    width: 400, 
+    height: 400,
   },
   scrollContainer: {
     flexGrow: 1,
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20, 
   },
   button: {
-    backgroundColor: 'green',
+    backgroundColor: '#70A533',
     width: '100%', 
     padding: 15,
     borderRadius: 10,
