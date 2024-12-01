@@ -4,7 +4,7 @@ import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { db } from './firebase';
 import { getAuth } from "firebase/auth";
-import Stars from "./Stars"
+import Stars from "./Stars";
 
 export default function UserPosts() {
   const [userFoodPosts, setUserFoodPosts] = useState([]);

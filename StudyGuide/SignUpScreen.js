@@ -73,13 +73,13 @@ const SignUpScreen = () => {
           await user.reload();
           if (user.emailVerified) {
             console.log('Email verified');
-            clearInterval(intervalId); // Stop the interval once verified
+            clearInterval(intervalId); 
             
             await setDoc(doc(db, 'users', user.uid), {
               email,
               name,
               year,
-              city: restaurantLocationId, // Assuming restaurantLocationId holds city
+              city: restaurantLocationId,
               userId: user.uid,
             });
       
@@ -149,7 +149,7 @@ const SignUpScreen = () => {
         <View style={{ zIndex: 1000, marginBottom: 10 }}>
           <DropDownPicker
             open={yearOpen}
-            value={year} // Selected value
+            value={year} 
             items={Array.from({ length: 31 }, (_, i) => {
               const year = 2000 + i;
               return { label: year.toString(), value: year.toString() };
@@ -193,12 +193,12 @@ const SignUpScreen = () => {
           >
             <Text style={styles.buttonText}>Sign Up</Text> 
           </TouchableOpacity>
-          <Text style={styles.infoText}>To create an account your email must be educational (ending with edu).</Text>
+          <Text style={styles.infoText}>   To create an account your email must be educational (ending with edu).</Text>
 
           <TouchableOpacity onPress={() => navigation.navigate("Login")} style={styles.button}>
           <Text style={styles.buttonText}>Login</Text> 
           </TouchableOpacity>
-          <Text style={styles.infoText}>If you have already registered, Login.</Text>
+          <Text style={styles.infoText}>   If you have already registered, Login.</Text>
 
         </View>
         
@@ -243,6 +243,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,
+    backgroundColor: 'white',
   },
   scrollContainer: {
     flexGrow: 1,
@@ -258,10 +259,11 @@ const styles = StyleSheet.create({
     fontSize: 34, 
     fontWeight: "bold",    
     textAlign: 'center',
-    marginVertical: 40, 
+    marginVertical: 35, 
+    fontFamily: 'Times New Roman',
   },
   input: {
-    backgroundColor: 'white',
+    backgroundColor: '#EEEEEE',
     color: 'grey',
     paddingHorizontal: 15,
     paddingVertical: 15,
@@ -273,7 +275,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 15,
-    backgroundColor: 'white',
+    backgroundColor: '#EEEEEE',
     borderRadius: 10,
   },
   passwordInput: {
@@ -286,7 +288,7 @@ const styles = StyleSheet.create({
   showButton: {
     paddingHorizontal: 10,
     paddingVertical: 15,
-    color: 'rgb(60, 179, 113)',
+    color: '#70A533',
     fontWeight: 'bold',
   },
   buttonContainer: {
@@ -295,7 +297,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   button: {
-    backgroundColor: 'green',
+    backgroundColor: '#70A533',
     width: '100%', 
     padding: 15,
     borderRadius: 10,
@@ -304,13 +306,16 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white', 
-    fontSize: 15,
+    fontSize: 18,
     fontWeight: "bold",  
   },
-
+  infoText: {
+    fontFamily: 'Times New Roman',
+    fontSize: 15,
+  },
    //Dropdown style
    dropdownContainer: {
-    backgroundColor: 'white',
+    backgroundColor: '#EEEEEE',
     borderRadius: 10,
     borderWidth: 0,
     marginTop: 10,
@@ -324,7 +329,7 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     borderWidth: 0, 
     fontSize: 14,
-    color: 'grey',
+    backgroundColor: '#EEEEEE',
     fontWeight: 'normal',
   },
   dropdownPlaceholder: {
