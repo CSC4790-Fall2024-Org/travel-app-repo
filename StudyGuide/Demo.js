@@ -20,7 +20,7 @@ function Demo() {
                         <Text style={styles.buttonText}>Login</Text> 
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate("SignUp")} style={styles.button}>
-                        <Text style={styles.buttonText}>Sign up</Text> 
+                        <Text style={styles.buttonText}>Sign Up</Text> 
                     </TouchableOpacity>
                 </View>
             {/* </ScrollView> */}
@@ -53,11 +53,11 @@ const styles = StyleSheet.create({
   },
   title: {    
     fontSize: 34, 
-    fontWeight: "bold",    
-    marginBottom: 10, 
+    fontWeight: "light",    
+    marginBottom: 20, 
     textAlign: 'center',
-    fontFamily: 'Times New Roman',
-    marginTop: 30,
+    fontFamily: 'San Francisco',
+    marginTop: 110,
   },
   buttonContainer: {
     width: '100%',

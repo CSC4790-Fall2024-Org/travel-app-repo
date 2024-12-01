@@ -122,7 +122,7 @@ const SignUpScreen = () => {
 
           {/* City */}
           {/* Restaurant Location */}
-        <View style={{ zIndex: 2000, marginBottom: 1 }}>
+        <View style={{ zIndex: 2000, marginTop: 5, marginBottom: 5 }}>
           <DropDownPicker
             style={styles.dropdown}
             containerStyle={styles.dropdownContainer}
@@ -146,7 +146,7 @@ const SignUpScreen = () => {
 
 
         {/* Year */}
-        <View style={{ zIndex: 1000, marginBottom: 10 }}>
+        <View style={{ zIndex: 1000, marginBottom: 5 }}>
           <DropDownPicker
             open={yearOpen}
             value={year} 
@@ -277,6 +277,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     backgroundColor: '#EEEEEE',
     borderRadius: 10,
+    marginBottom: 10,
   },
   passwordInput: {
     flex: 1,
@@ -310,9 +311,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",  
   },
   infoText: {
-    fontFamily: 'Times New Roman',
-    fontSize: 15,
+    color: 'gray', 
+    fontSize: 13,
+    fontWeight: "light",  
   },
+
    //Dropdown style
    dropdownContainer: {
     backgroundColor: '#EEEEEE',
@@ -329,26 +332,26 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     borderWidth: 0, 
     fontSize: 14,
-    backgroundColor: '#EEEEEE',
+    color: '#6D6D6D',
     fontWeight: 'normal',
   },
   dropdownPlaceholder: {
-    color: 'grey',
+    color: '#B0B0B0',
     fontWeight: 'normal',
   },
   dropdownLabelStyle: {
     fontSize: 14,
     fontWeight: 'normal',
-    color: 'grey',
+    color: '#6D6D6D',
   },
   dropdownItem: {
     paddingHorizontal: 10,
     paddingVertical: 15,
-    color: 'grey',
+    color: '#6D6D6D',
     fontWeight: 'normal',
   },
   dropdownBadge: {
-    backgroundColor: 'grey',
+    backgroundColor: '#6D6D6D',
     color: 'white',
     paddingHorizontal: 8,
     paddingVertical: 3,

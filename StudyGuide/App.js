@@ -51,7 +51,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Demo">
         {/* Main page listing all subpages */}
-        <Stack.Screen name="Home" component={Demo} />
+        <Stack.Screen name="Home" component={Demo} options={{ headerShown: false }} />
         {/* Subpages */}
         <Stack.Screen name="UserPosts" component={UserPosts} />
         <Stack.Screen name="App Demo" component={Demo} />

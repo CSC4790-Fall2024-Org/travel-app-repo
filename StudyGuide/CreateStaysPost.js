@@ -487,7 +487,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
   },
   dropdownPlaceholder: {
-    color: 'grey',
+    color: '#B0B0B0',
     fontWeight: 'normal',
   },
   dropdownLabelStyle: {
