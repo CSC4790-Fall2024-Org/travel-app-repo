@@ -193,7 +193,9 @@ const SignUpScreen = () => {
           >
             <Text style={styles.buttonText}>Sign Up</Text> 
           </TouchableOpacity>
-          <Text style={styles.infoText}>   To create an account your email must be educational (ending with edu).</Text>
+          <Text style={styles.infoText}>   To create an account your email must be educational </Text>
+          <Text style={styles.infoText}>   (ending with edu).</Text>
+
 
           <TouchableOpacity onPress={() => navigation.navigate("Login")} style={styles.button}>
           <Text style={styles.buttonText}>Login</Text> 
@@ -260,7 +262,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",    
     textAlign: 'center',
     marginVertical: 35, 
-    fontFamily: 'Times New Roman',
+    marginTop: 100,
+    fontFamily: 'San Francisco',
   },
   input: {
     backgroundColor: '#EEEEEE',
@@ -312,7 +315,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     color: 'gray', 
-    fontSize: 13,
+    fontSize: 12.5,
     fontWeight: "light",  
   },
 
@@ -332,6 +335,7 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     borderWidth: 0, 
     fontSize: 14,
+    backgroundColor: '#EEEEEE',
     color: '#6D6D6D',
     fontWeight: 'normal',
   },

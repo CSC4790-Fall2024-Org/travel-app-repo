@@ -351,6 +351,7 @@ const styles = StyleSheet.create({
   itemTitle: {
     fontSize: 18,
     color: "black", 
+    marginTop: 10,
     marginBottom: 8,
     fontWeight: "bold",
   },

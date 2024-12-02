@@ -68,7 +68,7 @@ return (
     marginBottom: 30,
     textAlign: "center",
     color: "green", // Green accent for the title
-    fontFamily: 'Times New Roman',
+    fontFamily: 'San Francisco',
     fontWeight: "bold",
   },
   locationContainer: {

@@ -190,19 +190,19 @@ const styles = StyleSheet.create({
     fontSize: 35,  
     fontWeight: "bold", 
     marginBottom: 30, 
-    fontFamily: 'Times New Roman', 
+    fontFamily: 'San Francisco', 
   },
   profileItemCITY: { 
     fontSize: 35,  
     fontWeight: "bold", 
-    fontFamily: 'Times New Roman', 
+    fontFamily: 'San Francisco', 
     marginTop: 15,
     marginBottom: 5, 
   },
   profileItem: {
     fontSize: 25,  
     fontWeight: "bold", 
-    fontFamily: 'Times New Roman', 
+    fontFamily: 'San Francisco', 
   },
   image: {        
     width: '300',        
