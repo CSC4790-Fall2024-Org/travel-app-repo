@@ -1,20 +1,26 @@
 import React from "react"; 
 import { KeyboardAvoidingView, TouchableOpacity, Text, View, StyleSheet, ScrollView, Image } from "react-native";
 import { useNavigation } from '@react-navigation/native';
+import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 
 function Demo() {
     const navigation = useNavigation(); 
 
     return (
+        <SafeAreaProvider>
+          <SafeAreaView style={styles.container} edges={['top']}>
         <KeyboardAvoidingView style={styles.container} behavior="padding"> 
+       {/* <ScrollView contentContainerStyle={styles.scrollContainer}> */} 
+       <ScrollView style={styles.scrollView}>
             <Text style={styles.title}>Welcome to StudyGuide</Text>
+            
             <View style={styles.imageContainer}>
                 <Image 
                     source={require('./Logo.jpeg')} 
                     style={styles.image} 
                 />
             </View>
-            {/* <ScrollView contentContainerStyle={styles.scrollContainer}> */}
+             
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate("Login")} style={styles.button}>
                         <Text style={styles.buttonText}>Login</Text> 
@@ -23,8 +29,10 @@ function Demo() {
                         <Text style={styles.buttonText}>Sign Up</Text> 
                     </TouchableOpacity>
                 </View>
-            {/* </ScrollView> */}
+             </ScrollView> 
         </KeyboardAvoidingView>
+        </SafeAreaView>
+        </SafeAreaProvider>
     );
 }
 
