@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, ScrollView, TouchableOpacity, TouchableWithoutFeedback, Image } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Image, ScrollView } from "react-native";
 import { getFirestore, doc, getDoc, collection, getDocs, query, where } from "firebase/firestore"; 
 import { useNavigation } from "@react-navigation/native";
 
@@ -8,7 +8,7 @@ export default function Profile({ route }) {
   const [profileData, setProfileData] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
   const [showUserPosts, setShowUserPosts] = useState(false);
-  const [countryCode, setCountryCode] = useState(""); // Initialize empty
+  const [countryCode, setCountryCode] = useState(""); 
   const db = getFirestore();
   const [isPostDropdownOpen, setPostDropdownOpen] = useState(false);
   const [isViewDropdownOpen, setViewDropdownOpen] = useState(false);
@@ -16,10 +16,16 @@ export default function Profile({ route }) {
 
   const togglePostDropdown = () => {
     setPostDropdownOpen(!isPostDropdownOpen);
+    if (!isPostDropdownOpen) {
+      setViewDropdownOpen(false); 
+    }
   };
-
+  
   const toggleViewDropdown = () => {
     setViewDropdownOpen(!isViewDropdownOpen);
+    if (!isViewDropdownOpen) {
+      setPostDropdownOpen(false); 
+    }
   };
 
   const handlePostNavigation = (screen) => {
@@ -43,7 +49,7 @@ export default function Profile({ route }) {
 
   const fetchUserPosts = async () => {
     try {
-      console.log("Fetching posts for UID:", uid); // Log UID for debugging
+      console.log("Fetching posts for UID:", uid);
       const postsRef = collection(db, "posts");
       const postsQuery = query(postsRef, where("uid", "==", uid));
       const postsSnap = await getDocs(postsQuery);
@@ -52,7 +58,7 @@ export default function Profile({ route }) {
         console.log("No posts found for this user.");
       } else {
         const postsData = postsSnap.docs.map(doc => doc.data());
-        setUserPosts(postsData); // Set user posts in state
+        setUserPosts(postsData); 
       }
     } catch (error) {
       console.error("Error fetching user posts: ", error);
@@ -82,22 +88,22 @@ export default function Profile({ route }) {
   useEffect(() => {
     const fetchCountryCode = async () => {
       if (!profileData || !profileData.city) return;
-
+    
       try {
         const locationRef = collection(db, "locations");
         const locationQuery = query(locationRef, where("city", "==", profileData.city));
         const locationSnap = await getDocs(locationQuery);
-        
+    
         if (!locationSnap.empty) {
           const locationData = locationSnap.docs[0].data();
-          setCountryCode(locationData.countryCode); // Assuming the field is country_code
+          setCountryCode(locationData.countryCode.toLowerCase()); 
         } else {
           console.log("No matching location found for city:", profileData.city);
         }
       } catch (error) {
         console.error("Error fetching country code for city:", error);
       }
-    };
+    };    
 
     fetchCountryCode();
   }, [profileData]);
@@ -112,20 +118,18 @@ export default function Profile({ route }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profile Page</Text>
+      <Text style={styles.title}>{profileData.name}'s Profile</Text>
       {countryCode && (
         <Image 
-          source={{ uri: `https://flagsapi.com/${countryCode}/flat/64.png` }} 
+          source={{ uri: `https://flagcdn.com/w2560/${countryCode}.png` }} 
           style={styles.image} 
         />
       )}
-      <Text style={styles.profileItem}>{profileData.name}</Text>
-      <Text style={styles.profileItem}>{profileData.city}</Text>
+      <Text style={styles.profileItemCITY}>{profileData.city}</Text>
       <Text style={styles.profileItem}>{profileData.year}</Text>
-      <Text style={styles.profileItem}>{profileData.email}</Text>
 
       <TouchableWithoutFeedback onPress={closeDropdowns}>
-        <View style={styles.container}>
+        <View style={styles.buttonsContainer}>
           <TouchableOpacity onPress={togglePostDropdown} style={styles.button}>
             <Text style={styles.buttonText}>Create a Post</Text>
           </TouchableOpacity>
@@ -162,23 +166,57 @@ export default function Profile({ route }) {
             </View>
           )}
 
-        <TouchableOpacity onPress={navigateToUserPosts} style={styles.button}>
-          <Text style={styles.buttonText}>View your Posts</Text>
-        </TouchableOpacity>
-
+          <TouchableOpacity onPress={navigateToUserPosts} style={styles.button}>
+            <Text style={styles.buttonText}>View your Posts</Text>
+          </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
     </View>
   );
 }
 
+
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center", padding: 20, width: '100%' },
-  title: { fontSize: 30, marginBottom: 20, fontWeight: "bold" },
-  profileItem: { fontSize: 20, marginVertical: 5, fontWeight: "bold" },
-  button: {
-    backgroundColor: 'green',
+  container: { 
+    flex: 1, 
+    justifyContent: "flex-start", 
+    backgroundColor: 'white', 
+    alignItems: "center", 
+    padding: 20, 
+    width: '100%' 
+  },
+  title: { 
+    textAlign: 'left', 
+    fontSize: 35,  
+    fontWeight: "bold", 
+    marginBottom: 30, 
+    fontFamily: 'San Francisco', 
+  },
+  profileItemCITY: { 
+    fontSize: 35,  
+    fontWeight: "bold", 
+    fontFamily: 'San Francisco', 
+    marginTop: 15,
+    marginBottom: 5, 
+  },
+  profileItem: {
+    fontSize: 25,  
+    fontWeight: "bold", 
+    fontFamily: 'San Francisco', 
+  },
+  image: {        
+    width: '300',        
+    height: '200', 
+    marginBottom: 20,   
+  },
+  buttonsContainer: {
+    marginTop: 30, 
     width: '100%',
+    alignItems: 'center', 
+  },
+  button: {
+    backgroundColor: '#70A533',
+    width: '90%', 
     padding: 10,
     borderRadius: 10,
     alignItems: 'center',
@@ -191,8 +229,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   dropdownMenu: {
-    backgroundColor: '#EDEDED',
-    width: '50%',
+    backgroundColor: '#EEEEEE',
+    width: '90%',
     alignSelf: 'center',
     borderRadius: 5,
     paddingVertical: 5,
@@ -208,21 +246,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
   },
-  image: {        
-    width: 300,        
-    height: 250,    
-  },
-  postsContainer: {
-    marginTop: 10,
-    width: '100%',
-  },
-  postItem: {
-    padding: 10,
-    backgroundColor: '#F0F0F0',
-    borderRadius: 5,
-    marginBottom: 10,
-  },
-  postText: {
-    fontSize: 16,
-  },
 });
+

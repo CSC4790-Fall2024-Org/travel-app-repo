@@ -4,7 +4,7 @@ import { Text, View, StyleSheet, ScrollView, Button } from "react-native";
 import { useNavigation, firestore } from "@react-navigation/native";
 import { db } from './firebase';
  
-  export default function FindActivitiesPosts() {
+  export default function FindFoodPosts() {
     const [locations, setLocations] = useState([]);
     const navigation = useNavigation();
     const [sortedPosts, setSortedPosts]= useState([]);
@@ -44,6 +44,7 @@ return (
           <Button
             title={location.city} // Assuming each location document has a 'name' field
             onPress={() => handleLocationPress(location.id)}
+            color= "green" // Green color for button
           />
           
         </View>
@@ -52,23 +53,33 @@ return (
   </View>
 );
 }
-    
-  
+
+
+
   const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      paddingTop: 50,
-      paddingHorizontal: 20,
-    },
-    title: {
-      fontSize: 24,
-      marginBottom: 20,
-      textAlign: "center",
-    },
-    locationContainer: {
-      marginBottom: 15,
-    },
-    postContainer: {
-      marginBottom: 15,
-    },
-  });
+  container: {
+    flex: 1,
+    backgroundColor: "#f0f0f0", // Light gray background
+    paddingTop: 50,
+    paddingHorizontal: 20,
+  },
+  title: {
+    fontSize: 28,
+    marginBottom: 30,
+    textAlign: "center",
+    color: "green", // Green accent for the title
+    fontFamily: 'San Francisco',
+    fontWeight: "bold",
+  },
+  locationContainer: {
+    marginBottom: 15,
+    backgroundColor: "#ffffff", // White card for each location
+    borderRadius: 8,
+    padding: 15,
+    shadowColor: "#000", // Shadow for card elevation
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3, // For Android elevation
+  },
+});

@@ -14,16 +14,16 @@ function Demo() {
                     style={styles.image} 
                 />
             </View>
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
+            {/* <ScrollView contentContainerStyle={styles.scrollContainer}> */}
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate("Login")} style={styles.button}>
                         <Text style={styles.buttonText}>Login</Text> 
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate("SignUp")} style={styles.button}>
-                        <Text style={styles.buttonText}>Register</Text> 
+                        <Text style={styles.buttonText}>Sign Up</Text> 
                     </TouchableOpacity>
                 </View>
-            </ScrollView>
+            {/* </ScrollView> */}
         </KeyboardAvoidingView>
     );
 }
@@ -39,11 +39,11 @@ const styles = StyleSheet.create({
   imageContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 40, 
+    marginVertical: 10, 
   },
   image: {        
-    width: 300, 
-    height: 300,
+    width: 400, 
+    height: 400,
   },
   scrollContainer: {
     flexGrow: 1,
@@ -53,11 +53,11 @@ const styles = StyleSheet.create({
   },
   title: {    
     fontSize: 34, 
-    fontWeight: "bold",    
+    fontWeight: "semi bold",    
     marginBottom: 20, 
     textAlign: 'center',
-    fontFamily: 'Times New Roman',
-    marginTop: 50,
+    fontFamily: 'San Francisco',
+    marginTop: 110,
   },
   buttonContainer: {
     width: '100%',
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20, 
   },
   button: {
-    backgroundColor: 'green',
+    backgroundColor: '#70A533',
     width: '100%', 
     padding: 15,
     borderRadius: 10,

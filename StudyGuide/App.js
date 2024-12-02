@@ -9,7 +9,6 @@ import Demo from './Demo';
 import LoginScreen from './LoginScreen';
 import SignUpScreen from './SignUpScreen';
 import Profile from './Profile';
-import Home from './Home';
 import FoodPosts from './FoodPosts';
 import StayPosts from './StayPosts';
 import ActivitiesPosts from './ActivitiesPosts';
@@ -21,6 +20,7 @@ import FindActivitiesPosts from "./FindActivitiesPosts";
 import FindStayPosts from "./FindStayPosts";
 
 const Stack = createStackNavigator();
+
 
 function MainPage({ navigation }) {
   return (
@@ -45,28 +45,28 @@ function MainPage({ navigation }) {
   );
 }
 
+
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="MainPage">
+      <Stack.Navigator initialRouteName="Demo">
         {/* Main page listing all subpages */}
-        <Stack.Screen name="MainPage" component={MainPage} />
+        <Stack.Screen name="Home" component={Demo} options={{ headerShown: false }} />
         {/* Subpages */}
-        <Stack.Screen name="UserPosts" component={UserPosts} />
+        <Stack.Screen name="UserPosts" component={UserPosts} options={{ title: ' ' }} />
         <Stack.Screen name="App Demo" component={Demo} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
-        <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="FoodPosts" component={FoodPosts} />
-        <Stack.Screen name="ActivitiesPosts" component={ActivitiesPosts} />
-        <Stack.Screen name="StayPosts" component={StayPosts} />
-        <Stack.Screen name="CreateFoodPost" component={CreateFoodPost} />
-        <Stack.Screen name="CreateStaysPost" component={CreateStaysPost} />
-        <Stack.Screen name="CreateActivitiesPost" component={CreateActivitiesPost} />
-        <Stack.Screen name="FindFoodPosts" component={FindFoodPosts} />
-        <Stack.Screen name="FindActivitiesPosts" component={FindActivitiesPosts} />
-        <Stack.Screen name="FindStayPosts" component={FindStayPosts} />
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="Profile" component={Profile} options={{ title: ' ' }} />
+        <Stack.Screen name="FoodPosts" component={FoodPosts} options={{ title: ' ' }}/>
+        <Stack.Screen name="ActivitiesPosts" component={ActivitiesPosts} options={{ title: ' ' }}/>
+        <Stack.Screen name="StayPosts" component={StayPosts} options={{ title: ' ' }}/>
+        <Stack.Screen name="CreateFoodPost" component={CreateFoodPost} options={{ title: ' ' }} />
+        <Stack.Screen name="CreateStaysPost" component={CreateStaysPost} options={{ title: ' ' }} />
+        <Stack.Screen name="CreateActivitiesPost" component={CreateActivitiesPost} options={{ title: ' ' }} />
+        <Stack.Screen name="FindFoodPosts" component={FindFoodPosts} options={{ title: ' ' }}/>
+        <Stack.Screen name="FindActivitiesPosts" component={FindActivitiesPosts} options={{ title: ' ' }} />
+        <Stack.Screen name="FindStayPosts" component={FindStayPosts} options={{ title: ' ' }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

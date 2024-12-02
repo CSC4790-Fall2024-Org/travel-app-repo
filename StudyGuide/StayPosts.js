@@ -85,39 +85,32 @@ useEffect(() => {
   return (
     <View style={styles.container}>
 
-      <Text style={styles.title}> Places to Stay in {locationCity} </Text>
     
 
     <ScrollView>
-
+    <Text style={styles.title}> Places to Stay in {locationCity} </Text>
+    
     
 
      {sortedStayPosts.map((sortedStayPost) => (
 
 
             <View key={sortedStayPost.id} style={styles.container}>
-            
-             <Text style={styles.itemTitle}> Post from ID: <Text style={styles.postItem}>{sortedStayPost.userId}</Text></Text> 
-            
-            <Text style={styles.itemTitle}>  Name: <Text style={styles.postItem}>{sortedStayPost.stayName}</Text></Text>
-            <Text style={styles.itemTitle}> Post from: <Text style={styles.postItem}>{sortedStayPost.posterName} who visited {sortedStayPost.posterVisitedCity} in {sortedStayPost.posterYear}</Text></Text>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={styles.itemTitle}>Rating by {sortedStayPost.posterName}:</Text>
-              <Stars rating={sortedStayPost.stars} readOnly={true} />
+             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={styles.itemTitle}>
+            <Text style={styles.itemTitle}>{sortedStayPost.stayName}</Text>
+            </Text>
+            <Stars rating={sortedStayPost.stars} readOnly={true} />
+          
             </View>
+            <Text style={styles.itemTitle}> Post from: <Text style={styles.postItem}>{sortedStayPost.posterName} who visited {sortedStayPost.posterVisitedCity} in {sortedStayPost.posterYear}</Text></Text>
+           
             <Text style={styles.itemTitle}> Expense: <Text style={styles.postItem}>{sortedStayPost.expense}</Text></Text>
            {/* <Text style={styles.itemTitle}> Meal Time: <Text style={styles.postItem}>{sortedStayPost.mealTime}</Text></Text>*/}
             <Text style={styles.itemTitle}> Type of Place to Stay: <Text style={styles.postItem}>{sortedStayPost.stayType}</Text></Text>
-             <Text style={styles.itemTitle}> Location Id: <Text style={styles.postItem}>{sortedStayPost.locat_id}</Text></Text> 
-            
+           
             <Text style={styles.itemTitle}> Ammenities: <Text style={styles.postItem}>{sortedStayPost.ammenities}</Text></Text>
-            <Text style={styles.itemTitle}> wouldReturn: <Text style={styles.postItem}>{sortedStayPost.wouldReturn}</Text></Text>
-
-          {/*   {sortedStayPost.dietary ? (
-              <Text style={styles.itemTitle}>Dietary Restrictions: <Text style={styles.postItem}>{sortedStayPost.dietary}</Text></Text>
-            ) : null}
-            */}
-
+            <Text style={styles.itemTitle}> Would return? <Text style={styles.postItem}>{sortedStayPost.wouldReturn}</Text></Text>
 
             {sortedStayPost.address ? (
               <Text style={styles.itemTitle}>Address: <Text style={styles.postItem}>{sortedStayPost.address}</Text></Text>
@@ -131,9 +124,7 @@ useEffect(() => {
               <Text style={styles.itemTitle}>Link to website: <Text style={styles.postItem}>{sortedStayPost.link}</Text></Text>
             ) : null}
             
-            {/* <Text style={styles.itemTitle}> Address: <Text style={styles.postItem}>{sortedStayPost.address}</Text></Text> 
-            <Text style={styles.itemTitle}> Link to website: <Text style={styles.postItem}>{sortedStayPost.link}</Text></Text>
-            */}
+  
             
             <Text style={styles.itemTitle}> Description/Message: <Text style={styles.postItem}>{sortedStayPost.description}</Text></Text>
         </View>
@@ -148,38 +139,44 @@ useEffect(() => {
   );
 }
 
-// make address and link to website be conditional, only show if added
-// user id make say the user name
-//add dietary restrictions here
-// also add stars
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 50,
     paddingHorizontal: 20,
+    backgroundColor: "LightGray"
   },
   title: {
-    fontSize: 24,
+    fontSize: 40,
+    marginTop: 20,
     marginBottom: 20,
     textAlign: "center",
-    fontWeight: "bold" 
+    fontWeight: "bold",
   },
+
   postContainer: {
-    marginBottom: 15,
+    marginBottom: 20,
+    padding: 15,
+    marginLeft: 15,
+    marginRight: 15,
+    backgroundColor: "#f8f8f8",
   },
-  postItem: { 
-    fontSize: 18, 
-    marginVertical: 10, 
-    textAlign: "center",
+  postItem: {
+    fontSize: 18,
+    color: "black", 
     marginBottom: 5,
-    fontWeight: "normal" ,
+    fontWeight: "normal",
   },
-  itemTitle: { 
-    fontSize: 22, 
-    marginVertical: 10, 
-    textAlign: "center",
-    fontWeight: "bold" ,
-    marginBottom: 5,
+  itemTitle: {
+    fontSize: 15,
+    color: "black", 
+    marginBottom: 8,
+    fontWeight: "bold",
+  },
+  resturantTitle: {
+    fontSize: 20,
+    color: "black", 
+    marginBottom: 8,
+    fontWeight: "bold",
   },
 });
