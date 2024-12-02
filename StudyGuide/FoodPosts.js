@@ -80,14 +80,9 @@ useEffect(() => {
   fetchSortedPosts();
 }, [db, 'locations']);
 
-
-//come back to userId field that has been taken out of foodPosts fields
-//also need to add addr (address), userId, food_city, link
-//make sure the field names match in here and create food posts so that 
-
   return (
     <ScrollView>
-      <Text style={styles.title}>{locationCity}</Text>
+      <Text style={styles.title}>Places to Eat in {locationCity}</Text>
     
   {sortedPosts.map((sortedPost) => (
     <View key={sortedPost.id} style={styles.postContainer}>
