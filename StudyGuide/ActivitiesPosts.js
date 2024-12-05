@@ -91,18 +91,16 @@ useEffect(() => {
 
 
             <View key={sortedActPost.id} style={styles.container}>
+              <Text style={styles.itemPosterTitle}>
+                Post from <Text style={styles.itemPosterInfo}>{sortedActPost.posterName} who visited {sortedActPost.posterVisitedCity} in {sortedActPost.posterYear}</Text>
+              </Text>
 
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text style={styles.itemTitle}>{sortedActPost.activityName}</Text>
             <Stars rating={sortedActPost.stars} readOnly={true} />
             </View>
             
-           
-           
-            
-            
-            <Text style={styles.itemTitle}> Post from: <Text style={styles.postItem}>{sortedActPost.posterName} who visited {sortedActPost.posterVisitedCity} in {sortedActPost.posterYear}</Text></Text>
-          
+                    
             <Text style={styles.itemTitle}> Expense: <Text style={styles.postItem}>{sortedActPost.expense}</Text></Text>
             <Text style={styles.itemTitle}> Activity Type: <Text style={styles.postItem}>{sortedActPost.activityType}</Text></Text>
             

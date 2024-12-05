@@ -121,6 +121,10 @@ useEffect(() => {
 
   {sortedPosts.map((sortedPost) => (
     <View key={sortedPost.id} style={styles.postContainer}>
+      <Text style={styles.itemPosterTitle}>
+        Post from <Text style={styles.itemPosterInfo}>{sortedPost.posterName} who visited {sortedPost.posterVisitedCity} in {sortedPost.posterYear}</Text>
+      </Text>
+
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text style={styles.itemTitle}>
         <Text style={styles.resturantTitle}>{sortedPost.restaurant}</Text>
@@ -128,10 +132,6 @@ useEffect(() => {
       <Stars rating={sortedPost.stars} readOnly={true} />
      
       </View>
-
-      <Text style={styles.itemTitle}>
-        Post from: <Text style={styles.postItem}>{sortedPost.posterName} who visited {sortedPost.posterVisitedCity} in {sortedPost.posterYear}</Text>
-      </Text>
   
       <Text style={styles.itemTitle}>
         Expense: <Text style={styles.postItem}>{sortedPost.expense}</Text>
@@ -174,9 +174,13 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingHorizontal: 20,
     backgroundColor: "LightGray"
+    //backgroundColor: "#90EE90",
   },
   title: {
     fontSize: 40,
+  //  color: '#70A533',
+  //  fontFamily: 'San Francisco',
+  //  color: "green",
     marginTop: 20,
     marginBottom: 20,
     textAlign: "center",
@@ -189,16 +193,26 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15,
     backgroundColor: "#f8f8f8",
+  //  backgroundColor: "#90EE90",
+    shadowColor: "#000", // Shadow for card elevation
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3, // For Android elevation
   },
   postItem: {
     fontSize: 18,
-    color: "black", 
-    marginBottom: 5,
+    color: "black",
+    marginTop: 5, 
     fontWeight: "normal",
+  //  color: "green",
+  //  fontFamily: 'San Francisco',
   },
   itemTitle: {
     fontSize: 15,
     color: "black", 
+ //   fontFamily: 'San Francisco',
+ //   color: "green",
     marginBottom: 5,
     marginTop: 10,
     fontWeight: "bold",
@@ -208,6 +222,24 @@ const styles = StyleSheet.create({
     color: "black", 
     marginBottom: 8,
     fontWeight: "bold",
+  //  fontFamily: 'San Francisco',
+   // color: "green",
+  },
+  itemPosterInfo: {
+    fontSize: 12,
+    color: "gray", 
+    marginBottom: 5,
+    marginTop: 10,
+    fontWeight: "italic",
+  //  fontFamily: 'San Francisco',
+  },
+  itemPosterTitle: {
+    fontSize: 12,
+    color: "gray", 
+    marginBottom: 5,
+    marginTop: 10,
+    fontWeight: "italic",
+  //  fontFamily: 'San Francisco',
   },
 
   //Dropdown style
