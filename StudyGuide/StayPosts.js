@@ -102,7 +102,7 @@ useEffect(() => {
 
             <View key={sortedStayPost.id} style={styles.container}>
               <Text style={styles.itemPosterTitle}>
-                Post from <Text style={styles.itemPosterInfo}>{sortedPost.posterName} who visited {sortedPost.posterVisitedCity} in {sortedPost.posterYear}</Text>
+                Post from <Text style={styles.itemPosterInfo}>{sortedStayPost.posterName} who visited {sortedStayPost.posterVisitedCity} in {sortedStayPost.posterYear}</Text>
               </Text>
              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text style={styles.itemTitle}>
