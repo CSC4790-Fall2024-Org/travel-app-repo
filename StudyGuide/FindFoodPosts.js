@@ -44,7 +44,7 @@ return (
           <Button
             title={location.city} // Assuming each location document has a 'name' field
             onPress={() => handleLocationPress(location.id)}
-            color= "green" // Green color for button
+            color= "#70A533" // Green color for button
           />
           
         </View>
@@ -87,7 +87,7 @@ return (
     fontSize: 28,
     marginBottom: 30,
     textAlign: "center",
-    color: "green", // Green accent for the title
+    color: "#70A533", // Green accent for the title
     fontFamily: 'San Francisco',
     fontWeight: "bold",
   },

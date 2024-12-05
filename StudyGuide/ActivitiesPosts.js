@@ -83,11 +83,13 @@ useEffect(() => {
 
     <ScrollView>
     <Text style={styles.title}> Things to do in {locationCity} </Text>
-    
-
-    
-
-     {sortedActPosts.map((sortedActPost) => (
+              {/* Check if sortedPosts is empty */}
+    {sortedActPosts.length === 0 ? (
+        <View style={{ marginTop: 20, alignItems: 'center' }}>
+          <Text style={styles.noPostsText}>No activities posts yet. Go to create post to be the first!</Text>
+        </View>
+      ) : (
+     sortedActPosts.map((sortedActPost) => (
 
 
             <View key={sortedActPost.id} style={styles.container}>
@@ -119,14 +121,10 @@ useEffect(() => {
             
             <Text style={styles.itemTitle}> Description/Message: <Text style={styles.postItem}>{sortedActPost.description}</Text></Text>
         </View>
-
-    
-          
-      ))}        
+      ))
+    )}       
     </ScrollView>
     </View>
-
-
   );
 }
 
