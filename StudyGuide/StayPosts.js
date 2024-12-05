@@ -105,9 +105,7 @@ useEffect(() => {
                 Post from <Text style={styles.itemPosterInfo}>{sortedStayPost.posterName} who visited {sortedStayPost.posterVisitedCity} in {sortedStayPost.posterYear}</Text>
               </Text>
              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={styles.itemTitle}>
-            <Text style={styles.itemTitle}>{sortedStayPost.stayName}</Text>
-            </Text>
+            <Text style={styles.resturantTitle}>{sortedStayPost.stayName}</Text>
             <Stars rating={sortedStayPost.stars} readOnly={true} />
           
             </View>
@@ -176,7 +174,7 @@ const styles = StyleSheet.create({
     elevation: 3, // For Android elevation
   },
   postItem: {
-    fontSize: 18,
+    fontSize: 15,
     color: "black",
     marginTop: 5, 
     fontWeight: "normal",
@@ -215,5 +213,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontWeight: "italic",
   //  fontFamily: 'San Francisco',
+  },
+  noPostsText: {
+    fontSize: 18,
+    color: "back",
+    textAlign: "center",
   },
 });
