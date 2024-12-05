@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     elevation: 3, // For Android elevation
   },
   postItem: {
-    fontSize: 18,
+    fontSize: 15,
     color: "black",
     marginTop: 5, 
 
@@ -173,15 +173,15 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginTop: 10,
     fontWeight: "italic",
-  //  fontFamily: 'San Francisco',
-  },
+  //  fontStyle: "italic",
+},
   itemPosterTitle: {
     fontSize: 12,
     color: "gray", 
     marginBottom: 5,
     marginTop: 10,
     fontWeight: "italic",
-  //  fontFamily: 'San Francisco',
+  //  fontStyle: "italic",
   },
   noPostsText: {
     fontSize: 18,

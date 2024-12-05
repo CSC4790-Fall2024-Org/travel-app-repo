@@ -98,7 +98,7 @@ useEffect(() => {
               </Text>
 
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={styles.itemTitle}>{sortedActPost.activityName}</Text>
+            <Text style={styles.resturantTitle}>{sortedActPost.activityName}</Text>
             <Stars rating={sortedActPost.stars} readOnly={true} />
             </View>
             
@@ -138,8 +138,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
     paddingHorizontal: 20,
-    backgroundColor: "LightGray"
-    //backgroundColor: "#90EE90",
+    backgroundColor: "LightGray",
   },
   title: {
     fontSize: 40,
@@ -165,25 +164,24 @@ const styles = StyleSheet.create({
     elevation: 3, // For Android elevation
   },
   postItem: {
-    fontSize: 18,
+    fontSize: 15,
     color: "black",
     marginTop: 5, 
+
     fontWeight: "normal",
   //  color: "green",
   //  fontFamily: 'San Francisco',
   },
   itemTitle: {
     fontSize: 15,
-    color: "black", 
- //   fontFamily: 'San Francisco',
- //   color: "green",
+    color: "black",
     marginBottom: 5,
     marginTop: 10,
     fontWeight: "bold",
   },
   resturantTitle: {
     fontSize: 20,
-    color: "black", 
+    color: "black",
     marginBottom: 8,
     fontWeight: "bold",
   //  fontFamily: 'San Francisco',
@@ -204,5 +202,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontWeight: "italic",
   //  fontFamily: 'San Francisco',
+  },
+  noPostsText: {
+    fontSize: 18,
+    color: "back",
+    textAlign: "center",
   },
 });
