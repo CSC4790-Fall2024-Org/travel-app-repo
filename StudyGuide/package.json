@@ -12,7 +12,7 @@
     "@react-native-picker/picker": "2.9.0",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
-    "expo": "^52.0.8",
+    "expo": "^52.0.15",
     "expo-status-bar": "~2.0.0",
     "firebase": "^9.x.x",
     "react": "18.3.1",

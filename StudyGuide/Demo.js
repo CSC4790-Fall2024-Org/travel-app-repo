@@ -1,84 +1,99 @@
-import React from "react"; 
-import { KeyboardAvoidingView, TouchableOpacity, Text, View, StyleSheet, ScrollView, Image } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import React from "react";
+import {
+    KeyboardAvoidingView,
+    TouchableOpacity,
+    Text,
+    View,
+    StyleSheet,
+    ScrollView,
+    Image,
+    SafeAreaView,
+    Dimensions,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 function Demo() {
-    const navigation = useNavigation(); 
+    const navigation = useNavigation();
+    const { width, height } = Dimensions.get("window"); 
 
     return (
-        <KeyboardAvoidingView style={styles.container} behavior="padding"> 
-            <Text style={styles.title}>Welcome to StudyGuide</Text>
-            <View style={styles.imageContainer}>
-                <Image 
-                    source={require('./Logo.jpeg')} 
-                    style={styles.image} 
-                />
-            </View>
-            {/* <ScrollView contentContainerStyle={styles.scrollContainer}> */}
+        <SafeAreaView style={styles.safeArea}>
+            <KeyboardAvoidingView style={styles.container} behavior="padding">
+                <Text style={[styles.title, { fontSize: Math.min(width * 0.08, 34) }]}>
+                    Welcome to StudyGuide
+                </Text>
+                <View style={styles.imageContainer}>
+                    <Image
+                        source={require("./Logo.jpeg")}
+                        style={[
+                            styles.image,
+                            { width: Math.min(width * 0.75, 400), height: Math.min(width * 0.75, 400) },
+                        ]}
+                    />
+                </View>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate("Login")} style={styles.button}>
-                        <Text style={styles.buttonText}>Login</Text> 
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate("Login")}
+                        style={[styles.button, { width: Math.min(width * 0.85, 350) }]}
+                    >
+                        <Text style={styles.buttonText}>Login</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate("SignUp")} style={styles.button}>
-                        <Text style={styles.buttonText}>Sign Up</Text> 
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate("SignUp")}
+                        style={[styles.button, { width: Math.min(width * 0.85, 350) }]}
+                    >
+                        <Text style={styles.buttonText}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>
-            {/* </ScrollView> */}
-        </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    width: '100%'
-  },
-  imageContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 10, 
-  },
-  image: {        
-    width: 400, 
-    height: 400,
-  },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: 20,
-  },
-  title: {    
-    fontSize: 34, 
-    fontWeight: "semi bold",    
-    marginBottom: 20, 
-    textAlign: 'center',
-    fontFamily: 'San Francisco',
-    marginTop: 110,
-  },
-  buttonContainer: {
-    width: '100%',
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 40,
-    paddingHorizontal: 20, 
-  },
-  button: {
-    backgroundColor: '#70A533',
-    width: '100%', 
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginTop: 15,
-  },
-  buttonText: {
-    color: 'white', 
-    fontSize: 18,
-    fontWeight: "bold",    
-  },
+    safeArea: {
+        flex: 1,
+        backgroundColor: "white",
+    },
+    container: {
+        flex: 1,
+        backgroundColor: "white",
+        alignItems: "center",
+        justifyContent: "center",
+        paddingHorizontal: 20,
+    },
+    imageContainer: {
+        justifyContent: "center",
+        alignItems: "center",
+        marginVertical: 20,
+    },
+    image: {
+        resizeMode: "contain",
+    },
+    title: {
+        fontWeight: "600",
+        marginBottom: 20,
+        textAlign: "center",
+        fontFamily: "San Francisco",
+    },
+    buttonContainer: {
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 30,
+    },
+    button: {
+        backgroundColor: "#70A533",
+        padding: 15,
+        borderRadius: 10,
+        alignItems: "center",
+        marginTop: 15,
+    },
+    buttonText: {
+        color: "white",
+        fontSize: 18,
+        fontWeight: "bold",
+    },
 });
 
 export default Demo;
