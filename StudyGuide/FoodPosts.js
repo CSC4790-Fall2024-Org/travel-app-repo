@@ -65,8 +65,8 @@ export default function FoodPosts({ route }) {
       ) : (
         sortedPosts.map((sortedPost) => (
       <View key={sortedPost.id} style={styles.postContainer}>
-      <Text style={styles.itemPosterTitle}>
-        Post from <Text style={styles.itemPosterInfo}>{sortedPost.posterName} who visited {sortedPost.posterVisitedCity} in {sortedPost.posterYear}</Text>
+      <Text style={styles.itemPosterInfo}>
+        Post from {sortedPost.posterName} who visited {sortedPost.posterVisitedCity} in {sortedPost.posterYear}
       </Text>
 
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -172,17 +172,10 @@ const styles = StyleSheet.create({
     color: "gray", 
     marginBottom: 5,
     marginTop: 10,
+    textAlign: "center",
     fontWeight: "italic",
   //  fontStyle: "italic",
 },
-  itemPosterTitle: {
-    fontSize: 12,
-    color: "gray", 
-    marginBottom: 5,
-    marginTop: 10,
-    fontWeight: "italic",
-  //  fontStyle: "italic",
-  },
   noPostsText: {
     fontSize: 18,
     color: "back",
