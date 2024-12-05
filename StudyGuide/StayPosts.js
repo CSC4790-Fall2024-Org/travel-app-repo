@@ -100,9 +100,9 @@ useEffect(() => {
      sortedStayPosts.map((sortedStayPost) => (
 
 
-            <View key={sortedStayPost.id} style={styles.container}>
-              <Text style={styles.itemPosterTitle}>
-                Post from <Text style={styles.itemPosterInfo}>{sortedStayPost.posterName} who visited {sortedStayPost.posterVisitedCity} in {sortedStayPost.posterYear}</Text>
+            <View key={sortedStayPost.id} style={styles.postContainer}>
+              <Text style={styles.itemPosterInfo}>
+                Post from {sortedStayPost.posterName} who visited {sortedStayPost.posterVisitedCity} in {sortedStayPost.posterYear}
               </Text>
              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text style={styles.resturantTitle}>{sortedStayPost.stayName}</Text>
@@ -199,14 +199,6 @@ const styles = StyleSheet.create({
    // color: "green",
   },
   itemPosterInfo: {
-    fontSize: 12,
-    color: "gray", 
-    marginBottom: 5,
-    marginTop: 10,
-    fontWeight: "italic",
-  //  fontFamily: 'San Francisco',
-  },
-  itemPosterTitle: {
     fontSize: 12,
     color: "gray", 
     marginBottom: 5,

@@ -92,9 +92,9 @@ useEffect(() => {
      sortedActPosts.map((sortedActPost) => (
 
 
-            <View key={sortedActPost.id} style={styles.container}>
-              <Text style={styles.itemPosterTitle}>
-                Post from <Text style={styles.itemPosterInfo}>{sortedActPost.posterName} who visited {sortedActPost.posterVisitedCity} in {sortedActPost.posterYear}</Text>
+            <View key={sortedActPost.id} style={styles.postContainer}>
+              <Text style={styles.itemPosterInfo}>
+                Post from {sortedActPost.posterName} who visited {sortedActPost.posterVisitedCity} in {sortedActPost.posterYear}
               </Text>
 
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -195,14 +195,7 @@ const styles = StyleSheet.create({
     fontWeight: "italic",
   //  fontFamily: 'San Francisco',
   },
-  itemPosterTitle: {
-    fontSize: 12,
-    color: "gray", 
-    marginBottom: 5,
-    marginTop: 10,
-    fontWeight: "italic",
-  //  fontFamily: 'San Francisco',
-  },
+
   noPostsText: {
     fontSize: 18,
     color: "back",
