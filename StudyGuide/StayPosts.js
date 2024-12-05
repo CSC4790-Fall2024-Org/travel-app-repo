@@ -90,9 +90,14 @@ useEffect(() => {
     <ScrollView>
     <Text style={styles.title}> Places to Stay in {locationCity} </Text>
     
-    
+          {/* Check if sortedPosts is empty */}
+          {sortedStayPosts.length === 0 ? (
+        <View style={{ marginTop: 20, alignItems: 'center' }}>
+          <Text style={styles.noPostsText}>No stay posts yet. Go to create post to be the first!</Text>
+        </View>
+      ) : (
 
-     {sortedStayPosts.map((sortedStayPost) => (
+     sortedStayPosts.map((sortedStayPost) => (
 
 
             <View key={sortedStayPost.id} style={styles.container}>
@@ -128,10 +133,8 @@ useEffect(() => {
             
             <Text style={styles.itemTitle}> Description/Message: <Text style={styles.postItem}>{sortedStayPost.description}</Text></Text>
         </View>
-
-    
-          
-      ))}        
+      ))
+    )}      
     </ScrollView>
     </View>
 
