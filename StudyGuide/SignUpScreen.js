@@ -54,6 +54,53 @@ const SignUpScreen = () => {
         return email.includes(".edu");
     };
 
+    // const handleSignUp = async () => {
+    //     if (!checkEmail(email)) {
+    //         Alert.alert(
+    //             "Error",
+    //             "StudyGuide is designed for university students. Please enter an email address associated with a university."
+    //         );
+    //         return;
+    //     }
+
+    //     const auth = getAuth();
+    //     try {
+    //         const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+    //         const user = userCredentials.user;
+
+    //         await sendEmailVerification(user);
+    //         Alert.alert("Verification Email Sent", "Please check your email to verify your account.");
+
+    //         const intervalId = setInterval(async () => {
+    //             await user.reload();
+    //             if (user.emailVerified) {
+    //                 clearInterval(intervalId);
+    //                 await setDoc(doc(db, "users", user.uid), {
+    //                     email,
+    //                     name,
+    //                     year,
+    //                     city: restaurantLocationId,
+    //                     userId: user.uid,
+    //                 });
+
+    //                 Alert.alert(
+    //                     "Sign Up Successful",
+    //                     "Your email is verified. Welcome to StudyGuide! You can login now."
+    //                 );
+    //                 navigation.navigate("Login");
+    //             }
+    //         }, 5000);
+    //     } catch (error) {
+    //         if (error.code === "auth/email-already-in-use") {
+    //             Alert.alert("Error", "This email is already in use. Please log in or use another email.");
+    //         } else {
+    //             Alert.alert("Error", error.message);
+    //         }
+    //     }
+    // };
+
+
+
     const handleSignUp = async () => {
         if (!checkEmail(email)) {
             Alert.alert(
@@ -62,19 +109,24 @@ const SignUpScreen = () => {
             );
             return;
         }
-
+    
         const auth = getAuth();
         try {
             const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredentials.user;
-
+    
+            // Send the verification email
             await sendEmailVerification(user);
             Alert.alert("Verification Email Sent", "Please check your email to verify your account.");
-
+    
+            // Poll to check if the email is verified
             const intervalId = setInterval(async () => {
-                await user.reload();
+                await user.reload(); // Reload the user's data
+                console.log("Email verified status: ", user.emailVerified);
                 if (user.emailVerified) {
                     clearInterval(intervalId);
+    
+                    // Create Firestore entry only after verification
                     await setDoc(doc(db, "users", user.uid), {
                         email,
                         name,
@@ -82,7 +134,7 @@ const SignUpScreen = () => {
                         city: restaurantLocationId,
                         userId: user.uid,
                     });
-
+    
                     Alert.alert(
                         "Sign Up Successful",
                         "Your email is verified. Welcome to StudyGuide! You can login now."
@@ -98,6 +150,7 @@ const SignUpScreen = () => {
             }
         }
     };
+    
 
     return (
         <SafeAreaView style={styles.safeArea}>
